@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/Base.astro';
+import FloatingNavbar from '../components/navbar/FloatingNavbar.svelte';
+import HeroSection from '../components/home/HeroSection.svelte';
+import YouSection from '../components/home/YouSection.svelte';
+import SectionStacking from '../components/SectionStacking.svelte';
+import CompaniesSection from '../components/home/CompaniesSection.svelte';
+import PartnersSection from '../components/home/PartnersSection.astro';
+import OfficeSection from '../components/home/OfficeSection.astro';
+import ContactFormSection from '../components/home/ContactFormSection.astro';
+import BackToTop from '../components/BackToTop.svelte';
+import Footer from '../components/Footer.svelte';
+---
+
+<BaseLayout title="Página Inicial">
+  {/* Critical: Navbar precisa estar interativa imediatamente */}
+  <FloatingNavbar client:load />
+
+  {/* Critical: SectionStacking controla o scroll de todas as seções */}
+  <SectionStacking client:load />
+
+  <main id="main-content">
+    {/* Critical: Hero é a primeira seção visível */}
+    <HeroSection client:load />
+
+    {/* Critical: YouSection precisa hidratar cedo para registrar seu pin horizontal antes do stacking seguinte */}
+    <YouSection client:load />
+
+    {/* Static: CompaniesSection renderiza no SSR e evita layout shift após a YouSection */}
+    <CompaniesSection />
+
+    {/* Static: PartnersSection não precisa de hidratação */}
+    <PartnersSection />
+
+    {/* Static: OfficeSection não precisa de hidratação */}
+    <OfficeSection />
+
+    {/* Static: ContactFormSection não precisa de hidratação */}
+    <ContactFormSection />
+  </main>
+
+  {/* Idle: Footer carrega após página interativa */}
+  <Footer client:idle />
+
+  {/* Idle: Back to top button */}
+  <BackToTop client:idle />
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/Base.astro';
+---
+
+<BaseLayout title="Guia de Estilo">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8 text-center text-white">Guia de Estilo</h1>
+
+    <section class="mb-12 bg-white bg-opacity-90 p-6 rounded-lg">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2 text-gray-800">Cores</h2>
+
+      <h3 class="text-xl font-medium mb-4 text-gray-800">Cores Primárias</h3>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(214, 61%, 24%);"></div>
+          <p class="text-sm text-gray-800">Primária<br><code>hsl(214, 61%, 24%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(214, 61%, 34%);"></div>
+          <p class="text-sm text-gray-800">Primária Light<br><code>hsl(214, 61%, 34%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(214, 61%, 44%);"></div>
+          <p class="text-sm text-gray-800">Primária Lighter<br><code>hsl(214, 61%, 44%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(214, 61%, 14%);"></div>
+          <p class="text-sm text-gray-800">Primária Dark<br><code>hsl(214, 61%, 14%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(214, 61%, 4%);"></div>
+          <p class="text-sm text-gray-800">Primária Darker<br><code>hsl(214, 61%, 4%)</code></p>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-medium mb-4 text-gray-800">Cores Secundárias</h3>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(231.8 84.6% 94.9%);"></div>
+          <p class="text-sm text-gray-800">Secundária<br><code>hsl(231.8 84.6% 94.9%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(231.8 84.6% 97.9%);"></div>
+          <p class="text-sm text-gray-800">Secundária Light<br><code>hsl(231.8 84.6% 97.9%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(231.8 84.6% 99.9%);"></div>
+          <p class="text-sm text-gray-800">Secundária Lighter<br><code>hsl(231.8 84.6% 99.9%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(231.8 84.6% 84.9%);"></div>
+          <p class="text-sm text-gray-800">Secundária Dark<br><code>hsl(231.8 84.6% 84.9%)</code></p>
+        </div>
+        <div>
+          <div class="w-full h-16 rounded mb-2" style="background-color: hsl(231.8 84.6% 74.9%);"></div>
+          <p class="text-sm text-gray-800">Secundária Darker<br><code>hsl(231.8 84.6% 74.9%)</code></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12 bg-white bg-opacity-90 p-6 rounded-lg">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2 text-gray-800">Tipografia</h2>
+
+      <h3 class="text-xl font-medium mb-4 text-gray-800">Fontes Disponíveis</h3>
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-bold text-lg text-gray-800" style="font-family: 'Proxima Nova', sans-serif;">Proxima Nova (Sans-serif)</h4>
+          <p class="text-gray-800" style="font-family: 'Proxima Nova', sans-serif;">The quick brown fox jumps over the lazy dog.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-lg text-gray-800" style="font-family: 'IBM Plex Serif', serif;">IBM Plex Serif (Serif)</h4>
+          <p class="text-gray-800" style="font-family: 'IBM Plex Serif', serif;">The quick brown fox jumps over the lazy dog.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

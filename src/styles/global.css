@@ -1,0 +1,83 @@
+/* Import Tailwind CSS */
+@import "tailwindcss";
+
+/* Define theme for Tailwind CSS */
+@theme {
+  --font-sans: 'Proxima Nova', 'sans-serif';
+  --font-serif: 'IBM Plex Serif', 'serif';
+  --font-handwriting: 'IBM Plex Serif', 'serif';
+}
+
+/* Premium Foundation */
+html {
+  scroll-padding-top: 100px;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: hsla(214, 61%, 14%, 0.15);
+}
+
+:focus-visible {
+  outline: 2px solid hsl(214, 61%, 14%);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:root {
+  /* Primary Color and Variations */
+  --color-primary: hsl(214, 61%, 24%);
+  --color-primary-light: hsl(214, 61%, 34%);
+  --color-primary-lighter: hsl(214, 61%, 44%);
+  --color-primary-dark: hsl(214, 61%, 14%);
+  --color-primary-darker: hsl(214, 61%, 4%);
+
+  /* Secondary Color and Variations */
+  --color-secondary: hsl(231.8 84.6% 94.9%);
+  --color-secondary-light: hsl(231.8 84.6% 97.9%);
+  --color-secondary-lighter: hsl(231.8 84.6% 99.9%);
+  --color-secondary-dark: hsl(231.8 84.6% 84.9%);
+  --color-secondary-darker: hsl(231.8 84.6% 74.9%);
+
+  /* Tertiary Color and Variations */
+  --color-tertiary: hsl(47, 100%, 61%);;
+  --color-tertiary-light: hsl(47, 93%, 47%);;
+  --color-tertiary-lighter: hsl(47, 99%, 35%);;
+  --color-tertiary-dark: hsl(47, 95%, 24%);
+  --color-tertiary-darker: hsl(46, 94%, 13%);
+
+  /* Text Color and Variations */
+  --color-text-dark: hsl(240 4% 95.1%);
+  --color-text-light: hsl(240 4% 90.1%);
+  --color-text-lighter: hsl(240 4% 80.1%);
+  --color-text-medium: hsl(240 4% 65.1%);
+  --color-text-heavy: hsl(240 4% 35.1%);
+  --color-text-contrast: hsl(240, 3%, 12%);
+}
+
+body {
+    background: linear-gradient(
+      235deg,
+      hsl(231.8 84.6% 99.9%) 0%,
+      hsl(0, 0%, 100%) 100%
+    );
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+    min-height: 100vh;
+  }

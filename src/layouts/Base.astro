@@ -1,0 +1,765 @@
+---
+import SmoothScroll from '../components/SmoothScroll.svelte';
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title || 'Guia de Estilo'}</title>
+  <script is:inline>
+    try {
+      const transitionKey = 'klout:page-transition';
+      const rawState = window.sessionStorage.getItem(transitionKey);
+
+      if (rawState) {
+        const transitionState = JSON.parse(rawState);
+        const isFreshState =
+          transitionState &&
+          typeof transitionState.ts === 'number' &&
+          Date.now() - transitionState.ts < 4000;
+
+        if (isFreshState) {
+          document.documentElement.classList.add('page-transition-enter');
+        } else {
+          window.sessionStorage.removeItem(transitionKey);
+        }
+      }
+    } catch {
+      window.sessionStorage.removeItem('klout:page-transition');
+    }
+  </script>
+
+  <!-- Favicon (inline SVG) -->
+  <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔹</text></svg>' />
+
+  <!-- Preload de imagens críticas -->
+  <link rel="preload" as="image" href="/images/logo_v3_blue.png" />
+
+  <!-- Importação direta das fontes do diretório public -->
+  <link rel="stylesheet" href="/fonts/ibm_plex_serif/ibm-plex-serif.css">
+  <link rel="stylesheet" href="/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono.css">
+  <link rel="stylesheet" href="/fonts/proxima_nova/proxima-nova.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap">
+
+  <!-- Estilos básicos -->
+  <style>
+    :root {
+      --font-sans: 'Proxima Nova', 'sans-serif';
+      --font-serif: 'IBM Plex Serif', 'serif';
+      --font-handwriting: 'IBM Plex Serif', 'serif';
+      --page-transition-solid: hsl(221, 46%, 6%);
+    }
+
+    /* Lenis smooth scroll */
+    html.lenis {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    .lenis.lenis-scrolling iframe {
+      pointer-events: none;
+    }
+
+    /* Skip Link para acessibilidade */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: hsl(214, 61%, 14%);
+      color: white;
+      padding: 8px 16px;
+      z-index: 10000;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 0 0 4px 0;
+      transition: top 0.3s;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Reset básico para full-width */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: linear-gradient(
+        135deg,
+        hsl(214, 61%, 97%) 0%,
+        hsl(214, 61%, 99%) 100%
+      );
+      min-height: 100vh;
+      color: hsl(214, 61%, 14%); /* Primary darker color */
+      font-family: 'Proxima Nova', 'sans-serif';
+    }
+
+    html.page-transition-enter body,
+    html.page-transition-active body {
+      overflow: hidden;
+    }
+
+    .page-transition-overlay {
+      --page-transition-enter-ms: 1060ms;
+      --page-transition-reveal-ms: 1020ms;
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      background: var(--page-transition-solid);
+      will-change: opacity;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      contain: strict;
+    }
+
+    html.page-transition-enter .page-transition-overlay,
+    html.page-transition-active .page-transition-overlay,
+    html.page-transition-revealing .page-transition-overlay {
+      visibility: visible;
+    }
+
+    html.page-transition-active .page-transition-overlay {
+      opacity: 1;
+      transition: opacity var(--page-transition-enter-ms) cubic-bezier(0.32, 0, 0.08, 1);
+    }
+
+    html.page-transition-enter .page-transition-overlay {
+      opacity: 1;
+      transition: none;
+    }
+
+    html.page-transition-revealing .page-transition-overlay {
+      opacity: 0;
+      transition: opacity var(--page-transition-reveal-ms) cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Custom scrollbar styling */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: hsla(42, 28%, 42%, 0.92) hsla(214, 22%, 16%, 0.08);
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: hsla(214, 22%, 16%, 0.08);
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(
+        180deg,
+        hsla(42, 30%, 48%, 0.96) 0%,
+        hsla(42, 26%, 36%, 0.96) 100%
+      );
+      border-radius: 999px;
+      border: 2px solid hsla(0, 0%, 100%, 0.55);
+      box-shadow:
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.18),
+        0 2px 8px hsla(214, 28%, 10%, 0.14);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(
+        180deg,
+        hsla(42, 34%, 54%, 0.98) 0%,
+        hsla(42, 28%, 40%, 0.98) 100%
+      );
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    :global(.control-button) {
+      --control-size: 4.65rem;
+      --control-arrow-width: 1.9rem;
+      --control-arrow-height: 0.95rem;
+      --control-hover-x: 0px;
+      --control-hover-y: 0px;
+      --control-base-x: 0px;
+      --control-base-y: 0px;
+      --control-hover-scale: 1.02;
+      --control-active-scale: 0.98;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--control-size);
+      height: var(--control-size);
+      padding: 0;
+      border: 1px solid hsla(214, 20%, 30%, 0.08);
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, hsla(42, 30%, 98%, 0.94) 0%, hsla(206, 24%, 93%, 0.96) 100%);
+      box-shadow:
+        0 18px 34px hsla(214, 24%, 18%, 0.12),
+        0 6px 14px hsla(214, 20%, 22%, 0.08),
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.95),
+        inset 0 -10px 18px hsla(214, 20%, 82%, 0.22);
+      backdrop-filter: blur(10px) saturate(1.02);
+      transform: translate3d(var(--control-base-x), var(--control-base-y), 0) scale(1);
+      transition:
+        transform 0.32s ease,
+        box-shadow 0.32s ease,
+        filter 0.32s ease,
+        opacity 0.25s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :global(.control-button::before) {
+      content: '';
+      position: absolute;
+      inset: 0.38rem;
+      border-radius: inherit;
+      border: 1px solid hsla(213, 26%, 34%, 0.08);
+      box-shadow:
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.8),
+        inset 0 -6px 10px hsla(214, 16%, 76%, 0.14);
+      pointer-events: none;
+    }
+
+    :global(.control-button:hover:not(:disabled)) {
+      transform:
+        translate3d(
+          calc(var(--control-base-x) + var(--control-hover-x)),
+          calc(var(--control-base-y) + var(--control-hover-y)),
+          0
+        )
+        scale(var(--control-hover-scale));
+      filter: saturate(1.04);
+      box-shadow:
+        0 22px 42px hsla(214, 24%, 18%, 0.15),
+        0 8px 16px hsla(214, 20%, 22%, 0.1),
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.98),
+        inset 0 -10px 18px hsla(214, 20%, 82%, 0.24);
+    }
+
+    :global(.control-button:active:not(:disabled)) {
+      transform:
+        translate3d(
+          calc(var(--control-base-x) + var(--control-hover-x)),
+          calc(var(--control-base-y) + var(--control-hover-y)),
+          0
+        )
+        scale(var(--control-active-scale));
+    }
+
+    :global(.control-button:focus-visible) {
+      outline: 2px solid hsla(43, 52%, 46%, 0.55);
+      outline-offset: 6px;
+      border-radius: 999px;
+    }
+
+    :global(.control-button:disabled) {
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    :global(.control-button__arrow) {
+      width: var(--control-arrow-width);
+      height: var(--control-arrow-height);
+      display: block;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    :global(.control-button__arrow::before) {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 1.05rem;
+      height: 1px;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, hsl(41, 34%, 56%) 0%, hsl(38, 38%, 42%) 100%);
+      box-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.16);
+    }
+
+    :global(.control-button__arrow::after) {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 0.72rem;
+      height: 0.72rem;
+      box-shadow: 1px -1px 0 hsla(0, 0%, 100%, 0.08);
+    }
+
+    :global(.control-button__arrow--right::before) {
+      left: 0;
+    }
+
+    :global(.control-button__arrow--right::after) {
+      right: 0.02rem;
+      border-top: 1.5px solid hsl(39, 38%, 44%);
+      border-right: 1.5px solid hsl(39, 38%, 44%);
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    :global(.control-button__arrow--left::before) {
+      right: 0;
+    }
+
+    :global(.control-button__arrow--left::after) {
+      left: 0.02rem;
+      border-left: 1.5px solid hsl(39, 38%, 44%);
+      border-bottom: 1.5px solid hsl(39, 38%, 44%);
+      transform: translateY(-50%) rotate(45deg);
+      box-shadow: -1px 1px 0 hsla(0, 0%, 100%, 0.08);
+    }
+
+    :global(.control-button--compact) {
+      --control-size: 3.85rem;
+      --control-arrow-width: 1.55rem;
+      --control-arrow-height: 0.82rem;
+    }
+
+    :global(.control-button--mini) {
+      --control-size: 2.35rem;
+      --control-arrow-width: 1.1rem;
+      --control-arrow-height: 0.62rem;
+      --control-hover-scale: 1.01;
+      --control-active-scale: 0.97;
+    }
+
+    .bg-white {
+      background-color: white;
+    }
+
+    .bg-opacity-90 {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+
+    .mb-12 {
+      margin-bottom: 3rem;
+    }
+
+    .mb-8 {
+      margin-bottom: 2rem;
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem;
+    }
+
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+
+    .mb-2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .border-b {
+      border-bottom-width: 1px;
+      border-color: #e5e7eb;
+    }
+
+    .pb-2 {
+      padding-bottom: 0.5rem;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-4xl {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-medium {
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .h-16 {
+      height: 4rem;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .rounded {
+      border-radius: 0.25rem;
+    }
+
+    .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+      --space-y-reverse: 0;
+      margin-top: calc(1rem * calc(1 - var(--space-y-reverse)));
+      margin-bottom: calc(1rem * var(--space-y-reverse));
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .text-white {
+      color: white;
+    }
+
+    .text-gray-800 {
+      color: #1f2937;
+    }
+
+    /* Definições de fonte */
+    h1, h2, h3, h4 {
+      font-family: 'Proxima Nova', 'sans-serif';
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .page-transition-overlay {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition-overlay" id="page-transition-overlay" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+  <SmoothScroll client:only="svelte" />
+  <slot />
+  <script>
+    import { prefersReducedMotion } from '../lib/reducedMotion';
+
+    declare global {
+      interface Window {
+        __kloutNavigate?: (href: string, options?: { replace?: boolean }) => void;
+        __kloutPageTransition?: {
+          enterHoldMs: number;
+          revealMs: number;
+        };
+        lenisInstance?: { stop?: () => void; start?: () => void };
+      }
+    }
+
+    const TRANSITION_KEY = 'klout:page-transition';
+    const TRANSITION_TTL = 4000;
+    const EXIT_FADE_MS = 1060;
+    const EXIT_HOLD_MS = 180;
+    const ENTER_HOLD_MS = 240;
+    const REVEAL_FADE_MS = 1020;
+    const REVEAL_READY_TIMEOUT_MS = 1800;
+    let isTransitioning = false;
+    let navigationTimer: number | null = null;
+    let revealReadyTimer: number | null = null;
+    let revealTimer: number | null = null;
+    let revealCleanupTimer: number | null = null;
+
+    const html = document.documentElement;
+    const overlay = document.getElementById('page-transition-overlay') as HTMLElement | null;
+
+    window.__kloutPageTransition = {
+      enterHoldMs: ENTER_HOLD_MS,
+      revealMs: REVEAL_FADE_MS,
+    };
+
+    function clearTransitionState(): void {
+      try {
+        window.sessionStorage.removeItem(TRANSITION_KEY);
+      } catch {
+        // noop
+      }
+    }
+
+    function getFreshTransitionState(): { ts: number } | null {
+      try {
+        const rawState = window.sessionStorage.getItem(TRANSITION_KEY);
+        if (!rawState) return null;
+
+        const transitionState = JSON.parse(rawState) as { ts?: number };
+        if (typeof transitionState.ts !== 'number') return null;
+        if (Date.now() - transitionState.ts > TRANSITION_TTL) return null;
+
+        return { ts: transitionState.ts };
+      } catch {
+        return null;
+      }
+    }
+
+    function canAnimateTransition(): boolean {
+      return !prefersReducedMotion() && !!overlay;
+    }
+
+    function clearTransitionTimers(): void {
+      if (navigationTimer !== null) {
+        window.clearTimeout(navigationTimer);
+        navigationTimer = null;
+      }
+
+      if (revealTimer !== null) {
+        window.clearTimeout(revealTimer);
+        revealTimer = null;
+      }
+
+      if (revealReadyTimer !== null) {
+        window.clearTimeout(revealReadyTimer);
+        revealReadyTimer = null;
+      }
+
+      if (revealCleanupTimer !== null) {
+        window.clearTimeout(revealCleanupTimer);
+        revealCleanupTimer = null;
+      }
+    }
+
+    function resetOverlayState(): void {
+      clearTransitionTimers();
+      html.classList.remove('page-transition-enter', 'page-transition-active', 'page-transition-revealing');
+      if (!overlay) return;
+
+      overlay.style.opacity = '';
+      overlay.style.pointerEvents = 'none';
+      window.lenisInstance?.start?.();
+    }
+
+    function startNavigation(href: string, options?: { replace?: boolean }): void {
+      const targetUrl = new URL(href, window.location.href);
+      const isSameDocument =
+        targetUrl.origin === window.location.origin &&
+        targetUrl.pathname === window.location.pathname &&
+        targetUrl.search === window.location.search;
+
+      if (isSameDocument) {
+        if (targetUrl.hash && targetUrl.hash !== window.location.hash) {
+          window.location.href = targetUrl.href;
+          return;
+        }
+
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+        return;
+      }
+
+      if (!canAnimateTransition()) {
+        if (options?.replace) {
+          window.location.replace(targetUrl.href);
+        } else {
+          window.location.href = targetUrl.href;
+        }
+        return;
+      }
+
+      if (isTransitioning) return;
+      isTransitioning = true;
+
+      try {
+        window.sessionStorage.setItem(TRANSITION_KEY, JSON.stringify({ ts: Date.now() }));
+      } catch {
+        // noop
+      }
+
+      html.classList.add('page-transition-active');
+      window.lenisInstance?.stop?.();
+      overlay.style.pointerEvents = 'auto';
+
+      navigationTimer = window.setTimeout(() => {
+        navigationTimer = null;
+
+        if (options?.replace) {
+          window.location.replace(targetUrl.href);
+          return;
+        }
+
+        window.location.href = targetUrl.href;
+      }, EXIT_FADE_MS + EXIT_HOLD_MS);
+    }
+
+    function revealPage(): void {
+      const transitionState = getFreshTransitionState();
+      if (!transitionState) {
+        resetOverlayState();
+        return;
+      }
+
+      clearTransitionState();
+
+      if (!canAnimateTransition()) {
+        resetOverlayState();
+        return;
+      }
+
+      html.classList.add('page-transition-enter');
+      window.lenisInstance?.stop?.();
+      overlay.style.pointerEvents = 'none';
+
+      const startReveal = (): void => {
+        if (revealTimer !== null || revealCleanupTimer !== null) return;
+
+        if (revealReadyTimer !== null) {
+          window.clearTimeout(revealReadyTimer);
+          revealReadyTimer = null;
+        }
+
+        window.removeEventListener('load', startReveal);
+
+        revealTimer = window.setTimeout(() => {
+          revealTimer = null;
+          html.classList.remove('page-transition-enter');
+          html.classList.add('page-transition-revealing');
+
+          revealCleanupTimer = window.setTimeout(() => {
+            revealCleanupTimer = null;
+            isTransitioning = false;
+            resetOverlayState();
+          }, REVEAL_FADE_MS);
+        }, ENTER_HOLD_MS);
+      };
+
+      if (document.readyState === 'complete') {
+        startReveal();
+        return;
+      }
+
+      window.addEventListener('load', startReveal, { once: true });
+      revealReadyTimer = window.setTimeout(() => {
+        revealReadyTimer = null;
+        startReveal();
+      }, REVEAL_READY_TIMEOUT_MS);
+    }
+
+    function isEligibleAnchor(anchor: HTMLAnchorElement, event: MouseEvent): boolean {
+      const rawHref = anchor.getAttribute('href');
+      if (!rawHref) return false;
+      if (anchor.target && anchor.target !== '_self') return false;
+      if (anchor.hasAttribute('download')) return false;
+      if (anchor.dataset.noPageTransition !== undefined) return false;
+      if (event.defaultPrevented || event.button !== 0) return false;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+      if (
+        rawHref.startsWith('mailto:') ||
+        rawHref.startsWith('tel:') ||
+        rawHref.startsWith('javascript:')
+      ) {
+        return false;
+      }
+
+      const targetUrl = new URL(anchor.href, window.location.href);
+      if (targetUrl.origin !== window.location.origin) return false;
+
+      const isSameDocument =
+        targetUrl.pathname === window.location.pathname &&
+        targetUrl.search === window.location.search;
+
+      if (isSameDocument) {
+        return false;
+      }
+
+      return true;
+    }
+
+    window.__kloutNavigate = (href: string, options?: { replace?: boolean }) => {
+      startNavigation(href, options);
+    };
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        const target = event.target as Element | null;
+        const anchor = target?.closest('a[href]');
+        if (!(anchor instanceof HTMLAnchorElement)) return;
+        if (!isEligibleAnchor(anchor, event)) return;
+
+        event.preventDefault();
+        startNavigation(anchor.href);
+      },
+      { capture: true },
+    );
+
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        isTransitioning = false;
+        resetOverlayState();
+      }
+    });
+
+    requestAnimationFrame(() => {
+      revealPage();
+    });
+  </script>
+</body>
+</html>

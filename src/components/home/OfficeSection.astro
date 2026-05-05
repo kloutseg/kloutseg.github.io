@@ -1,0 +1,357 @@
+---
+import SectionIndicator from './SectionIndicators.svelte';
+---
+
+<section id="escritorio" data-stack-section data-dark-section>
+  <SectionIndicator number="05" title="Escritório" />
+
+  <div class="office-content">
+    <div class="image-wrapper" aria-label="Foto do escritório Klout">
+      <div class="office-image-container">
+        <img
+          src="/images/office_03.png"
+          alt="Ambiente do escritório Klout com design moderno e acolhedor"
+          class="office-image"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <div class="text-content">
+      <div class="editorial-card">
+        <h2 class="headline">
+          Atendimento com hora marcada.
+        </h2>
+        <p class="description">
+            Agende uma reunião com um dos nossos consultores para desenharmos a melhor solução.
+        </p>
+        <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="maps-button">
+          Ver localização
+          <svg class="button-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    min-height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    position: relative;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 4.5rem;
+    background:
+      radial-gradient(ellipse at 22% 24%, hsla(214, 44%, 32%, 0.18) 0%, transparent 44%),
+      radial-gradient(ellipse at 78% 76%, hsla(214, 34%, 24%, 0.14) 0%, transparent 48%),
+      radial-gradient(ellipse at 52% 48%, hsla(42, 18%, 42%, 0.04) 0%, transparent 42%),
+      linear-gradient(
+        135deg,
+        hsl(214, 42%, 15%) 0%,
+        hsl(214, 30%, 8%) 100%
+      );
+  }
+
+  section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        hsla(214, 42%, 4%, 0.3) 0%,
+        transparent 20%,
+        transparent 80%,
+        hsla(214, 42%, 4%, 0.42) 100%
+      );
+    pointer-events: none;
+  }
+
+  .office-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    justify-content: center;
+    gap: clamp(3rem, 5vw, 5.5rem);
+    width: 100%;
+    max-width: 1320px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .image-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .office-image-container {
+    width: min(100%, 620px);
+    aspect-ratio: 10 / 12;
+    height: auto;
+    box-shadow:
+      0 34px 56px rgba(0, 0, 0, 0.26),
+      0 10px 22px rgba(0, 0, 0, 0.14);
+    background: hsl(214, 20%, 95%);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: none;
+  }
+
+  .office-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+    border-radius: inherit;
+    filter: saturate(0.82) sepia(0.02) hue-rotate(-4deg) brightness(0.72) contrast(1.04);
+  }
+
+  .text-content {
+    width: 100%;
+    min-width: 0;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: none;
+    padding-top: 0;
+  }
+
+  .editorial-card {
+    width: min(100%, 32rem);
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .headline {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: clamp(2.25rem, 3.2vw, 3.1rem);
+    font-weight: 400;
+    line-height: 0.98;
+    margin-bottom: 1.35rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: hsl(0, 0%, 95%);
+    letter-spacing: -0.045em;
+    max-width: 15ch;
+    text-align: center;
+    text-shadow: 0 10px 28px hsla(214, 42%, 4%, 0.18);
+  }
+
+  .description {
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 1rem;
+    line-height: 1.9;
+    font-weight: 400;
+    color: hsl(214, 16%, 80%);
+    max-width: 44ch;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    letter-spacing: 0.015em;
+    opacity: 0.9;
+    text-align: center;
+  }
+
+  .maps-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    padding: 0.15rem 0;
+    border: none;
+    border-radius: 0;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 0.35s ease, transform 0.35s ease;
+    background: transparent;
+    color: hsl(42, 44%, 70%);
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+    box-shadow: none;
+  }
+
+  .maps-button::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 1.5rem;
+    bottom: -0.2rem;
+    height: 1px;
+    background: linear-gradient(90deg, hsla(42, 44%, 70%, 0.92) 0%, hsla(42, 44%, 70%, 0.18) 100%);
+    transform-origin: left center;
+    transition: transform 0.35s ease;
+  }
+
+  .maps-button:hover {
+    color: hsl(42, 52%, 78%);
+    transform: translateY(-1px);
+  }
+
+  .maps-button:hover::after {
+    transform: scaleX(1.08);
+  }
+
+  .maps-button:active {
+    transform: translateY(0);
+  }
+
+  .maps-button:focus-visible {
+    outline: 2px solid hsla(42, 44%, 70%, 0.88);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .button-arrow {
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    transition: transform 0.3s ease;
+  }
+
+  .maps-button:hover .button-arrow {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 1024px) {
+    section {
+      padding: 3rem 2.5rem;
+    }
+
+    .office-content {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .text-content {
+      align-items: center;
+    }
+
+    .editorial-card {
+      text-align: center;
+    }
+
+    .headline,
+    .description {
+      text-align: center;
+    }
+
+    .maps-button {
+      margin-top: 2.4rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    section {
+      padding: 3.5rem 1.5rem 4.5rem 1.5rem;
+      min-height: auto;
+    }
+
+    .office-content {
+      gap: 0;
+    }
+
+    .image-wrapper {
+      width: 100%;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .office-image-container {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      aspect-ratio: 10 / 12;
+      border-radius: 16px;
+      box-shadow: none;
+      transition: none;
+    }
+
+    .office-image {
+      object-position: center 24%;
+      transform: none;
+      transition: none;
+    }
+
+    .text-content {
+      width: 100%;
+      max-width: 520px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      margin-top: 1.6rem;
+      padding-inline: 1rem;
+      padding-top: 0;
+      box-sizing: border-box;
+    }
+
+    .editorial-card {
+      width: 100%;
+      max-width: 28rem;
+      margin: 0 auto;
+      box-sizing: border-box;
+      text-align: center;
+      padding: 0;
+    }
+
+    .headline,
+    .description {
+      text-align: center;
+    }
+
+    .headline {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      max-width: 100%;
+      font-size: 0.86rem;
+      color: hsl(214, 20%, 74%);
+      margin-bottom: 0;
+    }
+
+    .maps-button {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.07em;
+    }
+
+    .maps-button::after {
+      right: 1.35rem;
+    }
+
+  }
+</style>

@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/Base.astro';
+import LeadForm from '../components/lead-form/LeadForm.svelte';
+---
+
+<BaseLayout title="Solicitar Análise — Klout">
+  <main id="main-content">
+    <LeadForm client:load />
+  </main>
+</BaseLayout>

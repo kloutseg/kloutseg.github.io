@@ -1,0 +1,734 @@
+---
+import BaseLayout from '../layouts/Base.astro';
+import FloatingNavbar from '../components/navbar/FloatingNavbar.svelte';
+import SectionStacking from '../components/SectionStacking.svelte';
+import Footer from '../components/Footer.svelte';
+import BackToTop from '../components/BackToTop.svelte';
+
+const addressItems = [
+  {
+    label: 'Unidade base',
+    value: 'R. Sena Madureira, 151 - Vila Mariana, São Paulo - SP, 04021-050',
+  },
+  {
+    label: 'Atendimento',
+    value: 'Presencial com hora marcada',
+  },
+  {
+    label: 'Demais pontos',
+    value: 'R. da Quitanda, 96 - Centro Histórico de São Paulo, São Paulo - SP, 01012-010',
+    secondary: true,
+  },
+];
+---
+
+<BaseLayout title="A Klout">
+  <FloatingNavbar client:load />
+  <SectionStacking client:load />
+
+  <main id="main-content">
+    <section id="a-klout" class="about-klout-hero" data-stack-section data-dark-section>
+      <div class="about-klout-hero-media">
+        <img
+          src="/images/office_hero_04.webp"
+          alt="Ambiente real da Klout para reuniões e atendimento consultivo"
+          class="about-klout-hero-image"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="about-klout-hero-overlay"></div>
+      </div>
+
+      <div class="about-klout-hero-shell">
+        <p class="about-klout-kicker section-side-kicker section-side-kicker-light">A Klout</p>
+
+        <div class="about-klout-hero-copy">
+          <h1 class="about-klout-hero-title">
+            A Klout existe para influenciar decisões mais inteligentes em saúde.
+          </h1>
+          <p class="about-klout-hero-description">
+            Estamos presentes em São Paulo, com operação real, atendimento próximo e assistência personalizada para famílias e empresas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-klout-section about-klout-proof" data-stack-section>
+      <div class="about-klout-shell">
+        <p class="about-klout-side-kicker section-side-kicker">Presença real</p>
+
+        <div class="about-klout-proof-grid">
+          <div class="about-klout-proof-lead">
+            <h2 class="about-klout-proof-title">Não começamos pela venda. Começamos pela leitura.</h2>
+          </div>
+
+          <div class="about-klout-proof-copy">
+            <div class="about-klout-proof-lines" aria-label="Apresentação da Klout">
+              <p>Somos técnicos e transparentes. Lemos apólices com rigor e identificamos o que realmente altera cobertura, aderência e eficiência.</p>
+              <p>Transparência, aqui, significa uma coisa: dizer com clareza o que faz sentido e o que não faz, inclusive quando a melhor decisão é continuar com a sua apólice.</p>
+              <p>Atendemos no escritório, na empresa ou na sua casa, com hora marcada.</p>
+            </div>
+
+            <div class="about-klout-proof-actions">
+              <a href="/analise" class="about-klout-proof-cta">
+                Agendar conversa
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-klout-section about-klout-gallery">
+      <div class="about-klout-shell">
+        <div class="about-klout-units-grid">
+          <figure class="about-klout-units-photo-frame">
+            <img
+              src="/images/office_units_placeholder.png"
+              alt="Ambiente de escritório contemporâneo da Klout para reuniões presenciais"
+              class="about-klout-units-photo"
+              loading="lazy"
+            />
+          </figure>
+
+          <div class="about-klout-units-copy">
+            <p class="about-klout-side-kicker section-side-kicker">Unidades da Klout</p>
+
+            <div class="about-klout-address-list" aria-label="Pontos de atendimento da Klout">
+              {addressItems.map((item) => (
+                <article class="about-klout-address-item">
+                  <p class="about-klout-address-label">{item.label}</p>
+                  <p class:list={['about-klout-address-value', item.secondary && 'about-klout-address-value-secondary']}>{item.value}</p>
+                </article>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-klout-section about-klout-cta" data-dark-section>
+      <div class="about-klout-shell about-klout-cta-shell">
+        <p class="about-klout-cta-kicker">Conversar com a Klout</p>
+        <h2 class="about-klout-cta-title">
+          Se você procura critério, leitura técnica e transparência, podemos conversar.
+        </h2>
+        <a href="/analise" class="about-klout-cta-link">
+          Agendar conversa
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer client:idle />
+  <BackToTop client:idle />
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    window.addEventListener('load', () => {
+      const hero = document.querySelector('.about-klout-hero');
+      if (!hero) return;
+
+      const heroImage = hero.querySelector('.about-klout-hero-image');
+      const heroOverlay = hero.querySelector('.about-klout-hero-overlay');
+      const heroKicker = hero.querySelector('.about-klout-kicker');
+      const heroTitle = hero.querySelector('.about-klout-hero-title');
+      const heroDescription = hero.querySelector('.about-klout-hero-description');
+      const arrivedViaPageTransition =
+        document.documentElement.classList.contains('page-transition-enter');
+
+      if (arrivedViaPageTransition) {
+        gsap.set([heroKicker, heroTitle, heroDescription], {
+          autoAlpha: 1,
+          y: 0
+        });
+
+        gsap.set(heroImage, {
+          scale: 1,
+          autoAlpha: 1
+        });
+
+        gsap.set(heroOverlay, {
+          autoAlpha: 1
+        });
+
+        return;
+      }
+
+      gsap.set([heroKicker, heroTitle, heroDescription], {
+        autoAlpha: 0,
+        y: 42
+      });
+
+      gsap.set(heroImage, {
+        scale: 1.14,
+        autoAlpha: 0.58
+      });
+
+      gsap.set(heroOverlay, {
+        autoAlpha: 0.18
+      });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power2.out' }
+      });
+
+      tl.to(heroImage, {
+        scale: 1,
+        autoAlpha: 1,
+        duration: 2.8,
+        ease: 'power3.out'
+      })
+        .to(heroOverlay, {
+          autoAlpha: 1,
+          duration: 2.2,
+          ease: 'power2.out'
+        }, 0.18)
+        .to(heroKicker, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1.15,
+          ease: 'power3.out'
+        }, 0.92)
+        .to(heroTitle, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1.45,
+          ease: 'power3.out'
+        }, 1.02)
+        .to(heroDescription, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out'
+        }, 1.42);
+    }, { once: true });
+  }
+</script>
+
+<style>
+  .about-klout-hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+    background: hsl(214, 48%, 7%);
+  }
+
+  .about-klout-hero-media,
+  .about-klout-hero-image,
+  .about-klout-hero-overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .about-klout-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.56) saturate(0.88) contrast(0.94);
+  }
+
+  .about-klout-hero-overlay {
+    background:
+      linear-gradient(90deg, hsla(214, 52%, 6%, 0.84) 0%, hsla(214, 52%, 6%, 0.68) 38%, hsla(214, 52%, 6%, 0.36) 100%),
+      linear-gradient(180deg, hsla(214, 52%, 6%, 0.28) 0%, hsla(214, 52%, 6%, 0.54) 100%);
+  }
+
+  .about-klout-hero-shell {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 1280px);
+    min-height: 100vh;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: clamp(4.75rem, 8vh, 6.2rem) clamp(1.5rem, 5vw, 4.5rem) clamp(3rem, 6vh, 4rem);
+    display: grid;
+    align-content: center;
+    gap: 2rem;
+  }
+
+  .about-klout-kicker {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: fit-content;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsla(42, 30%, 88%, 0.82);
+  }
+
+  .about-klout-kicker::before {
+    content: '';
+    width: 1.9rem;
+    height: 1px;
+    background: linear-gradient(90deg, hsla(43, 52%, 56%, 0.78) 0%, hsla(43, 52%, 56%, 0.24) 100%);
+  }
+
+  .about-klout-hero-copy {
+    display: grid;
+    gap: 1.4rem;
+    max-width: 55rem;
+  }
+
+  .about-klout-hero-title {
+    margin: 0;
+    max-width: 12ch;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: clamp(3.4rem, 6.4vw, 6.3rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.075em;
+    color: hsl(40, 26%, 95%);
+    text-wrap: balance;
+  }
+
+  .about-klout-hero-description {
+    margin: 0;
+    max-width: 34ch;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 400;
+    line-height: 1.82;
+    letter-spacing: 0.01em;
+    color: hsla(214, 24%, 88%, 0.8);
+  }
+
+  .about-klout-section {
+    position: relative;
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .about-klout-proof {
+    background:
+      radial-gradient(circle at top left, hsla(42, 36%, 72%, 0.18) 0%, transparent 36%),
+      linear-gradient(180deg, hsl(42, 30%, 97.4%) 0%, hsl(206, 34%, 95.8%) 100%);
+  }
+
+  .about-klout-gallery {
+    background: hsl(210, 18%, 95%);
+  }
+
+  .about-klout-gallery .about-klout-shell {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  .about-klout-cta {
+    background:
+      radial-gradient(circle at 18% 22%, hsla(43, 42%, 46%, 0.12) 0%, transparent 20%),
+      linear-gradient(180deg, hsl(214, 52%, 7%) 0%, hsl(214, 61%, 4%) 100%);
+  }
+
+  .about-klout-shell {
+    width: min(100%, 1280px);
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 4.5rem);
+  }
+
+  .about-klout-side-kicker {
+    margin: 0 0 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: fit-content;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: hsla(214, 24%, 18%, 0.58);
+  }
+
+  .about-klout-side-kicker::before {
+    content: '';
+    width: 1.7rem;
+    height: 1px;
+    background: linear-gradient(90deg, hsla(214, 18%, 16%, 0.54) 0%, hsla(214, 18%, 16%, 0.12) 100%);
+  }
+
+  .about-klout-proof-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .about-klout-proof-title {
+    margin: 0;
+    max-width: 9ch;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: clamp(2.7rem, 4.8vw, 4.8rem);
+    font-weight: 400;
+    line-height: 0.94;
+    letter-spacing: -0.07em;
+    color: hsl(214, 34%, 12%);
+    text-wrap: balance;
+  }
+
+  .about-klout-proof-lines {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    max-width: 40rem;
+    padding: 0.15rem 0 0 2rem;
+    border-left: 1px solid hsla(214, 18%, 16%, 0.1);
+  }
+
+  .about-klout-proof-lines p {
+    margin: 0;
+    max-width: 37ch;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 400;
+    line-height: 1.82;
+    letter-spacing: 0.01em;
+    color: hsla(214, 28%, 17%, 0.8);
+    text-wrap: balance;
+  }
+
+  .about-klout-proof-copy {
+    display: grid;
+    align-content: start;
+    gap: 1.9rem;
+    margin-left: 8rem;
+  }
+
+  .about-klout-proof-lines p:nth-child(1) {
+    color: hsla(214, 30%, 13%, 0.9);
+  }
+
+  .about-klout-proof-lines p:nth-child(2) {
+    color: hsla(214, 28%, 15%, 0.82);
+  }
+
+  .about-klout-proof-lines p:nth-child(3) {
+    color: hsla(214, 30%, 14%, 0.9);
+  }
+
+  .about-klout-proof-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 0;
+  }
+
+  .about-klout-proof-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: fit-content;
+    padding: 0.92rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid hsla(214, 18%, 16%, 0.12);
+    background: hsla(0, 0%, 100%, 0.54);
+    box-shadow:
+      0 10px 24px hsla(214, 24%, 12%, 0.06),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.72);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: hsla(214, 32%, 14%, 0.88);
+    transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .about-klout-proof-cta:hover {
+    transform: translateX(2px);
+    color: hsla(214, 36%, 10%, 1);
+    background: hsla(0, 0%, 100%, 0.78);
+    border-color: hsla(214, 18%, 16%, 0.2);
+    box-shadow:
+      0 14px 28px hsla(214, 24%, 12%, 0.08),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.82);
+  }
+
+  .about-klout-proof-cta svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .about-klout-units-grid {
+    display: grid;
+    grid-template-columns: 50vw minmax(0, 1fr);
+    gap: 0;
+    align-items: stretch;
+    min-height: 100vh;
+  }
+
+  .about-klout-units-photo-frame {
+    margin: 0;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    border-radius: 0;
+    background: hsl(214, 12%, 88%);
+    box-shadow:
+      28px 0 56px hsla(214, 24%, 12%, 0.06);
+  }
+
+  .about-klout-units-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: calc(50% + 16rem) center;
+    filter: brightness(0.66) saturate(0.9) contrast(0.94);
+  }
+
+  .about-klout-units-photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, hsla(214, 38%, 6%, 0.16) 0%, hsla(214, 38%, 6%, 0.34) 100%);
+    pointer-events: none;
+  }
+
+  .about-klout-units-copy {
+    display: grid;
+    align-content: center;
+    gap: 0;
+    padding: clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 4.5rem);
+  }
+
+  .about-klout-address-list {
+    display: grid;
+    gap: 0.95rem;
+    padding-top: 1.2rem;
+  }
+
+  .about-klout-address-item {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1rem 0 0.95rem;
+    border-top: 1px solid hsla(214, 18%, 18%, 0.1);
+  }
+
+  .about-klout-address-item:last-child {
+    border-bottom: 1px solid hsla(214, 18%, 18%, 0.1);
+  }
+
+  .about-klout-address-label {
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsla(214, 22%, 22%, 0.54);
+  }
+
+  .about-klout-address-value {
+    margin: 0;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 1.42;
+    letter-spacing: 0.01em;
+    color: hsla(214, 30%, 14%, 0.9);
+  }
+
+  .about-klout-address-value-secondary {
+    font-weight: 400;
+  }
+
+  .about-klout-cta-shell {
+    min-height: 64vh;
+    display: grid;
+    align-content: center;
+    gap: 3.2rem;
+  }
+
+  .about-klout-cta-kicker {
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: hsla(43, 52%, 58%, 0.82);
+  }
+
+  .about-klout-cta-title {
+    margin: 0;
+    max-width: 12ch;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+    color: hsl(42, 24%, 94%);
+    text-wrap: balance;
+  }
+
+  .about-klout-cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: fit-content;
+    margin-left: 0.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: hsl(42, 28%, 90%);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .about-klout-cta-link:hover {
+    transform: translateX(2px);
+    color: hsl(42, 36%, 96%);
+  }
+
+  .about-klout-cta-link svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .about-klout-hero-shell,
+    .about-klout-shell {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .about-klout-proof-grid {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+    }
+
+    .about-klout-proof-title {
+      max-width: 10ch;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+    }
+
+    .about-klout-proof-copy {
+      margin-left: 0;
+    }
+
+    .about-klout-proof-actions {
+      padding-left: 0;
+    }
+
+    .about-klout-units-grid {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .about-klout-gallery .about-klout-shell {
+      padding: 0;
+    }
+
+    .about-klout-units-photo-frame {
+      min-height: 28rem;
+    }
+
+    .about-klout-units-copy {
+      padding: 2.5rem 2rem 4rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .about-klout-hero-shell,
+    .about-klout-shell {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .about-klout-hero-shell {
+      padding-top: 4.8rem;
+      padding-bottom: 3rem;
+      align-content: end;
+    }
+
+    .about-klout-hero-copy {
+      max-width: 100%;
+      gap: 1rem;
+    }
+
+    .about-klout-hero-title {
+      max-width: 10ch;
+      font-size: clamp(2.55rem, 11vw, 4rem);
+      line-height: 0.96;
+    }
+
+    .about-klout-hero-description,
+    .about-klout-proof-lines p {
+      max-width: 100%;
+      font-size: 0.96rem;
+      line-height: 1.72;
+    }
+
+    .about-klout-proof-lines {
+      gap: 1rem;
+      max-width: 100%;
+      padding-left: 1.2rem;
+      border-left: 1px solid hsla(214, 18%, 16%, 0.08);
+    }
+
+    .about-klout-side-kicker {
+      margin-bottom: 1.75rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+    }
+
+    .about-klout-side-kicker::before,
+    .about-klout-kicker::before {
+      width: 1.35rem;
+    }
+
+    .about-klout-units-photo-frame {
+      min-height: 19rem;
+    }
+
+    .about-klout-units-copy {
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .about-klout-address-value {
+      font-size: 1rem;
+    }
+
+    .about-klout-cta-shell {
+      min-height: 52vh;
+    }
+
+    .about-klout-cta-title {
+      max-width: 11ch;
+      font-size: clamp(2.3rem, 10vw, 3.6rem);
+    }
+  }
+</style>

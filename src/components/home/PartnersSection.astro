@@ -1,0 +1,613 @@
+---
+import SectionIndicator from './SectionIndicators.svelte';
+
+const partners = [
+  { slug: 'alice', src: '/images/logos_svgs/logo_alice.svg', alt: 'Alice' },
+  { slug: 'amil', src: '/images/logos_svgs/logo_amil.svg', alt: 'Amil' },
+  { slug: 'bradesco', src: '/images/logos_svgs/logo_bradesco.svg', alt: 'Bradesco Saúde' },
+  { slug: 'omint', src: '/images/logos_svgs/logo_omint.svg', alt: 'Omint' },
+  { slug: 'porto', src: '/images/logos_svgs/logo_porto.svg', alt: 'Porto Seguro' },
+  { slug: 'sulamerica', src: '/images/logos_svgs/logo_sulamerica.svg', alt: 'SulAmérica' },
+];
+---
+
+<section id="parceiros" data-stack-section data-dark-section>
+  <SectionIndicator number="03" title="Nossos parceiros" />
+
+  <div class="content-wrapper">
+    <div class="partners-layout">
+      <div class="text-container">
+        <div class="headline-block">
+          <h2 class="partners-headline">
+            Parceiros
+          </h2>
+          <span class="partners-subtitle">
+            Referência em saúde de alto padrão.
+          </span>
+        </div>
+
+        <div class="detail-block">
+          <div class="detail-content">
+            <p class="detail-subtext">
+                Nossa curadoria avalia combinações que podem aproximar o cliente de redes como Einstein, Sírio-Libanês, Oswaldo Cruz, Samaritano, BP, HCor, Pro Matre, Santa Catarina, Fleury, Alta, Delboni, Lavoisier e A+, conforme a linha e o perfil do plano.
+            </p>
+            <div class="detail-actions">
+              <a href="#contato" class="detail-cta">
+                  Revisar plano
+              </a>
+              <a href="/parceiros" class="detail-cta detail-cta-outline">
+                Ver operadoras
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-grid">
+        {partners.map((partner) => (
+          <a
+            href={`/parceiros#parceiro-${partner.slug}`}
+            class="logo-item"
+            aria-label={`Conhecer detalhes da operadora ${partner.alt}`}
+          >
+            <img src={partner.src} alt={partner.alt} loading="lazy" />
+          </a>
+        ))}
+      </div>
+
+      <div class="logo-track">
+        <div class="logo-track-inner">
+          {[...partners, ...partners].map((partner) => (
+            <a
+              href={`/parceiros#parceiro-${partner.slug}`}
+              class="logo-scroll-item"
+              aria-label={`Conhecer detalhes da operadora ${partner.alt}`}
+            >
+              <img src={partner.src} alt={partner.alt} loading="lazy" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    min-height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    position: relative;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.5rem 7rem 2rem 4rem;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 45% at 28% 12%, hsla(200, 56%, 52%, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 85% 90%, hsla(200, 62%, 44%, 0.04) 0%, transparent 45%),
+      radial-gradient(ellipse 40% 35% at 60% 50%, hsla(40, 28%, 52%, 0.03) 0%, transparent 50%),
+      linear-gradient(
+        180deg,
+        hsl(212, 54%, 14%) 0%,
+        hsl(214, 42%, 10%) 42%,
+        hsl(215, 36%, 7%) 76%,
+        hsl(216, 34%, 5%) 100%
+      );
+  }
+
+  section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 25%, hsla(200, 70%, 58%, 0.04) 0%, transparent 30%),
+      radial-gradient(circle at 85% 75%, hsla(180, 70%, 42%, 0.03) 0%, transparent 30%),
+      radial-gradient(circle at 50% 50%, hsla(40, 60%, 60%, 0.02) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .content-wrapper {
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .partners-layout {
+    display: grid;
+    grid-template-columns: minmax(340px, 1fr) minmax(320px, 0.88fr);
+    gap: 4.25rem;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3.75rem;
+  }
+
+  .headline-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .partners-headline {
+    display: block;
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 400;
+    font-size: clamp(4.4rem, 7.8vw, 7rem);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+    margin: 0;
+    color: hsl(214, 32%, 92%);
+    text-shadow: 0 8px 28px hsla(214, 42%, 2%, 0.22);
+    max-width: 8ch;
+    position: relative;
+    z-index: 1;
+  }
+
+  .partners-subtitle {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    margin-top: 0.25rem;
+    color: hsl(42, 30%, 58%);
+    text-transform: uppercase;
+  }
+
+  .detail-block {
+    position: relative;
+    max-width: 560px;
+  }
+
+  .detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  .detail-subtext {
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: clamp(1.02rem, 1.18vw, 1.08rem);
+    line-height: 1.9;
+    color: hsla(214, 30%, 86%, 0.74);
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    max-width: 44ch;
+  }
+
+  .detail-subtext .highlight {
+    font-weight: 500;
+    color: hsla(214, 34%, 92%, 0.96);
+  }
+
+  .detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    align-items: center;
+    margin-top: 1.1rem;
+  }
+
+  .detail-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1.4rem;
+    border-radius: 16px;
+    border: 1px solid hsla(42, 30%, 52%, 0.26);
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: clamp(0.9rem, 1vw, 0.98rem);
+    line-height: 1.2;
+    color: hsl(0, 0%, 100%);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    width: fit-content;
+    min-height: 48px;
+    white-space: nowrap;
+    background-color: hsl(42, 32%, 36%);
+    background: linear-gradient(
+      135deg,
+      hsl(42, 34%, 42%) 0%,
+      hsl(42, 30%, 36%) 52%,
+      hsl(40, 28%, 30%) 100%
+    );
+    box-shadow:
+      0 10px 22px hsla(42, 28%, 14%, 0.2),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.12);
+  }
+
+  .detail-cta-outline {
+    background: transparent;
+    border-color: hsla(42, 30%, 58%, 0.42);
+    color: hsl(42, 34%, 62%);
+    box-shadow: none;
+  }
+
+  .detail-cta:hover {
+    transform: translateY(-3px);
+    border-color: hsla(42, 32%, 62%, 0.34);
+    box-shadow:
+      0 18px 34px hsla(42, 28%, 14%, 0.28),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.12);
+  }
+
+  .detail-cta-outline:hover {
+    background: hsla(42, 30%, 58%, 0.08);
+    border-color: hsla(42, 34%, 66%, 0.62);
+    box-shadow: none;
+  }
+
+  .detail-cta:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .detail-cta:focus-visible {
+    outline: 2px solid hsla(42, 40%, 68%, 0.9);
+    outline-offset: 3px;
+  }
+
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    align-self: start;
+    padding: 1px;
+    position: relative;
+    width: 100%;
+    margin-left: -4rem;
+    border-radius: 28px;
+    overflow: hidden;
+    background:
+      linear-gradient(
+        180deg,
+        hsla(214, 14%, 60%, 0.05) 0%,
+        hsla(214, 10%, 34%, 0.02) 16%,
+        hsla(214, 18%, 14%, 0.14) 100%
+      ),
+      linear-gradient(
+        180deg,
+        hsla(214, 22%, 18%, 0.36) 0%,
+        hsla(214, 18%, 10%, 0.18) 100%
+      );
+    border: 1px solid hsla(214, 16%, 52%, 0.08);
+    box-shadow:
+      0 16px 28px hsla(214, 38%, 3%, 0.12),
+      inset 0 1px 0 hsla(214, 18%, 72%, 0.032),
+      inset 0 -14px 20px hsla(220, 34%, 6%, 0.045);
+  }
+
+  .logo-grid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 14%, hsla(0, 0%, 100%, 0.02) 0%, transparent 18%),
+      radial-gradient(circle at 84% 86%, hsla(220, 46%, 8%, 0.055) 0%, transparent 18%),
+      linear-gradient(180deg, hsla(0, 0%, 100%, 0.012) 0%, transparent 24%, transparent 76%, hsla(220, 46%, 8%, 0.035) 100%);
+    pointer-events: none;
+    opacity: 0.34;
+  }
+
+  .logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-decoration: none;
+    min-height: 118px;
+    padding: 0.9rem 1rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+      180deg,
+      hsla(214, 20%, 16%, 0.11) 0%,
+      hsla(214, 18%, 12%, 0.05) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 hsla(214, 18%, 78%, 0.018),
+      inset 0 -1px 0 hsla(220, 46%, 8%, 0.1);
+    transition:
+      transform 0.35s ease,
+      opacity 0.35s ease,
+      background 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .logo-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, hsla(0, 0%, 100%, 0.012) 0%, transparent 24%),
+      linear-gradient(180deg, transparent 62%, hsla(220, 48%, 8%, 0.03) 100%);
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .logo-item:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(
+      180deg,
+      hsla(214, 20%, 18%, 0.14) 0%,
+      hsla(214, 18%, 12%, 0.06) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 hsla(214, 18%, 82%, 0.024),
+      inset 0 -1px 0 hsla(220, 46%, 8%, 0.12),
+      inset 0 10px 16px hsla(0, 0%, 100%, 0.006);
+  }
+
+  .logo-item img {
+    max-width: 210px;
+    max-height: 98px;
+    width: auto;
+    height: auto;
+    opacity: 0.86;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    position: relative;
+    z-index: 1;
+    transform: translateX(-0.5rem);
+  }
+
+  .logo-item:hover img {
+    opacity: 0.96;
+    transform: translateX(-0.5rem) scale(1.015);
+  }
+
+  .logo-track {
+    display: none;
+    overflow: hidden;
+    width: 100%;
+    padding: 1.1rem 0 0.1rem;
+  }
+
+  .logo-track-inner {
+    display: flex;
+    width: max-content;
+    animation: scroll-logos 20s linear infinite;
+  }
+
+  .logo-scroll-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    min-width: 120px;
+    height: auto;
+    padding: 0.5rem;
+    margin-right: 1.5rem;
+    background: none;
+    border: none;
+    border-radius: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: none;
+  }
+
+  .logo-scroll-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .logo-scroll-item img {
+    max-width: 120px;
+    max-height: 120px;
+    width: auto;
+    height: auto;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+
+  .logo-scroll-item:hover img {
+    opacity: 1;
+  }
+
+  @keyframes scroll-logos {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 1200px) {
+    section {
+      padding: 4rem 6rem 2rem 5rem;
+    }
+
+    .text-container {
+      gap: 3.5rem;
+    }
+
+    .partners-layout {
+      gap: 3.4rem;
+    }
+  }
+
+  @media (max-width: 992px) {
+    section {
+      padding: 3.5rem 2rem 2rem 2rem;
+    }
+
+    .text-container {
+      gap: 3rem;
+    }
+
+    .partners-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .logo-grid {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 520px;
+      margin: 0 auto;
+      gap: 1px;
+      padding: 1px;
+    }
+
+    .logo-item {
+      min-height: 104px;
+      padding: 0.75rem 0.8rem;
+    }
+
+    .logo-item img {
+      max-width: 180px;
+      max-height: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    section {
+      padding: 2.5rem 5rem 1.5rem 1.5rem;
+      justify-content: flex-start;
+      padding-top: 6rem;
+    }
+
+    .content-wrapper {
+      height: auto;
+      min-height: auto;
+    }
+
+    .text-container {
+      gap: 2.5rem;
+    }
+
+    .partners-layout {
+      gap: 2.5rem;
+    }
+
+    .headline-block {
+      align-items: center;
+      text-align: center;
+      gap: 0.9rem;
+    }
+
+    .partners-headline {
+      font-size: clamp(2.5rem, 10vw, 4rem);
+      max-width: none;
+    }
+
+    .partners-subtitle {
+      font-size: clamp(0.85rem, 3vw, 1.1rem);
+      justify-content: center;
+      margin-top: 0.6rem;
+      margin-left: 0;
+    }
+
+    .detail-block {
+      padding-left: 0;
+      max-width: 100%;
+    }
+
+    .detail-content {
+      padding-left: 0;
+      align-items: center;
+      text-align: center;
+    }
+
+    .detail-subtext {
+      font-size: 0.92rem;
+      margin: 0 auto;
+    }
+
+    .detail-actions {
+      justify-content: center;
+    }
+
+    .detail-cta {
+      align-self: center;
+      min-height: 48px;
+      padding: 0.85rem 1.4rem;
+      border-radius: 16px;
+      box-sizing: border-box;
+      font-size: 0.82rem;
+      box-shadow:
+        0 10px 22px hsla(42, 28%, 14%, 0.2),
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.12);
+    }
+
+    .logo-grid {
+      display: none;
+    }
+
+    .logo-track {
+      display: block;
+    }
+
+    .logo-scroll-item {
+      background: none;
+      border: none;
+    }
+
+    .logo-scroll-item:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .logo-scroll-item img {
+      max-width: 120px;
+      max-height: 120px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    section {
+      padding: 2rem 1rem 1rem 1rem;
+    }
+
+    .text-container {
+      gap: 2rem;
+    }
+
+    .headline-block {
+      gap: 0.8rem;
+    }
+
+    .detail-content {
+      gap: 1.2rem;
+      padding-left: 0;
+    }
+
+    .detail-actions {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .detail-cta {
+      width: 100%;
+      max-width: 20rem;
+    }
+
+    .logo-grid {
+      gap: 0.75rem;
+    }
+
+    .logo-item {
+      min-height: 84px;
+      padding: 0.35rem 0.5rem;
+    }
+  }
+</style>
