@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/Base.astro';
 import FloatingNavbar from '../components/navbar/FloatingNavbar.svelte';
 import SectionStacking from '../components/SectionStacking.svelte';
 import Footer from '../components/Footer.svelte';
-import BackToTop from '../components/BackToTop.svelte';
+import BackToTop from '../components/BackToTop.astro';
 import IntroQaRotator from '../components/for-you/IntroQaRotator.svelte';
 import CriteriaRevealSection from '../components/for-you/CriteriaRevealSection.svelte';
 
@@ -150,8 +150,8 @@ const qaCases = [
     </section>
   </main>
 
-  <Footer client:idle />
-  <BackToTop client:idle />
+  <Footer />
+  <BackToTop />
 </BaseLayout>
 
 <script>

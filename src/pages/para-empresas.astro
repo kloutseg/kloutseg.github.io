@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/Base.astro';
 import FloatingNavbar from '../components/navbar/FloatingNavbar.svelte';
 import SectionStacking from '../components/SectionStacking.svelte';
 import Footer from '../components/Footer.svelte';
-import BackToTop from '../components/BackToTop.svelte';
+import BackToTop from '../components/BackToTop.astro';
 import IntroQaRotator from '../components/for-you/IntroQaRotator.svelte';
 
 const qaCases = [
@@ -148,9 +148,13 @@ const qaCases = [
           <div class="criteria-image-frame">
             <img
               src="/images/office_03.webp"
+              srcset="/images/office_03-700.webp 700w, /images/office_03-900.webp 900w, /images/office_03.webp 1023w"
+              sizes="(max-width: 768px) 88vw, 560px"
               alt="Equipe em reunião corporativa avaliando benefícios de saúde"
               class="criteria-image"
               loading="lazy"
+              width="1023"
+              height="1537"
             />
             <div class="criteria-image-shade"></div>
           </div>
@@ -178,8 +182,8 @@ const qaCases = [
     </section>
   </main>
 
-  <Footer client:idle />
-  <BackToTop client:idle />
+  <Footer />
+  <BackToTop />
 </BaseLayout>
 
 <script>

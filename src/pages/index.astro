@@ -8,7 +8,7 @@ import CompaniesSection from '../components/home/CompaniesSection.svelte';
 import PartnersSection from '../components/home/PartnersSection.astro';
 import OfficeSection from '../components/home/OfficeSection.astro';
 import ContactFormSection from '../components/home/ContactFormSection.astro';
-import BackToTop from '../components/BackToTop.svelte';
+import BackToTop from '../components/BackToTop.astro';
 import Footer from '../components/Footer.svelte';
 ---
 
@@ -40,8 +40,7 @@ import Footer from '../components/Footer.svelte';
   </main>
 
   {/* Idle: Footer carrega após página interativa */}
-  <Footer client:idle />
+  <Footer />
 
-  {/* Idle: Back to top button */}
-  <BackToTop client:idle />
+  <BackToTop />
 </BaseLayout>

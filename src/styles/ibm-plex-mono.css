@@ -3,6 +3,7 @@
   font-family: 'IBM Plex Mono';
   font-style: normal;
   font-weight: 700;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-bold.woff2') format('woff2');
 }
 
@@ -10,6 +11,7 @@
   font-family: 'IBM Plex Mono';
   font-style: italic;
   font-weight: 700;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-bold-italic.woff2') format('woff2');
 }
 
@@ -17,6 +19,7 @@
   font-family: 'IBM Plex Mono';
   font-style: normal;
   font-weight: 400;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono.woff2') format('woff2');
 }
 
@@ -24,6 +27,7 @@
   font-family: 'IBM Plex Mono';
   font-style: italic;
   font-weight: 400;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-italic.woff2') format('woff2');
 }
 
@@ -31,6 +35,7 @@
   font-family: 'IBM Plex Mono';
   font-style: normal;
   font-weight: 500;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-medium.woff2') format('woff2');
 }
 
@@ -38,6 +43,7 @@
   font-family: 'IBM Plex Mono';
   font-style: italic;
   font-weight: 500;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-medium-italic.woff2') format('woff2');
 }
 
@@ -45,6 +51,7 @@
   font-family: 'IBM Plex Mono';
   font-style: normal;
   font-weight: 600;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-semibold.woff2') format('woff2');
 }
 
@@ -52,5 +59,6 @@
   font-family: 'IBM Plex Mono';
   font-style: italic;
   font-weight: 600;
+  font-display: swap;
   src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono-semibold-italic.woff2') format('woff2');
 }

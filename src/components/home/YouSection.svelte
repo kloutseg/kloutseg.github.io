@@ -564,7 +564,7 @@
                 muted
                 playsinline
                 preload="none"
-                poster="/images/you_section_video_poster.webp"
+                poster="/images/you_section_video_poster-640.webp"
                 width="1920"
                 height="1080"
               ></video>
@@ -605,6 +605,8 @@
             <div class="image-capsule">
               <img
                 src="/images/consulting_01.webp"
+                srcset="/images/consulting_01-700.webp 700w, /images/consulting_01-1000.webp 1000w, /images/consulting_01.webp 1280w"
+                sizes="(max-width: 768px) 82vw, 520px"
                 alt="Consultoria personalizada"
                 loading="lazy"
                 width="1280"
@@ -628,6 +630,8 @@
             <div class="image-capsule">
               <img
                 src="/images/family_01.webp"
+                srcset="/images/family_01-700.webp 700w, /images/family_01-1000.webp 1000w, /images/family_01.webp 1400w"
+                sizes="(max-width: 768px) 82vw, 520px"
                 alt="Família e proteção"
                 loading="lazy"
                 width="1400"

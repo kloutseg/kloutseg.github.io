@@ -8,6 +8,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://kloutseg.github.io',
   integrations: [svelte()],
+  build: {
+    inlineStylesheets: 'always'
+  },
 
   vite: {
     plugins: [tailwindcss()]

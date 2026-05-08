@@ -32,6 +32,8 @@
       <figure class="image-container">
         <img
           src="/images/enterprise_01.webp"
+          srcset="/images/enterprise_01-640.webp 640w, /images/enterprise_01-960.webp 960w, /images/enterprise_01.webp 1264w"
+          sizes="(max-width: 768px) 88vw, 640px"
           alt="Profissionais trabalhando em ambiente moderno"
           class="capsule-image"
           loading="lazy"
