@@ -59,21 +59,16 @@
         duration: 1,
         ease: "power2.out"
       }, 2)
-      .to(description, {
-        opacity: 1,
-        y: 0,
-        duration: 1
-      }, 2.8)
       .to(ctaButton, {
         opacity: 1,
         y: 0,
         duration: 0.8
-      }, 3.2)
+      }, 1.6)
       .to(whoWeAreButton, {
         opacity: 1,
         y: 0,
         duration: 0.8
-      }, 3.2);
+      }, 1.6);
 
     // Parallax no scroll - geo background
     if (geoBackground && !reducedMotion) {
@@ -403,8 +398,19 @@
     font-weight: 400;
     margin: 0 0 1.8rem 0;
     font-family: 'Proxima Nova', sans-serif;
-    opacity: 0;
-    transform: translateY(20px);
+    animation: hero-description-settle 420ms ease-out 180ms both;
+  }
+
+  @keyframes hero-description-settle {
+    from {
+      opacity: 0.82;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   :global(.cta-button) {
@@ -622,6 +628,12 @@
       min-height: 48px;
       padding: 0.85rem 1.35rem;
       font-size: 0.88rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.hero-description) {
+      animation: none;
     }
   }
 </style>

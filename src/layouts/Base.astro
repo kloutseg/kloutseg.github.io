@@ -531,7 +531,7 @@ const { title } = Astro.props;
 <body>
   <div class="page-transition-overlay" id="page-transition-overlay" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
-  <SmoothScroll client:only="svelte" />
+  <SmoothScroll client:idle />
   <slot />
   <script>
     import { prefersReducedMotion } from '../lib/reducedMotion';
