@@ -1,112 +1,9 @@
 <script lang="ts">
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import HeroBadges3D from './HeroBadges3D.svelte';
-  import { prefersReducedMotion } from '../../lib/reducedMotion';
-
-  gsap.registerPlugin(ScrollTrigger);
-  const reducedMotion = prefersReducedMotion();
-
-  let headlineLine: HTMLElement | null = null;
-  let subtitle: HTMLElement | null = null;
-  let subtitleLine: HTMLElement | null = null;
-  let dividerLine: HTMLElement | null = null;
-  let description: HTMLElement | null = null;
-  let ctaButton: HTMLElement | null = null;
-  let whoWeAreButton: HTMLElement | null = null;
-  let section: HTMLElement | null = null;
-  let geoBackground: HTMLElement | null = null;
-  let timeline: gsap.core.Timeline | null = null;
-
-  $effect(() => {
-    if (reducedMotion) {
-      // Set elements to final state immediately
-      gsap.set([headlineLine, subtitle, subtitleLine, dividerLine, description, ctaButton, whoWeAreButton], {
-        opacity: 1, y: 0, scaleX: 1, clearProps: 'transform'
-      });
-      return;
-    }
-
-    // Timeline de entrada
-    timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-    timeline
-      .to(headlineLine, {
-        opacity: 1,
-        y: 0,
-        duration: 1.5
-      }, 0)
-      .to(subtitleLine, {
-        scaleX: 1,
-        width: '6rem',
-        duration: 3.2,
-        ease: "none"
-      }, 1.2)
-      .fromTo(subtitle,
-        {
-          autoAlpha: 0,
-          y: 16
-        },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 2.8,
-          ease: "power1.out"
-        }, 2.4)
-      .to(dividerLine, {
-        scaleX: 1,
-        opacity: 1,
-        duration: 1,
-        ease: "power2.out"
-      }, 2)
-      .to(ctaButton, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8
-      }, 1.6)
-      .to(whoWeAreButton, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8
-      }, 1.6);
-
-    // Parallax no scroll - geo background
-    if (geoBackground && !reducedMotion) {
-      gsap.to(geoBackground, {
-        y: 100,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-    }
-
-    // Parallax no conteúdo
-    if (section && !reducedMotion) {
-      gsap.to(section.querySelector('.content-wrapper'), {
-        y: -50,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-    }
-
-    // Teardown
-    return () => {
-      if (timeline) timeline.kill();
-    };
-  });
 </script>
 
-<section id="consulting" class="hero-section" data-stack-section bind:this={section}>
-  <div class="geo-background" bind:this={geoBackground} aria-hidden="true">
+<section id="consulting" class="hero-section" data-stack-section>
+  <div class="geo-background" aria-hidden="true">
     <div class="geo-line geo-line-v-1"></div>
     <div class="geo-line geo-line-v-2"></div>
     <div class="geo-line geo-line-v-3"></div>
@@ -117,11 +14,11 @@
   <div class="content-wrapper">
     <div class="hero-headline-wrapper">
       <h1 class="hero-headline">
-        <span class="main-word" bind:this={headlineLine} data-text="Inteligência">
+        <span class="main-word" data-text="Inteligência">
           Inteligência
         </span>
-        <span class="subtitle" bind:this={subtitle}>
-          <span class="subtitle-line subtitle-line-left" bind:this={subtitleLine}></span>
+        <span class="subtitle">
+          <span class="subtitle-line subtitle-line-left"></span>
           <span class="subtitle-text">
             <span class="subtitle-part-1">em planos</span>
             <span class="subtitle-part-2">de saúde.</span>
@@ -132,19 +29,19 @@
     </div>
 
     <div class="hero-content">
-      <div class="divider-line" bind:this={dividerLine}></div>
-      <p class="hero-description" bind:this={description}>
+      <div class="divider-line"></div>
+      <p class="hero-description">
           Analisamos custo, cobertura e acesso real a hospitais, laboratórios e clínicas relevantes para você e sua empresa.
       </p>
       <div class="cta-group">
-        <a href="/analise" class="cta-button" bind:this={ctaButton}>
+        <a href="/analise" class="cta-button">
           Iniciar análise
           <svg class="arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </a>
-        <a href="/sobre" class="cta-button cta-secondary" bind:this={whoWeAreButton}>
+        <a href="/sobre" class="cta-button cta-secondary">
             Conhecer a Klout
         </a>
       </div>
@@ -314,9 +211,10 @@
       hsla(214, 15%, 56%, 0.32) 80%,
       hsla(214, 15%, 60%, 0) 100%
     );
-    transform: scaleX(0);
+    transform: scaleY(1);
     transform-origin: top center;
-    opacity: 0;
+    opacity: 1;
+    animation: hero-divider-enter 680ms ease-out 900ms backwards;
     transition: background 0.3s ease;
   }
 
@@ -343,8 +241,9 @@
     font-weight: 400;
     line-height: 0.96;
     letter-spacing: -0.04em;
-    opacity: 0;
-    transform: translateY(40px);
+    opacity: 1;
+    transform: translateY(0);
+    animation: hero-main-word-enter 1150ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     position: relative;
     color: hsl(214, 58%, 14%);
   }
@@ -365,10 +264,9 @@
     align-items: center;
     gap: 1rem;
 
-    /* Estado inicial para animação Hygge — visibility garante que não apareça antes */
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(16px);
+    opacity: 1;
+    transform: translateY(0);
+    animation: hero-subtitle-enter 920ms ease-out 840ms backwards;
 
     color: hsl(42, 28%, 38%);
   }
@@ -380,7 +278,8 @@
     flex-shrink: 0;
     align-self: center;
     transform-origin: left center;
-    transform: scaleX(0);
+    transform: scaleX(1);
+    animation: hero-subtitle-line-enter 1200ms ease-out 620ms backwards;
 
     background: linear-gradient(
       90deg,
@@ -398,7 +297,53 @@
     font-weight: 400;
     margin: 0 0 1.8rem 0;
     font-family: 'Proxima Nova', sans-serif;
-    animation: hero-description-settle 420ms ease-out 180ms both;
+    animation: hero-description-settle 420ms ease-out 180ms backwards;
+  }
+
+  @keyframes hero-main-word-enter {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-subtitle-enter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-subtitle-line-enter {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes hero-divider-enter {
+    from {
+      opacity: 0;
+      transform: scaleY(0);
+    }
+
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
   }
 
   @keyframes hero-description-settle {
@@ -414,8 +359,9 @@
   }
 
   :global(.cta-button) {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 1;
+    transform: translateY(0);
+    animation: hero-cta-enter 720ms ease-out 1080ms backwards;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -449,6 +395,18 @@
       0 14px 30px hsla(214, 44%, 16%, 0.18),
       0 4px 12px hsla(214, 44%, 16%, 0.1),
       inset 0 1px 0 hsla(0, 0%, 100%, 0.18);
+  }
+
+  @keyframes hero-cta-enter {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   :global(.cta-button.cta-secondary) {
@@ -632,6 +590,11 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    :global(.hero-headline .main-word),
+    :global(.hero-headline .subtitle),
+    :global(.hero-headline .subtitle .subtitle-line),
+    :global(.divider-line),
+    :global(.cta-button),
     :global(.hero-description) {
       animation: none;
     }

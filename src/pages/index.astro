@@ -20,8 +20,8 @@ import Footer from '../components/Footer.svelte';
   <SectionStacking client:load />
 
   <main id="main-content">
-    {/* Critical: Hero é a primeira seção visível */}
-    <HeroSection client:load />
+    {/* Static: Hero é renderizado no HTML inicial e animado via CSS */}
+    <HeroSection />
 
     {/* Critical: YouSection precisa hidratar cedo para registrar seu pin horizontal antes do stacking seguinte */}
     <YouSection client:load />

@@ -1,70 +1,10 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { gsap } from 'gsap';
   import '../../styles/ibm-plex-mono.css';
-  import { prefersReducedMotion } from '../../lib/reducedMotion';
-
-  let container: HTMLElement | null = null;
-  let badge1: HTMLElement | null = null;
-  let badge2: HTMLElement | null = null;
-  let badge3: HTMLElement | null = null;
-  const reducedMotion = prefersReducedMotion();
-
-  onMount(() => {
-    if (reducedMotion) {
-      gsap.set([badge1, badge2, badge3], { opacity: 1, y: 0, scale: 1 });
-      return;
-    }
-
-    // Animação de entrada dos badges
-    const tl = gsap.timeline({ delay: 0.8 });
-
-    tl.set([badge1, badge2, badge3], {
-      opacity: 0,
-      y: 20,
-      scale: 0.95
-    })
-    .to([badge1, badge2, badge3], {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 1.2,
-      stagger: 0.15,
-      ease: 'power3.out'
-    });
-
-    // Efeito de hover com GSAP
-    [badge1, badge2, badge3].forEach((badge) => {
-      if (badge) {
-        const emblem = badge.querySelector('.badge-emblem');
-
-        badge.addEventListener('mouseenter', () => {
-          if (emblem) {
-            gsap.to(emblem, {
-              y: -6,
-              duration: 0.5,
-              ease: 'power2.out'
-            });
-          }
-        });
-
-        badge.addEventListener('mouseleave', () => {
-          if (emblem) {
-            gsap.to(emblem, {
-              y: 0,
-              duration: 0.6,
-              ease: 'power2.out'
-            });
-          }
-        });
-      }
-    });
-  });
 </script>
 
-<div class="hero-badges" bind:this={container}>
+<div class="hero-badges">
   <!-- Badge 1: Clientes -->
-  <div class="badge badge-primary" bind:this={badge1}>
+  <div class="badge badge-primary">
     <div class="badge-emblem">
       <img src="/images/badges/customers_emblem.png" alt="Clientes" class="badge-image" width="250" height="250" />
     </div>
@@ -75,7 +15,7 @@
   </div>
 
   <!-- Badge 2: Parceiras -->
-  <div class="badge badge-secondary" bind:this={badge2}>
+  <div class="badge badge-secondary">
     <div class="badge-emblem">
       <img src="/images/badges/partnership_emblem.png" alt="Seguradoras" class="badge-image" width="250" height="250" />
     </div>
@@ -86,7 +26,7 @@
   </div>
 
   <!-- Badge 3: Performance -->
-  <div class="badge badge-tertiary" bind:this={badge3}>
+  <div class="badge badge-tertiary">
     <div class="badge-emblem">
       <img src="/images/badges/performance_emblem.png" alt="Performance" class="badge-image" width="250" height="250" />
     </div>
@@ -114,6 +54,21 @@
     gap: 16px;
     padding: 0 4px;
     cursor: pointer;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: badge-enter 960ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .badge-primary {
+    animation-delay: 800ms;
+  }
+
+  .badge-secondary {
+    animation-delay: 950ms;
+  }
+
+  .badge-tertiary {
+    animation-delay: 1100ms;
   }
 
   .badge-emblem {
@@ -267,6 +222,25 @@
     }
     85% {
       background-position: 10% 0;
+    }
+  }
+
+  @keyframes badge-enter {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .badge,
+    .badge-number {
+      animation: none;
     }
   }
 </style>

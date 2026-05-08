@@ -1,6 +1,4 @@
 ---
-import SmoothScroll from '../components/SmoothScroll.svelte';
-
 const { title } = Astro.props;
 ---
 
@@ -531,7 +529,6 @@ const { title } = Astro.props;
 <body>
   <div class="page-transition-overlay" id="page-transition-overlay" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
-  <SmoothScroll client:idle />
   <slot />
   <script>
     import { prefersReducedMotion } from '../lib/reducedMotion';
@@ -543,7 +540,7 @@ const { title } = Astro.props;
           enterHoldMs: number;
           revealMs: number;
         };
-        lenisInstance?: { stop?: () => void; start?: () => void };
+        lenisInstance?: { stop?: () => void; start?: () => void; destroy?: () => void; raf?: (time: number) => void };
       }
     }
 
@@ -785,6 +782,70 @@ const { title } = Astro.props;
         resetOverlayState();
       }
     });
+
+    function initSmoothScrollWhenQuiet(): void {
+      if (prefersReducedMotion() || window.lenisInstance) {
+        return;
+      }
+
+      let started = false;
+      const cleanupInteractionListeners = (): void => {
+        window.removeEventListener('wheel', start);
+        window.removeEventListener('touchstart', start);
+        window.removeEventListener('keydown', start);
+        window.removeEventListener('pointerdown', start);
+      };
+
+      const start = (): void => {
+        if (started || prefersReducedMotion() || window.lenisInstance) {
+          return;
+        }
+
+        started = true;
+        cleanupInteractionListeners();
+        Promise.all([
+          import('lenis'),
+          import('gsap'),
+          import('gsap/ScrollTrigger'),
+        ]).then(([{ default: Lenis }, gsapModule, scrollTriggerModule]) => {
+          const gsap = gsapModule.gsap;
+          const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+          const lenis = new Lenis({
+            duration: 2.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+            normalizeWheel: false,
+          });
+
+          window.lenisInstance = lenis;
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add((time: number) => {
+            lenis.raf(time * 1000);
+          });
+          gsap.ticker.lagSmoothing(0);
+        }).catch(() => {
+          started = false;
+        });
+      };
+
+      window.addEventListener('wheel', start, { once: true, passive: true });
+      window.addEventListener('touchstart', start, { once: true, passive: true });
+      window.addEventListener('keydown', start, { once: true });
+      window.addEventListener('pointerdown', start, { once: true, passive: true });
+      window.setTimeout(start, 8000);
+    }
+
+    if (document.readyState === 'complete') {
+      initSmoothScrollWhenQuiet();
+    } else {
+      window.addEventListener('load', initSmoothScrollWhenQuiet, { once: true });
+    }
 
     requestAnimationFrame(() => {
       revealPage();
