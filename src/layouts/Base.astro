@@ -39,14 +39,43 @@ const { title } = Astro.props;
   <!-- Preload de imagens críticas -->
   <link rel="preload" as="image" href="/images/logo_v3_blue.png" />
 
-  <!-- Importação direta das fontes do diretório public -->
-  <link rel="stylesheet" href="/fonts/ibm_plex_serif/ibm-plex-serif.css">
-  <link rel="stylesheet" href="/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono.css">
-  <link rel="stylesheet" href="/fonts/proxima_nova/proxima-nova.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap">
+  <link rel="preload" as="font" href="/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff" type="font/woff" crossorigin>
+  <link rel="preload" as="font" href="/fonts/ibm_plex_serif/ibm-plex-serif.woff2" type="font/woff2" crossorigin>
 
   <!-- Estilos básicos -->
   <style>
+    @font-face {
+      font-family: 'Proxima Nova';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff') format('woff');
+    }
+
+    @font-face {
+      font-family: 'Proxima Nova';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Semibold-webfont.woff2') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'Proxima Nova';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Bold-webfont.woff2') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'IBM Plex Serif';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/fonts/ibm_plex_serif/ibm-plex-serif.woff2') format('woff2');
+    }
+
     :root {
       --font-sans: 'Proxima Nova', 'sans-serif';
       --font-serif: 'IBM Plex Serif', 'serif';

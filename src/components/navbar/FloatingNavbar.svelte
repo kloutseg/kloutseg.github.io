@@ -498,6 +498,8 @@
           src={isDark ? '/icons/atendimento_mini_light.png' : '/icons/atendimento_mini.png'}
           alt="Atendimento"
           class="atendimento-icon"
+          width="50"
+          height="50"
         />
       </a>
     </div>
@@ -507,12 +509,16 @@
           src={isDark ? '/images/logo_simple_light.png' : '/images/logo_v3_blue.png'}
           alt="Logotipo da Klout"
           class="logo-desktop"
+          width="248"
+          height="71"
           style="height: 18px; width: auto;"
         />
         <img
           src={isDark ? '/images/navbar-logo-3d.png' : '/images/navbar-logo-blue-3d.png'}
           alt="Logotipo da Klout"
           class="logo-mobile"
+          width="30"
+          height="40"
           style="height: 32px; width: auto;"
         />
       </a>

@@ -66,7 +66,7 @@
   <!-- Badge 1: Clientes -->
   <div class="badge badge-primary" bind:this={badge1}>
     <div class="badge-emblem">
-      <img src="/images/badges/customers_emblem.png" alt="Clientes" class="badge-image" />
+      <img src="/images/badges/customers_emblem.png" alt="Clientes" class="badge-image" width="250" height="250" />
     </div>
     <div class="badge-content">
       <span class="badge-number">+250</span>
@@ -77,7 +77,7 @@
   <!-- Badge 2: Parceiras -->
   <div class="badge badge-secondary" bind:this={badge2}>
     <div class="badge-emblem">
-      <img src="/images/badges/partnership_emblem.png" alt="Seguradoras" class="badge-image" />
+      <img src="/images/badges/partnership_emblem.png" alt="Seguradoras" class="badge-image" width="250" height="250" />
     </div>
     <div class="badge-content">
       <span class="badge-number">Top 1%</span>
@@ -88,7 +88,7 @@
   <!-- Badge 3: Performance -->
   <div class="badge badge-tertiary" bind:this={badge3}>
     <div class="badge-emblem">
-      <img src="/images/badges/performance_emblem.png" alt="Performance" class="badge-image" />
+      <img src="/images/badges/performance_emblem.png" alt="Performance" class="badge-image" width="250" height="250" />
     </div>
     <div class="badge-content">
       <span class="badge-number">+R$ 20 Milhões</span>

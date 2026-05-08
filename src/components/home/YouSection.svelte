@@ -37,16 +37,6 @@
   let ctaButton: HTMLElement | null = $state(null);
   let ctaVisible = $state(false);
 
-  // Image capsule states for slide 2
-  let isImageExpanded = $state(false);
-  let imageCapsuleEl: HTMLElement | null = $state(null);
-  let imageEl: HTMLImageElement | null = $state(null);
-
-  // Image capsule states for slide 3
-  let imageCapsuleEl2: HTMLElement | null = $state(null);
-  let imageEl2: HTMLImageElement | null = $state(null);
-  let isImageExpanded2 = $state(false);
-
   // Show CTA after video plays for a few seconds
   let ctaTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -390,6 +380,7 @@
     if (videoEl) {
       videoEl.pause();
       videoEl.currentTime = 0;
+      videoEl.load();
     }
 
     // Re-enable scroll
@@ -435,13 +426,13 @@
         delay: 0.2
       });
 
-      // Collapse video back to vertical capsule
+      // Collapse video back to editorial media frame
       gsap.to(videoContainer, {
         position: 'relative',
         top: 0,
         left: 0,
-        width: '340px',
-        height: '540px',
+        width: 'min(42vw, 520px)',
+        height: 'auto',
         zIndex: 1,
         duration: 0.5,
         ease: 'power3.inOut',
@@ -449,7 +440,7 @@
       });
 
       gsap.to(videoContainer.querySelector('.video-capsule'), {
-        borderRadius: '32px',
+        borderRadius: '30px',
         duration: 0.5,
         ease: 'power3.inOut',
         delay: 0.1
@@ -486,73 +477,6 @@
     }
   }
 
-  // Image capsule handlers for slide 2
-  function handleImageExpand() {
-    if (isMobile()) return;
-    if (!imageCapsuleEl || isImageExpanded) return;
-
-    isImageExpanded = true;
-
-    // Expand image capsule to vertical rectangle
-    gsap.to(imageCapsuleEl, {
-      width: '390px',
-      height: '560px',
-      borderRadius: '26px',
-      duration: 0.6,
-      ease: 'power3.inOut'
-    });
-  }
-
-  function handleImageCollapse() {
-    if (isMobile()) return;
-    if (!imageCapsuleEl || !isImageExpanded) return;
-
-    isImageExpanded = false;
-
-    // Collapse back to capsule
-    gsap.to(imageCapsuleEl, {
-      width: '340px',
-      height: '540px',
-      borderRadius: '32px',
-      duration: 0.6,
-      ease: 'power3.inOut'
-    });
-  }
-
-  // Image capsule handlers for slide 3
-  function handleImageExpand2() {
-    if (isMobile()) return;
-    if (!imageCapsuleEl2 || isImageExpanded2) return;
-
-    isImageExpanded2 = true;
-
-    // Expand image capsule to vertical rectangle with subtle rotation
-    gsap.to(imageCapsuleEl2, {
-      width: '390px',
-      height: '560px',
-      borderRadius: '26px',
-      rotate: 0.75,
-      duration: 0.8,
-      ease: 'power3.inOut'
-    });
-  }
-
-  function handleImageCollapse2() {
-    if (isMobile()) return;
-    if (!imageCapsuleEl2 || !isImageExpanded2) return;
-
-    isImageExpanded2 = false;
-
-    // Collapse back to capsule
-    gsap.to(imageCapsuleEl2, {
-      width: '340px',
-      height: '540px',
-      borderRadius: '32px',
-      rotate: 0,
-      duration: 0.8,
-      ease: 'power3.inOut'
-    });
-  }
 </script>
 
 <section id="voce" bind:this={section} class="slide-section">
@@ -639,7 +563,10 @@
                 src="/videos/test_01.mp4"
                 muted
                 playsinline
-                preload="metadata"
+                preload="none"
+                poster="/images/you_section_video_poster.webp"
+                width="1920"
+                height="1080"
               ></video>
               <div class="video-overlay"></div>
             </div>
@@ -674,19 +601,14 @@
           <!-- Second slide with image capsule (reversed: image left, text right) -->
           <div
             class="image-capsule-wrapper image-left"
-            bind:this={imageCapsuleEl}
-            onmouseenter={handleImageExpand}
-            onmouseleave={handleImageCollapse}
-            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleImageExpand(); } }}
-            role="button"
-            tabindex="0"
-            aria-label="Expandir imagem"
           >
             <div class="image-capsule">
               <img
-                bind:this={imageEl}
                 src="/images/consulting_01.webp"
                 alt="Consultoria personalizada"
+                loading="lazy"
+                width="1280"
+                height="1920"
               />
               <div class="image-overlay"></div>
             </div>
@@ -702,19 +624,14 @@
           <!-- Third slide with family image capsule -->
           <div
             class="image-capsule-wrapper image-left slide-3-image"
-            bind:this={imageCapsuleEl2}
-            onmouseenter={handleImageExpand2}
-            onmouseleave={handleImageCollapse2}
-            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleImageExpand2(); } }}
-            role="button"
-            tabindex="0"
-            aria-label="Expandir imagem da família"
           >
             <div class="image-capsule">
               <img
-                bind:this={imageEl2}
                 src="/images/family_01.webp"
                 alt="Família e proteção"
+                loading="lazy"
+                width="1400"
+                height="2100"
               />
               <div class="image-overlay"></div>
             </div>
@@ -910,7 +827,7 @@
     position: relative;
     padding: 0 clamp(4.5rem, 8vw, 11rem);
     box-sizing: border-box;
-    gap: 7rem;
+    gap: clamp(3rem, 5vw, 5.5rem);
   }
 
   .slide:global(.expanded) {
@@ -983,23 +900,23 @@
   }
 
   /* ═══════════════════════════════════════════
-     VIDEO WRAPPER - Cápsula vertical
+     VIDEO WRAPPER - editorial media frame
      ═══════════════════════════════════════════ */
   .video-wrapper {
     position: relative;
-    width: 340px;
-    height: 540px;
+    width: min(42vw, 520px);
+    aspect-ratio: 10 / 12;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     justify-self: center;
   }
 
   .video-capsule {
     width: 100%;
     height: 100%;
-    border-radius: 32px;
+    border-radius: 30px;
     overflow: hidden;
     position: relative;
     box-shadow:
@@ -1012,7 +929,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 12% center;
     display: block;
+    filter: saturate(0.92) sepia(0.035) hue-rotate(3deg) brightness(0.97) contrast(1.03);
   }
 
   .video-overlay {
@@ -1103,9 +1022,9 @@
 
   /* CTA Button - durante o vídeo */
   .cta-button-video {
-    position: fixed;
-    bottom: 48px;
-    right: 48px;
+    position: absolute;
+    right: clamp(1rem, 3vw, 3rem);
+    bottom: clamp(1rem, 3vw, 3rem);
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
@@ -1132,7 +1051,7 @@
       opacity 0.5s ease,
       transform 0.5s ease,
       box-shadow 0.3s ease;
-    z-index: 1001;
+    z-index: 20;
   }
 
   .cta-button-video.visible {
@@ -1154,16 +1073,16 @@
   }
 
   /* ═══════════════════════════════════════════
-     IMAGE CAPSULE - Slide 2
+     IMAGE FRAME - Slide 2
      ═══════════════════════════════════════════ */
   .image-capsule-wrapper {
     position: relative;
-    width: 340px;
-    height: 540px;
+    width: min(42vw, 520px);
+    aspect-ratio: 10 / 12;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     justify-self: center;
   }
 
@@ -1178,14 +1097,10 @@
     transition: transform 0.4s ease;
   }
 
-  .image-capsule-wrapper.image-left.slide-3-image:hover {
-    transform: rotate(0deg);
-  }
-
   .image-capsule {
     width: 100%;
     height: 100%;
-    border-radius: 32px;
+    border-radius: 30px;
     overflow: hidden;
     position: relative;
     box-shadow:
@@ -1200,11 +1115,10 @@
     object-fit: cover;
     display: block;
     filter: saturate(0.92) sepia(0.035) hue-rotate(3deg) brightness(0.97) contrast(1.03);
-    transition: transform 0.6s ease;
   }
 
-  .image-capsule-wrapper:hover .image-capsule img {
-    transform: scale(1.05);
+  .slide-3-image .image-capsule img {
+    object-position: center 0%;
   }
 
   .image-overlay {
@@ -1605,9 +1519,8 @@
     }
 
     .cta-button-video {
-      position: fixed;
-      bottom: 24px;
       right: 16px;
+      bottom: 16px;
       min-height: 48px;
       padding: 0.85rem 1.4rem;
       border: 1px solid hsla(42, 30%, 52%, 0.26);

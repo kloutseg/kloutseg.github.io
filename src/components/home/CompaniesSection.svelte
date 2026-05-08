@@ -35,6 +35,8 @@
           alt="Profissionais trabalhando em ambiente moderno"
           class="capsule-image"
           loading="lazy"
+          width="1264"
+          height="842"
         />
       </figure>
     </div>

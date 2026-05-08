@@ -217,7 +217,7 @@
     color: #fff;
     text-shadow: 0 0 40px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.5), 0 4px 8px rgba(0, 0, 0, 0.8);
     letter-spacing: -0.05em;
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Outfit', 'Proxima Nova', sans-serif;
   }
 
   .divider {
