@@ -1360,12 +1360,12 @@
 
     .slide {
       grid-template-columns: 1fr;
-      padding: 3.35rem 1.25rem 4rem;
-      gap: 1.15rem;
-      min-height: 100dvh;
+      padding: clamp(2.7rem, 6svh, 3.35rem) 1.25rem clamp(3.25rem, 7svh, 4rem);
+      gap: clamp(0.9rem, 2.4svh, 1.15rem);
+      min-height: 100svh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: stretch;
       width: 100vw !important;
       flex-shrink: 0 !important;
@@ -1434,7 +1434,7 @@
     .slide-number {
       font-size: 1.95rem;
       font-weight: 400;
-      margin-bottom: 0.4rem;
+      margin-bottom: clamp(0.2rem, 0.9svh, 0.4rem);
       opacity: 0.42;
       line-height: 1;
     }
@@ -1442,14 +1442,14 @@
     .slide-title {
       font-size: 0.68rem;
       letter-spacing: 0.12em;
-      margin-bottom: 0.7rem;
+      margin-bottom: clamp(0.45rem, 1.3svh, 0.7rem);
       text-transform: uppercase;
     }
 
     .slide-heading {
       font-size: 1.45rem;
       line-height: 1.06;
-      margin-bottom: 0.72rem;
+      margin-bottom: clamp(0.52rem, 1.4svh, 0.72rem);
       font-weight: 400;
       max-width: 19ch;
     }
@@ -1465,7 +1465,7 @@
     .video-wrapper {
       order: 1;
       width: 82vw;
-      max-width: 308px;
+      max-width: min(308px, 82vw);
       aspect-ratio: 16 / 10;
       height: auto;
       justify-self: center;
@@ -1506,7 +1506,7 @@
     /* Image capsules for slides 2 and 3 */
     .image-capsule-wrapper {
       width: 82vw;
-      max-width: 308px;
+      max-width: min(308px, 82vw);
       height: auto;
       aspect-ratio: 16 / 10;
       justify-self: center;
@@ -1579,8 +1579,8 @@
 
     .curation-interlude {
       height: auto;
-      min-height: 72vh;
-      padding: 4.5rem 1.25rem;
+      min-height: auto;
+      padding: clamp(4rem, 11svh, 5.25rem) 1.25rem;
     }
 
     .curation-interlude::before {
@@ -1608,6 +1608,37 @@
 
     .curation-interlude__cta::after {
       right: 1.35rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slide {
+      padding: clamp(2.35rem, 5.5svh, 3rem) 1rem clamp(3.1rem, 7svh, 3.75rem);
+      gap: clamp(0.75rem, 2svh, 1rem);
+    }
+
+    .slide-number {
+      font-size: 1.65rem;
+    }
+
+    .slide-heading {
+      font-size: clamp(1.26rem, 6.1vw, 1.42rem);
+      max-width: 20ch;
+    }
+
+    .slide-text {
+      font-size: 0.8rem;
+      line-height: 1.52;
+      max-width: 34ch;
+    }
+
+    .video-wrapper,
+    .image-capsule-wrapper {
+      width: min(82vw, 300px);
+    }
+
+    .curation-interlude {
+      padding: clamp(3.75rem, 10svh, 4.75rem) 1rem;
     }
   }
 </style>
