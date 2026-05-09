@@ -49,13 +49,28 @@ const qaCases = [
     <section id="voce" class="for-you-hero" data-stack-section data-dark-section>
       <p class="hero-kicker section-side-kicker section-side-kicker-light">Para você</p>
       <div class="hero-media">
-        <img
-          src="/images/einstein_01.webp"
-          alt="Pessoa em atendimento consultivo com foco em decisões de plano de saúde"
-          class="hero-image"
-          loading="eager"
-          fetchpriority="high"
-        />
+        <picture class="hero-picture">
+          <source
+            type="image/webp"
+            media="(max-width: 768px)"
+            srcset="/images/einstein_01-768.webp 768w, /images/einstein_01-1280.webp 1280w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcset="/images/einstein_01-1280.webp 1280w, /images/einstein_01-1920.webp 1920w, /images/einstein_01-2160.webp 2160w"
+            sizes="100vw"
+          />
+          <img
+            src="/images/einstein_01-1920.webp"
+            alt="Pessoa em atendimento consultivo com foco em decisões de plano de saúde"
+            class="hero-image"
+            loading="eager"
+            fetchpriority="high"
+            width="1920"
+            height="1279"
+          />
+        </picture>
         <div class="hero-overlay"></div>
       </div>
 
@@ -274,6 +289,7 @@ const qaCases = [
   }
 
   .hero-media,
+  .hero-picture,
   .hero-image,
   .hero-overlay {
     position: absolute;
@@ -281,10 +297,11 @@ const qaCases = [
   }
 
   .hero-media {
-    background-image: url('/images/einstein_01.webp');
-    background-size: cover;
-    background-position: center 24%;
-    background-repeat: no-repeat;
+    background: hsl(214, 18%, 10%);
+  }
+
+  .hero-picture {
+    display: block;
   }
 
   .hero-image {

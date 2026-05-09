@@ -1283,7 +1283,7 @@
   @media (max-width: 768px) {
     .slide-section {
       height: auto;
-      min-height: auto;
+      min-height: 100svh;
       overflow: visible;
     }
 
