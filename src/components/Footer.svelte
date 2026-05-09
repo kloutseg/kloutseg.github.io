@@ -5,7 +5,15 @@
 <footer data-dark-section>
 	<div class="footer-main">
 		<div class="footer-logo">
-			<img src="/images/logo_shield_light_3d.png" alt="Klout Logo" width="221" height="297" loading="lazy" />
+			<img
+        src="/images/logo_shield_light_3d-180.webp"
+        srcset="/images/logo_shield_light_3d-148.webp 148w, /images/logo_shield_light_3d-180.webp 180w, /images/logo_shield_light_3d.png 221w"
+        sizes="(max-width: 768px) 148px, 180px"
+        alt="Klout Logo"
+        width="221"
+        height="297"
+        loading="lazy"
+      />
 		</div>
 
 		<div class="footer-positioning">
