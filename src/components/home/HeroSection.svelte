@@ -504,6 +504,25 @@
       gap: 0.75rem;
     }
 
+    :global(.hero-headline .subtitle)::after {
+      content: '';
+      display: block;
+      width: 3rem;
+      height: 1px;
+      flex-shrink: 0;
+      align-self: center;
+      transform-origin: center center;
+      transform: scaleX(1);
+      animation: hero-subtitle-line-enter 1200ms ease-out 620ms backwards;
+      background: linear-gradient(
+        90deg,
+        hsl(42, 22%, 42%) 0%,
+        hsl(42, 28%, 52%) 50%,
+        hsl(42, 22%, 42%) 100%
+      );
+      box-shadow: none;
+    }
+
     :global(.hero-headline .subtitle .subtitle-line-left) {
       width: 3rem !important;
       transform-origin: center center;
@@ -575,6 +594,7 @@
 
   :global(html.hero-entry-complete .hero-section .main-word),
   :global(html.hero-entry-complete .hero-section .subtitle),
+  :global(html.hero-entry-complete .hero-section .subtitle::after),
   :global(html.hero-entry-complete .hero-section .subtitle-line-left),
   :global(html.hero-entry-complete .hero-section .divider-line),
   :global(html.hero-entry-complete .hero-section .cta-button) {
