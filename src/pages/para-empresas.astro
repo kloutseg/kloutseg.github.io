@@ -49,7 +49,6 @@ const qaCases = [
 
   <main id="main-content">
     <section id="empresas" class="companies-hero" data-stack-section data-dark-section>
-      <p class="hero-kicker section-side-kicker section-side-kicker-light">Para empresas</p>
       <div class="hero-media">
         <img
           src="/images/office_hero.webp"
@@ -202,82 +201,21 @@ const qaCases = [
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReducedMotion) {
-    window.addEventListener('load', async () => {
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-        import('gsap'),
-        import('gsap/ScrollTrigger'),
-      ]);
+    const scheduleStepsAnimation = () => {
+      if (!window.matchMedia('(min-width: 769px)').matches) return;
 
-      gsap.registerPlugin(ScrollTrigger);
+      const startStepsAnimation = async () => {
+        const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+          import('gsap'),
+          import('gsap/ScrollTrigger'),
+        ]);
 
-      const hero = document.querySelector('.companies-hero');
-      if (!hero) return;
+        gsap.registerPlugin(ScrollTrigger);
 
-      const canAnimateHeroIntro = window.matchMedia('(min-width: 769px)').matches;
+        const stepsSection = document.querySelector('.section-steps');
+        const stepCards = stepsSection?.querySelectorAll('.step-card');
 
-      if (canAnimateHeroIntro) {
-        const heroImage = hero.querySelector('.hero-image');
-        const heroOverlay = hero.querySelector('.hero-overlay');
-        const heroKicker = hero.querySelector('.hero-kicker');
-        const heroTitle = hero.querySelector('.hero-title');
-        const heroDescriptionShell = hero.querySelector('.hero-description-shell');
-
-        gsap.set([heroKicker, heroTitle, heroDescriptionShell], {
-          autoAlpha: 0,
-          y: 42
-        });
-
-        gsap.set(heroImage, {
-          scale: 1.14,
-          autoAlpha: 0.58
-        });
-
-        gsap.set(heroOverlay, {
-          autoAlpha: 0.18
-        });
-
-        const tl = gsap.timeline({
-          defaults: { ease: 'power2.out' }
-        });
-
-        tl.to(heroImage, {
-          scale: 1,
-          autoAlpha: 1,
-          duration: 2.8,
-          ease: 'power3.out'
-        })
-          .to(heroOverlay, {
-            autoAlpha: 1,
-            duration: 2.2,
-            ease: 'power2.out'
-          }, 0.18)
-          .to(heroKicker, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1.15,
-            ease: 'power3.out'
-          }, 0.92)
-          .to(heroTitle, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1.45,
-            ease: 'power3.out'
-          }, 1.02)
-          .to(heroDescriptionShell, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-          }, 1.42);
-      }
-
-      const stepsSection = document.querySelector('.section-steps');
-      const stepCards = stepsSection?.querySelectorAll('.step-card');
-
-      if (stepsSection && stepCards?.length) {
-        const mm = gsap.matchMedia();
-
-        mm.add('(min-width: 769px)', () => {
+        if (stepsSection && stepCards?.length) {
           gsap.set(stepCards, {
             autoAlpha: 0,
             y: 72,
@@ -303,28 +241,22 @@ const qaCases = [
               duration: 0.86,
               stagger: 0.12
             }, 0);
-        });
+        }
+      };
 
-        mm.add('(max-width: 768px)', () => {
-          gsap.set(stepCards, {
-            autoAlpha: 0,
-            y: 36
-          });
+      const schedule = () => {
+        window.setTimeout(() => void startStepsAnimation(), 1800);
+      };
 
-          gsap.to(stepCards, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.72,
-            stagger: 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: stepsSection,
-              start: 'top 64%'
-            }
-          });
-        });
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(schedule, { timeout: 2400 });
+        return;
       }
-    }, { once: true });
+
+      window.addEventListener('load', schedule, { once: true });
+    };
+
+    scheduleStepsAnimation();
   }
 </script>
 

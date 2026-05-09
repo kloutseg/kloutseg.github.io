@@ -75,7 +75,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
         font-family: 'Proxima Nova';
         font-style: normal;
         font-weight: 600;
-        font-display: swap;
+        font-display: optional;
         src: url('/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Semibold-webfont.woff2') format('woff2');
       }
 
@@ -83,7 +83,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
         font-family: 'Proxima Nova';
         font-style: normal;
         font-weight: 700;
-        font-display: swap;
+        font-display: optional;
         src: url('/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Bold-webfont.woff2') format('woff2');
       }
     }
@@ -895,9 +895,16 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 
     function scheduleSmoothScroll() {
       if (!canUseSmoothScroll()) return;
-      window.requestAnimationFrame(() => {
-        window.setTimeout(() => void startSmoothScroll(), 120);
-      });
+      const schedule = () => {
+        window.setTimeout(() => void startSmoothScroll(), 2600);
+      };
+
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(schedule, { timeout: 3200 });
+        return;
+      }
+
+      window.addEventListener('load', schedule, { once: true });
     }
 
     if (document.readyState === 'loading') {
