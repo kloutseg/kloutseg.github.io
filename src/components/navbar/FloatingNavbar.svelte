@@ -1,68 +1,18 @@
 <script lang="ts">
-  import { gsap } from 'gsap';
-  import { prefersReducedMotion } from '../../lib/reducedMotion';
-
-  // Estado reativo com Svelte 5
   let menuOpen = $state(false);
   let scrolled = $state(false);
   let activeSection = $state('');
   let isDark = $state(false);
-  const reducedMotion = prefersReducedMotion();
 
-  // Referências DOM com bind:this
-  let navbar: HTMLElement | null = null;
-  let consultantButton: HTMLElement | null = null;
   let menuToggleBtn: HTMLElement | null = null;
-
-  // GSAP timelines
-  let enterTl: gsap.core.Timeline | null = null;
-  let menuTl: gsap.core.Timeline | null = null;
-  let consultantTl: gsap.core.Timeline | null = null;
   const MOBILE_BREAKPOINT = 768;
 
-  // Efeito principal de inicialização
+  function prefersReducedMotion(): boolean {
+    return typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
   $effect(() => {
-    // Skip GSAP entrance animations if user prefers reduced motion
-    if (reducedMotion) {
-      if (navbar) {
-        gsap.set(navbar, { y: 0, opacity: 1, scale: 1 });
-      }
-      gsap.set(['.logo', '.nav-links li', '.consultant-button', '.menu-toggle-mobile'], {
-        opacity: 1,
-        y: 0,
-        clearProps: 'transform'
-      });
-      return;
-    }
-
-    // Inicializar GSAP
-    enterTl = gsap.timeline();
-    enterTl
-      .set(navbar, { y: -50, opacity: 0, scale: 0.95 })
-      .to(navbar, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 2.2,
-        ease: "power2.out"
-      })
-      .to(['.logo', '.nav-links li', '.consultant-button'], {
-        opacity: 1,
-        y: 0,
-        stagger: 0.12,
-        duration: 2,
-        ease: "expo.out"
-      }, "-=1")
-      .to('.menu-toggle-mobile', {
-        opacity: 1,
-        y: 0,
-        duration: 2,
-        ease: "expo.out"
-      }, "-=1.8");
-
-    // Scroll listener com RAF para performance
-    // Usa elementFromPoint para detectar seção ativa - este método é imune a desalinhamentos
-    // causados por pinSpacing do YouSection e pinning do SectionStacking
     let rafId: number;
     let ticking = false;
     let lastActiveSection = '';
@@ -73,16 +23,12 @@
           const scrollY = window.scrollY;
           scrolled = scrollY > 50;
 
-          // Detectar seção ativa usando elementFromPoint no centro da viewport
-          // Este método é robusto contra desalinhamentos de ScrollTrigger causados por pinSpacing
           const centerX = window.innerWidth / 2;
           const centerY = window.innerHeight / 2;
           const el = document.elementFromPoint(centerX, centerY);
 
-          // Detectar dark mode
           isDark = !!el?.closest('[data-dark-section]');
 
-          // Detectar seção ativa subindo o DOM a partir do elemento central
           if (el) {
             const section = el.closest('section[id]');
             if (section) {
@@ -94,7 +40,6 @@
             }
           }
 
-          // Fallback: se estiver no topo absoluto, limpar
           if (scrollY < 50) {
             activeSection = '';
             lastActiveSection = '';
@@ -120,70 +65,6 @@
           menuOpen = false;
         }
         document.body.style.overflow = '';
-
-        const overlayMenu = document.querySelector('.overlay-menu') as HTMLElement | null;
-        const overlayContent = document.querySelector('.overlay-content') as HTMLElement | null;
-        const overlayItems = document.querySelectorAll<HTMLElement>('.overlay-nav li');
-
-        if (menuTl) {
-          menuTl.kill();
-          menuTl = null;
-        }
-
-        if (overlayMenu) {
-          overlayMenu.style.display = 'none';
-          gsap.set(overlayMenu, { clearProps: 'all' });
-        }
-        if (overlayContent) {
-          gsap.set(overlayContent, { clearProps: 'all' });
-        }
-        overlayItems.forEach(item => gsap.set(item, { clearProps: 'all' }));
-
-        if (consultantTl) {
-          consultantTl.kill();
-          consultantTl = null;
-        }
-
-        const consultantBtn = consultantButton?.querySelector('button');
-        const consultantIcon = consultantButton?.querySelector('.phone-icon');
-        const consultantText = consultantButton?.querySelector('.button-text');
-        if (consultantBtn) gsap.set(consultantBtn, { clearProps: 'all' });
-        if (consultantIcon) gsap.set(consultantIcon, { clearProps: 'all' });
-        if (consultantText) gsap.set(consultantText, { clearProps: 'all' });
-
-        const logoEl = document.querySelector('.logo') as HTMLElement | null;
-        const menuToggleEl = document.querySelector('.menu-toggle-mobile') as HTMLElement | null;
-        const leftMobileEl = document.querySelector('.left-content-mobile') as HTMLElement | null;
-        const rightContentEl = document.querySelector('.right-content') as HTMLElement | null;
-        const centerContentEl = document.querySelector('.center-content') as HTMLElement | null;
-
-        if (navbar) {
-          if (isMobileNow) {
-            gsap.set(navbar, {
-              clearProps: 'y,opacity,scale',
-              left: 0,
-              x: 0,
-              width: '100%',
-              maxWidth: '100%',
-              transform: 'none'
-            });
-          } else {
-            gsap.set(navbar, {
-              clearProps: 'all',
-              left: '50%',
-              xPercent: -50,
-              width: '90%',
-              maxWidth: '1200px'
-            });
-          }
-        }
-
-        if (logoEl) gsap.set(logoEl, { clearProps: 'all' });
-        if (menuToggleEl) gsap.set(menuToggleEl, { clearProps: 'all' });
-        if (leftMobileEl) gsap.set(leftMobileEl, { clearProps: 'all' });
-        if (rightContentEl) gsap.set(rightContentEl, { clearProps: 'all' });
-        if (centerContentEl) gsap.set(centerContentEl, { clearProps: 'all' });
-
         wasMobile = isMobileNow;
       }
     };
@@ -195,7 +76,6 @@
 
     window.addEventListener('resize', handleResize);
 
-    // Keyboard handler para fechar menu com Escape
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && menuOpen) {
         closeMenu();
@@ -203,7 +83,6 @@
     };
     window.addEventListener('keydown', handleKeyDown);
 
-    // Teardown
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('scroll', handleScroll);
@@ -213,122 +92,23 @@
     };
   });
 
-  // Teardown das timelines
-  $effect(() => {
-    return () => {
-      if (enterTl) enterTl.kill();
-      if (menuTl) menuTl.kill();
-    };
-  });
-
-  // Abrir menu mobile
   function openMenu(): void {
     menuOpen = true;
     document.body.style.overflow = 'hidden';
 
-    if (menuTl) menuTl.kill();
-
-    const overlayMenu = document.querySelector('.overlay-menu') as HTMLElement;
-    const overlayContent = document.querySelector('.overlay-content') as HTMLElement;
-    const overlayItems = document.querySelectorAll<HTMLElement>('.overlay-nav li');
-
-    if (reducedMotion) {
-      if (overlayMenu) {
-        gsap.set(overlayMenu, { opacity: 1, display: 'flex', clearProps: 'transform' });
-      }
-      gsap.set(overlayContent, { y: 0, opacity: 1, clearProps: 'transform' });
-      overlayItems.forEach(item => gsap.set(item, { x: 0, opacity: 1, clearProps: 'transform' }));
-      // Focus first menu item
-      const firstLink = overlayMenu.querySelector('a');
+    setTimeout(() => {
+      const overlayMenu = document.querySelector('.overlay-menu') as HTMLElement | null;
+      const firstLink = overlayMenu?.querySelector('a');
       if (firstLink) firstLink.focus();
-      return;
-    }
-
-    if (overlayMenu) {
-      overlayMenu.style.display = 'flex';
-      gsap.set(overlayMenu, { opacity: 0, clearProps: 'transform' });
-    }
-    if (overlayContent) {
-      gsap.set(overlayContent, { y: 50, opacity: 0, clearProps: 'transform' });
-    }
-    overlayItems.forEach(item => gsap.set(item, { x: -50, opacity: 0, clearProps: 'transform' }));
-
-    menuTl = gsap.timeline();
-    menuTl
-      .to(overlayMenu, {
-        opacity: 1,
-        duration: 0.4,
-        ease: "power2.out"
-      })
-      .to(overlayContent, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "back.out(1.2)"
-      }, "-=0.3")
-      .to(overlayItems, {
-        x: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 0.4,
-        ease: "power2.out"
-      }, "-=0.4")
-      .call(() => {
-        // Focus first menu item after animation
-        const firstLink = overlayMenu?.querySelector('a');
-        if (firstLink) firstLink.focus();
-      }, null, "-=0.1");
+    }, prefersReducedMotion() ? 0 : 360);
   }
 
-  // Fechar menu mobile
   function closeMenu(): void {
     document.body.style.overflow = '';
-
-    if (menuTl) menuTl.kill();
-
-    const overlayMenu = document.querySelector('.overlay-menu') as HTMLElement | null;
-    const overlayContent = document.querySelector('.overlay-content') as HTMLElement | null;
-    const overlayItems = document.querySelectorAll<HTMLElement>('.overlay-nav li');
-
-    if (reducedMotion) {
-      menuOpen = false;
-      if (overlayMenu) {
-        overlayMenu.style.display = 'none';
-      }
-      // Return focus to menu toggle
-      if (menuToggleBtn) menuToggleBtn.focus();
-      return;
-    }
-
-    menuTl = gsap.timeline();
-    menuTl
-      .to(overlayContent, {
-        y: -50,
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.in"
-      })
-      .to(overlayItems, {
-        x: 50,
-        opacity: 0,
-        stagger: 0.05,
-        duration: 0.3,
-        ease: "power2.in"
-      }, "-=0.3")
-      .to(overlayMenu, {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.in",
-        onComplete: () => {
-          menuOpen = false;
-          if (overlayMenu) overlayMenu.style.display = 'none';
-          // Return focus to menu toggle
-          if (menuToggleBtn) menuToggleBtn.focus();
-        }
-      }, "-=0.3");
+    menuOpen = false;
+    if (menuToggleBtn) menuToggleBtn.focus();
   }
 
-  // Smooth scroll para anchors
   function navigateWithTransition(href: string): void {
     if (typeof window === 'undefined') return;
 
@@ -348,7 +128,7 @@
     // Se estiver na home, apenas volta ao topo.
     if (href === '/') {
       if (window.location.pathname === '/') {
-        window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
         if (menuOpen) closeMenu();
         return;
       }
@@ -388,85 +168,6 @@
       navigateWithTransition(fallbackRoute);
     }
   }
-
-  // Hover do botão "Falar com consultor" com GSAP
-  function handleConsultantHover(): void {
-    if (reducedMotion) return; // Skip animations
-    if (consultantTl) consultantTl.kill();
-    
-    const button = consultantButton?.querySelector('button');
-    const icon = consultantButton?.querySelector('.phone-icon');
-    const text = consultantButton?.querySelector('.button-text');
-    
-    if (!button || !icon || !text) return;
-    
-    // Cores variam conforme o tema
-    const hoverBg = isDark
-      ? 'hsla(210, 24%, 68%, 0.08)'
-      : 'hsla(45, 40%, 55%, 0.04)';
-    const hoverBorder = isDark
-      ? 'hsla(210, 20%, 62%, 0.18)'
-      : 'hsla(45, 40%, 55%, 0.2)';
-    
-    // Timeline Hygge - movimento suave e elegante
-    consultantTl = gsap.timeline();
-    consultantTl
-      .to(button, {
-        width: '200px',
-        duration: 1,
-        ease: 'power1.inOut',
-        backgroundColor: hoverBg,
-        borderColor: hoverBorder
-      })
-      .to(icon, {
-        x: -76,
-        scale: 1,
-        duration: 1,
-        ease: 'power1.inOut'
-      }, 0)
-      .to(text, {
-        opacity: 1,
-        duration: 1,
-        ease: 'power1.out'
-      }, 1.2);
-  }
-
-  function handleConsultantLeave(): void {
-    if (consultantTl) consultantTl.kill();
-    
-    const button = consultantButton?.querySelector('button');
-    const icon = consultantButton?.querySelector('.phone-icon');
-    const text = consultantButton?.querySelector('.button-text');
-    
-    if (!button || !icon || !text) return;
-    
-    // Cor da borda de repouso varia conforme o tema
-    const restBorder = isDark
-      ? 'hsla(214, 18%, 72%, 0.08)'
-      : 'hsla(214, 61%, 14%, 0.08)';
-    
-    // Timeline de volta - suave
-    consultantTl = gsap.timeline();
-    consultantTl
-      .to(text, {
-        opacity: 0,
-        duration: 1.5,
-        ease: 'power1.in'
-      })
-      .to(button, {
-        width: '42px',
-        duration: 1.8,
-        ease: 'power1.inOut',
-        backgroundColor: 'transparent',
-        borderColor: restBorder
-      }, 0)
-      .to(icon, {
-        x: 0,
-        scale: 1,
-        duration: 2,
-        ease: 'power1.inOut'
-      }, 0);
-  }
 </script>
 
 <!-- Gradientes para ícones -->
@@ -490,7 +191,7 @@
   </defs>
 </svg>
 
-<nav class="floating-navbar" class:dark={isDark} bind:this={navbar} aria-label="Menu principal">
+<nav class="floating-navbar" class:dark={isDark} class:scrolled={scrolled} aria-label="Menu principal">
   <div class="navbar-container">
     <div class="left-content-mobile">
       <a href="/analise" aria-label="Entrar em contato com atendimento" class="mobile-atendimento-link">
@@ -574,9 +275,6 @@
     <div class="right-content">
       <div
         class="consultant-button"
-        bind:this={consultantButton}
-        onmouseenter={handleConsultantHover}
-        onmouseleave={handleConsultantLeave}
         aria-hidden="true"
       >
         <button
@@ -617,7 +315,6 @@
   aria-modal="true"
   aria-label="Menu de navegação móvel"
   tabindex="-1"
-  style="display: none;"
   onclick={(e) => e.target === e.currentTarget && closeMenu()}
   onkeydown={(e) => { if (e.target === e.currentTarget && e.key === 'Escape') closeMenu(); }}
 >
@@ -722,7 +419,20 @@
     max-height: 88px;
     backdrop-filter: blur(20px) saturate(1.02);
     border: 1px solid hsla(214, 22%, 22%, 0.08);
+    animation: navbar-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes navbar-enter {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-50px) scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
   }
 
   :global(.floating-navbar::before) {
@@ -861,13 +571,14 @@
   :global(.consultant-button) {
     display: flex;
     align-items: center;
-    opacity: 0;
-    transform: translateY(15px);
+    opacity: 1;
+    transform: translateY(0);
     width: 200px;
     justify-content: flex-end;
     position: relative;
     pointer-events: auto;
     cursor: pointer;
+    animation: navbar-item-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) 360ms backwards;
   }
 
   :global(.consultant-button button) {
@@ -891,9 +602,20 @@
     z-index: 2;
     position: relative;
     transform: translateX(20px);
+    transition:
+      width 1s ease,
+      background 1s ease,
+      border-color 1s ease,
+      box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow:
       inset 0 1px 0 hsla(0, 0%, 100%, 0.5),
       0 8px 18px hsla(214, 26%, 14%, 0.06);
+  }
+
+  :global(.consultant-button:hover button) {
+    width: 200px;
+    background: hsla(45, 40%, 55%, 0.04);
+    border-color: hsla(45, 40%, 55%, 0.2);
   }
 
   :global(.consultant-button .phone-icon) {
@@ -902,6 +624,11 @@
     flex-shrink: 0;
     fill: url(#phone-gradient-light);
     filter: drop-shadow(0 1px 1px hsla(214, 61%, 14%, 0.3));
+    transition: transform 1s ease, filter 0.6s ease;
+  }
+
+  :global(.consultant-button:hover .phone-icon) {
+    transform: translateX(-76px);
   }
 
   :global(.consultant-button .button-text) {
@@ -916,6 +643,11 @@
     letter-spacing: 0.015em;
     overflow: visible;
     pointer-events: none;
+    transition: opacity 1s ease 180ms;
+  }
+
+  :global(.consultant-button:hover .button-text) {
+    opacity: 1;
   }
 
   :global(.floating-navbar.dark .consultant-button .button-text) {
@@ -948,8 +680,9 @@
   }
 
   :global(.logo) {
-    opacity: 0;
-    transform: translateY(15px);
+    opacity: 1;
+    transform: translateY(0);
+    animation: navbar-item-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) 160ms backwards;
   }
 
   :global(.logo a) {
@@ -969,8 +702,37 @@
   }
 
   :global(.nav-links li) {
-    opacity: 0;
-    transform: translateY(15px);
+    opacity: 1;
+    transform: translateY(0);
+    animation: navbar-item-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  :global(.nav-links li:nth-child(1)) {
+    animation-delay: 220ms;
+  }
+
+  :global(.nav-links li:nth-child(2)) {
+    animation-delay: 300ms;
+  }
+
+  :global(.nav-links li:nth-child(3)) {
+    animation-delay: 380ms;
+  }
+
+  :global(.nav-links li:nth-child(4)) {
+    animation-delay: 460ms;
+  }
+
+  @keyframes navbar-item-enter {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   :global(.left-content-mobile) {
@@ -1127,19 +889,24 @@
     backdrop-filter: none;
     border: 1px solid hsla(214, 18%, 72%, 0.08);
     text-shadow: none;
-    /* Sem transition: all — o GSAP controla width/bg/border no hover */
     transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-               box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+               box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+               width 1s ease,
+               background 1s ease,
+               border-color 1s ease;
   }
 
-  /* Hover visual controlado pelo GSAP; CSS só complementa cor do texto */
   :global(.floating-navbar.dark .consultant-button button:hover) {
     color: hsl(210, 26%, 92%);
     text-shadow: none;
   }
 
+  :global(.floating-navbar.dark .consultant-button:hover button) {
+    background: hsla(210, 24%, 68%, 0.08);
+    border-color: hsla(210, 20%, 62%, 0.18);
+  }
+
   :global(.floating-navbar.dark .consultant-button button:active) {
-    /* Nenhum transform aqui — evita conflito com GSAP */
   }
 
   :global(.floating-navbar.dark .consultant-button button:focus-visible) {
@@ -1176,11 +943,22 @@
       hsl(214, 50%, 4%) 40%,
       hsl(214, 45%, 2.5%) 100%
     );
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
     overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.34s ease, visibility 0s linear 0.34s;
+  }
+
+  :global(.overlay-menu.active) {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.34s ease, visibility 0s;
   }
 
   /* Gradiente dourado sutil no topo */
@@ -1221,6 +999,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: 0;
+    transform: translateY(50px);
+    transition:
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  :global(.overlay-menu.active .overlay-content) {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* Divisor decorativo entre o botão fechar e o menu */
@@ -1325,6 +1113,30 @@
   :global(.overlay-nav li) {
     opacity: 0;
     transform: translateX(-50px);
+    transition:
+      opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  :global(.overlay-menu.active .overlay-nav li) {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  :global(.overlay-menu.active .overlay-nav li:nth-child(1)) {
+    transition-delay: 80ms;
+  }
+
+  :global(.overlay-menu.active .overlay-nav li:nth-child(2)) {
+    transition-delay: 150ms;
+  }
+
+  :global(.overlay-menu.active .overlay-nav li:nth-child(3)) {
+    transition-delay: 220ms;
+  }
+
+  :global(.overlay-menu.active .overlay-nav li:nth-child(4)) {
+    transition-delay: 290ms;
   }
 
   :global(.overlay-nav a) {
@@ -1451,6 +1263,19 @@
       overflow: hidden;
       padding: 10px 8px 12px 8px;
       max-height: none;
+      animation-name: mobile-navbar-enter;
+    }
+
+    @keyframes mobile-navbar-enter {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     :global(.navbar-container) {
@@ -1541,6 +1366,25 @@
       box-shadow:
         inset 0 1px 0 hsla(42, 18%, 92%, 0.08),
         0 8px 18px hsla(228, 24%, 6%, 0.16);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.floating-navbar),
+    :global(.logo),
+    :global(.nav-links li),
+    :global(.consultant-button),
+    :global(.overlay-logo) {
+      animation: none;
+    }
+
+    :global(.overlay-menu),
+    :global(.overlay-content),
+    :global(.overlay-nav li),
+    :global(.consultant-button button),
+    :global(.consultant-button .phone-icon),
+    :global(.consultant-button .button-text) {
+      transition: none;
     }
   }
 </style>
