@@ -580,6 +580,23 @@
       padding: 0.85rem 1.35rem;
       font-size: 0.88rem;
     }
+
+    :global(.hero-section .content-wrapper) {
+      width: 100%;
+      max-width: 420px;
+      box-sizing: border-box;
+      margin-inline: auto !important;
+      left: auto !important;
+      right: auto !important;
+    }
+
+    :global(.hero-section .hero-headline-wrapper),
+    :global(.hero-section .hero-content),
+    :global(.hero-section .cta-group) {
+      width: 100%;
+      box-sizing: border-box;
+      margin-inline: auto;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
