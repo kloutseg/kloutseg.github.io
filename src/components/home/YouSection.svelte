@@ -1,29 +1,12 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import SectionIndicator from './SectionIndicators.svelte';
   import { prefersReducedMotion } from '../../lib/reducedMotion';
 
+  gsap.registerPlugin(ScrollTrigger);
   const reducedMotion = prefersReducedMotion();
-  type Gsap = typeof import('gsap').gsap;
-  type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
-
-  let gsap: Gsap | null = null;
-  let ScrollTrigger: ScrollTriggerPlugin | null = null;
-
-  async function ensureGsap() {
-    if (gsap && ScrollTrigger) return { gsap, ScrollTrigger };
-
-    const [gsapModule, scrollTriggerModule] = await Promise.all([
-      import('gsap'),
-      import('gsap/ScrollTrigger'),
-    ]);
-
-    gsap = gsapModule.gsap;
-    ScrollTrigger = scrollTriggerModule.ScrollTrigger;
-    gsap.registerPlugin(ScrollTrigger);
-
-    return { gsap, ScrollTrigger };
-  }
 
   // Stacking horizontal ativo apenas em telas acima de 768px (smartphones usam scroll natural)
   const STACKING_BREAKPOINT = 768;
@@ -37,7 +20,7 @@
   let slidesContainer: HTMLElement;
   let slides: HTMLElement[] = [];
   let progressIndicators: HTMLElement[] = [];
-  let scrollTriggerInstance: any = null;
+  let scrollTriggerInstance: ScrollTrigger | null = null;
   let slideContentEl: HTMLElement | null = $state(null);
 
   // Mobile swipe state
@@ -152,76 +135,65 @@
       };
     }
 
-    let killed = false;
-    let tween: any = null;
+    const totalSlides = slideData.length;
+    const getScrollDistance = () => (totalSlides - 1) * window.innerHeight * 3.4;
 
-    const setupDesktopScroll = async () => {
-      const modules = await ensureGsap();
-      if (killed) return;
+    // Matar qualquer ScrollTrigger existente nesta seção
+    ScrollTrigger.getAll().forEach(t => {
+      if (t.trigger === section) {
+        t.kill();
+      }
+    });
 
-      const totalSlides = slideData.length;
-      const getScrollDistance = () => (totalSlides - 1) * window.innerHeight * 3.4;
+    // Criar animação horizontal controlada pelo scroll
+    const tween = gsap.to(slidesContainer, {
+      x: `-${(totalSlides - 1) * 100}vw`,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${getScrollDistance()}`,
+        scrub: 1,
+        pin: true,
+        pinSpacing: true, // Adiciona espaço para o pin
+        anticipatePin: 0,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const currentSlide = Math.min(
+            Math.floor(progress * totalSlides),
+            totalSlides - 1
+          );
 
-      // Matar qualquer ScrollTrigger existente nesta seção
-      modules.ScrollTrigger.getAll().forEach(t => {
-        if (t.trigger === section) {
-          t.kill();
-        }
-      });
-
-      // Criar animação horizontal controlada pelo scroll
-      tween = modules.gsap.to(slidesContainer, {
-        x: `-${(totalSlides - 1) * 100}vw`,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: () => `+=${getScrollDistance()}`,
-          scrub: 1,
-          pin: true,
-          pinSpacing: true, // Adiciona espaço para o pin
-          anticipatePin: 0,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const currentSlide = Math.min(
-              Math.floor(progress * totalSlides),
-              totalSlides - 1
-            );
-
-            // Atualizar indicadores de progresso
-            progressIndicators.forEach((indicator, idx) => {
-              const fill = indicator.querySelector('.progress-bar-fill') as HTMLElement;
-              if (fill) {
-                if (idx < currentSlide) {
-                  // Slides já passados: fill completo
-                  setProgressFill(fill, 1);
-                } else if (idx === currentSlide) {
-                  // Slide atual: fill animando
-                  const slideProgress = (progress * totalSlides) - currentSlide;
-                  setProgressFill(fill, Math.min(slideProgress, 1));
-                } else {
-                  // Slides futuros: fill vazio
-                  setProgressFill(fill, 0);
-                }
+          // Atualizar indicadores de progresso
+          progressIndicators.forEach((indicator, idx) => {
+            const fill = indicator.querySelector('.progress-bar-fill') as HTMLElement;
+            if (fill) {
+              if (idx < currentSlide) {
+                // Slides já passados: fill completo
+                setProgressFill(fill, 1);
+              } else if (idx === currentSlide) {
+                // Slide atual: fill animando
+                const slideProgress = (progress * totalSlides) - currentSlide;
+                setProgressFill(fill, Math.min(slideProgress, 1));
+              } else {
+                // Slides futuros: fill vazio
+                setProgressFill(fill, 0);
               }
-            });
-          }
+            }
+          });
         }
-      });
+      }
+    });
 
-      scrollTriggerInstance = tween.scrollTrigger;
-      modules.ScrollTrigger.refresh();
-    };
-
-    void setupDesktopScroll();
+    scrollTriggerInstance = tween.scrollTrigger;
+    ScrollTrigger.refresh();
 
     // Add keyboard listener for ESC key
     window.addEventListener('keydown', handleKeydown);
 
     return () => {
-      killed = true;
-      tween?.kill();
+      tween.kill();
       scrollTriggerInstance?.kill();
       window.removeEventListener('keydown', handleKeydown);
       if (ctaTimeout) {
@@ -290,9 +262,8 @@
   }
 
   // Video handlers
-  async function handleExpand() {
+  function handleExpand() {
     if (!videoContainer || !slideContentEl) return;
-    const { gsap } = await ensureGsap();
 
     const slide = videoContainer.closest('.slide');
     if (slide) {
@@ -304,8 +275,7 @@
 
     // Pause scroll when expanded
     if (scrollTriggerInstance) {
-      scrollTriggerInstance.disable?.();
-      scrollTriggerInstance.scrollTrigger?.disable?.();
+      scrollTriggerInstance.scrollTrigger?.disable();
     }
 
     // Play video
@@ -392,9 +362,8 @@
     }, 1000);
   }
 
-  async function handleClose() {
+  function handleClose() {
     if (!videoContainer || !slideContentEl) return;
-    const { gsap } = await ensureGsap();
 
     const slide = videoContainer.closest('.slide');
     if (slide) {
@@ -420,8 +389,7 @@
 
     // Re-enable scroll
     if (scrollTriggerInstance) {
-      scrollTriggerInstance.enable?.();
-      scrollTriggerInstance.scrollTrigger?.enable?.();
+      scrollTriggerInstance.scrollTrigger?.enable();
     }
 
     const isMobileDevice = isMobile();

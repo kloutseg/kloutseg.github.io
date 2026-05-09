@@ -16,8 +16,8 @@ import Footer from '../components/Footer.svelte';
   {/* Critical: Navbar precisa estar interativa imediatamente */}
   <FloatingNavbar client:load />
 
-  {/* Idle: SectionStacking entra após o primeiro paint para não competir com LCP */}
-  <SectionStacking client:idle />
+  {/* Desktop-only: mobile usa scroll natural e não precisa do stacking/pinning */}
+  <SectionStacking client:media="(min-width: 769px)" />
 
   <main id="main-content">
     {/* Static: Hero é renderizado no HTML inicial e animado via CSS */}

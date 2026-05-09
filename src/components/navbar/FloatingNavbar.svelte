@@ -34,6 +34,13 @@
     const setupObservers = () => {
       cleanupObservers();
 
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        scrolled = false;
+        isDark = false;
+        activeSection = '';
+        return;
+      }
+
       scrollSentinel = document.createElement('span');
       scrollSentinel.setAttribute('aria-hidden', 'true');
       scrollSentinel.style.cssText = 'position:absolute;top:50px;left:0;width:1px;height:1px;pointer-events:none;';
@@ -43,12 +50,6 @@
         scrolled = !entry.isIntersecting;
       });
       scrollObserver.observe(scrollSentinel);
-
-      if (window.innerWidth <= MOBILE_BREAKPOINT) {
-        isDark = false;
-        activeSection = '';
-        return;
-      }
 
       sectionObserver = new IntersectionObserver((entries) => {
         const visible = entries
