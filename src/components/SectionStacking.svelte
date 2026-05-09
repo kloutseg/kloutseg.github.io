@@ -165,11 +165,13 @@
       };
     };
 
-    if (window.requestIdleCallback) {
-      idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 1200 });
-    } else {
-      timeoutId = window.setTimeout(() => void start(), 450);
-    }
+    timeoutId = window.setTimeout(() => {
+      if (window.requestIdleCallback) {
+        idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 600 });
+      } else {
+        void start();
+      }
+    }, 2200);
 
     return () => {
       cancelled = true;
