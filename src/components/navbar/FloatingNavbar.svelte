@@ -238,11 +238,11 @@
           style="height: 18px; width: auto;"
         />
         <img
-          src={isDark ? '/images/navbar-logo-3d.png' : '/images/navbar-logo-blue-3d.png'}
+          src={isDark ? '/images/navbar-logo-3d-60.webp' : '/images/navbar-logo-blue-3d-60.webp'}
           alt="Logotipo da Klout"
           class="logo-mobile"
-          width="30"
-          height="40"
+          width="60"
+          height="80"
           style="height: 32px; width: auto;"
         />
       </a>
