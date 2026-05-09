@@ -263,7 +263,7 @@
     <div class="logo">
       <a href="/" aria-label="Página inicial da Klout" onclick={(e) => { e.preventDefault(); handleAnchorClick('/'); }}>
         <img
-          src={isDark ? '/images/logo_simple_light.png' : '/images/logo_v3_blue-126.webp'}
+          src={isDark ? '/images/logo_simple_light-126.webp' : '/images/logo_v3_blue-126.webp'}
           alt="Logotipo da Klout"
           class="logo-desktop"
           width="126"
