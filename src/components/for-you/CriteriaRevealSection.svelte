@@ -46,10 +46,14 @@
     <div class="criteria-viewport">
       <div class="criteria-visual-stage">
         <img
-          src="/images/consulting_b2c_02.webp"
+          src="/images/consulting_b2c_02-1160.webp"
+          srcset="/images/consulting_b2c_02-960.webp 960w, /images/consulting_b2c_02-1160.webp 1160w, /images/consulting_b2c_02.webp 1280w"
+          sizes="(max-width: 768px) 100vw, (max-width: 1400px) calc(100vw - 14rem), 1160px"
           alt="Consultora conversando com um casal e analisando documentos para recomendar o plano mais adequado"
           class="criteria-image"
           loading="lazy"
+          width="1160"
+          height="773"
         />
         <div class="criteria-image-shade"></div>
 
