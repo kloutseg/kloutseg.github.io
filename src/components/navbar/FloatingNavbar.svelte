@@ -13,57 +13,71 @@
   }
 
   $effect(() => {
-    let rafId: number;
-    let ticking = false;
-    let lastActiveSection = '';
-
-    const handleScroll = () => {
-      if (!ticking) {
-        rafId = requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          scrolled = scrollY > 50;
-
-          if (window.innerWidth <= MOBILE_BREAKPOINT) {
-            isDark = false;
-            activeSection = '';
-            lastActiveSection = '';
-            ticking = false;
-            return;
-          }
-
-          const centerX = window.innerWidth / 2;
-          const centerY = window.innerHeight / 2;
-          const el = document.elementFromPoint(centerX, centerY);
-
-          isDark = !!el?.closest('[data-dark-section]');
-
-          if (el) {
-            const section = el.closest('section[id]');
-            if (section) {
-              const sectionId = section.getAttribute('id');
-              if (sectionId && sectionId !== lastActiveSection) {
-                lastActiveSection = sectionId;
-                activeSection = sectionId;
-              }
-            }
-          }
-
-          if (scrollY < 50) {
-            activeSection = '';
-            lastActiveSection = '';
-          }
-
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
+    let scrollObserver: IntersectionObserver | null = null;
+    let sectionObserver: IntersectionObserver | null = null;
+    let darkObserver: IntersectionObserver | null = null;
+    let scrollSentinel: HTMLSpanElement | null = null;
     let wasMobile = window.innerWidth <= MOBILE_BREAKPOINT;
     let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const cleanupObservers = () => {
+      scrollObserver?.disconnect();
+      sectionObserver?.disconnect();
+      darkObserver?.disconnect();
+      scrollObserver = null;
+      sectionObserver = null;
+      darkObserver = null;
+      scrollSentinel?.remove();
+      scrollSentinel = null;
+    };
+
+    const setupObservers = () => {
+      cleanupObservers();
+
+      scrollSentinel = document.createElement('span');
+      scrollSentinel.setAttribute('aria-hidden', 'true');
+      scrollSentinel.style.cssText = 'position:absolute;top:50px;left:0;width:1px;height:1px;pointer-events:none;';
+      document.body.prepend(scrollSentinel);
+
+      scrollObserver = new IntersectionObserver(([entry]) => {
+        scrolled = !entry.isIntersecting;
+      });
+      scrollObserver.observe(scrollSentinel);
+
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        isDark = false;
+        activeSection = '';
+        return;
+      }
+
+      sectionObserver = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const sectionId = visible?.target.getAttribute('id');
+        if (sectionId) activeSection = sectionId;
+      }, {
+        rootMargin: '-42% 0px -42% 0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      });
+
+      document.querySelectorAll<HTMLElement>('section[id]').forEach(section => {
+        sectionObserver?.observe(section);
+      });
+
+      darkObserver = new IntersectionObserver((entries) => {
+        isDark = entries.some(entry => entry.isIntersecting);
+      }, {
+        rootMargin: '-45% 0px -45% 0px',
+        threshold: 0,
+      });
+
+      document.querySelectorAll<HTMLElement>('[data-dark-section]').forEach(section => {
+        darkObserver?.observe(section);
+      });
+    };
+
+    setupObservers();
 
     const syncResponsiveState = () => {
       const isMobileNow = window.innerWidth <= MOBILE_BREAKPOINT;
@@ -74,6 +88,7 @@
         }
         document.body.style.overflow = '';
         wasMobile = isMobileNow;
+        setupObservers();
       }
     };
 
@@ -92,8 +107,7 @@
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('scroll', handleScroll);
+      cleanupObservers();
       window.removeEventListener('resize', handleResize);
       if (resizeTimer) clearTimeout(resizeTimer);
       window.removeEventListener('keydown', handleKeyDown);
