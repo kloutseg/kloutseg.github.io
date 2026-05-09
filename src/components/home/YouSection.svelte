@@ -1464,9 +1464,9 @@
     /* Slide 1: video horizontal — retângulo compacto com cantos arredondados */
     .video-wrapper {
       order: 1;
-      width: 82vw;
-      max-width: min(308px, 82vw);
-      aspect-ratio: 16 / 10;
+      width: 84vw;
+      max-width: min(332px, 84vw);
+      aspect-ratio: 5 / 4;
       height: auto;
       justify-self: center;
       align-self: center;
@@ -1476,7 +1476,7 @@
 
     .video-capsule {
       width: 100%;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 5 / 4;
       height: auto;
       border-radius: 18px;
       overflow: hidden;
@@ -1505,10 +1505,10 @@
 
     /* Image capsules for slides 2 and 3 */
     .image-capsule-wrapper {
-      width: 82vw;
-      max-width: min(308px, 82vw);
+      width: 84vw;
+      max-width: min(332px, 84vw);
       height: auto;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 5 / 4;
       justify-self: center;
       align-self: center;
       flex-shrink: 0;
@@ -1579,7 +1579,7 @@
 
     .curation-interlude {
       height: auto;
-      min-height: auto;
+      min-height: 100svh;
       padding: clamp(4rem, 11svh, 5.25rem) 1.25rem;
     }
 
@@ -1634,7 +1634,7 @@
 
     .video-wrapper,
     .image-capsule-wrapper {
-      width: min(82vw, 300px);
+      width: min(84vw, 316px);
     }
 
     .curation-interlude {

@@ -317,19 +317,21 @@
 
   @media (max-width: 768px) {
     section {
-      min-height: auto;
-      padding: 3.5rem 1.5rem 4.5rem;
+      min-height: 100svh;
+      padding: clamp(3.25rem, 6svh, 4rem) 1.5rem clamp(3.75rem, 7svh, 4.75rem);
     }
 
     .section-content {
       padding: 0;
       max-width: 520px;
       gap: 0;
+      min-height: auto;
+      align-content: center;
     }
 
     .image-wrapper {
       order: 1;
-      margin-bottom: 1.5rem;
+      margin-bottom: clamp(1.35rem, 3svh, 1.8rem);
     }
 
     .content-rail {
@@ -340,7 +342,7 @@
     .image-container {
       width: 100%;
       max-width: none;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 10 / 12;
       border-radius: 20px;
       box-shadow: 0 16px 38px hsla(214, 30%, 12%, 0.1);
     }
@@ -355,7 +357,7 @@
       line-height: 1.25;
       letter-spacing: -0.03em;
       max-width: 100%;
-      margin-bottom: 1.05rem;
+      margin-bottom: clamp(0.82rem, 2svh, 1.05rem);
       text-align: center;
     }
 
@@ -391,6 +393,27 @@
         0 14px 30px hsla(214, 44%, 16%, 0.18),
         0 4px 12px hsla(214, 44%, 16%, 0.1),
         inset 0 1px 0 hsla(0, 0%, 100%, 0.18);
+    }
+  }
+
+  @media (max-width: 480px) {
+    section {
+      padding: clamp(2.75rem, 5.8svh, 3.5rem) 1rem clamp(3.35rem, 7svh, 4.25rem);
+    }
+
+    .image-container {
+      aspect-ratio: 10 / 11.5;
+      border-radius: 18px;
+    }
+
+    .section-text {
+      font-size: clamp(1.28rem, 6vw, 1.48rem);
+      line-height: 1.2;
+    }
+
+    .side-text p {
+      font-size: 0.8rem;
+      line-height: 1.62;
     }
   }
 </style>
