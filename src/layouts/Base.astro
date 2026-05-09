@@ -1,5 +1,9 @@
 ---
-const { title } = Astro.props;
+const {
+  title,
+  description = 'A Klout analisa planos de saúde com critério técnico para ajudar pessoas e empresas a decidir com mais segurança, eficiência e clareza.',
+} = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!DOCTYPE html>
@@ -8,6 +12,8 @@ const { title } = Astro.props;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title || 'Guia de Estilo'}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonicalUrl}>
   <script is:inline>
     try {
       const transitionKey = 'klout:page-transition';

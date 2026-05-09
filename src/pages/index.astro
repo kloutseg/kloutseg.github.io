@@ -12,7 +12,10 @@ import BackToTop from '../components/BackToTop.astro';
 import Footer from '../components/Footer.svelte';
 ---
 
-<BaseLayout title="Página Inicial">
+<BaseLayout
+  title="Klout | Inteligência em planos de saúde"
+  description="A Klout compara custo, cobertura e acesso real para orientar decisões mais eficientes em planos de saúde para pessoas e empresas."
+>
   {/* Desktop: navbar hidrata só quando precisa de observers/estado ativo */}
   <FloatingNavbar client:media="(min-width: 769px)" />
 
