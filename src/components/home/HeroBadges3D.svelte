@@ -1,7 +1,3 @@
-<script lang="ts">
-  import '../../styles/ibm-plex-mono.css';
-</script>
-
 <div class="hero-badges">
   <!-- Badge 1: Clientes -->
   <div class="badge badge-primary">
@@ -38,6 +34,16 @@
 </div>
 
 <style>
+  @media (min-width: 769px) {
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/fonts/ibm_plex_mono/woff2/ibm-plex-mono/ibm-plex-mono.woff2') format('woff2');
+    }
+  }
+
   .hero-badges {
     display: flex;
     gap: 72px;

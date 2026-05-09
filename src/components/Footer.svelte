@@ -62,22 +62,6 @@
 </footer>
 
 <style>
-  @font-face {
-    font-family: 'Outfit';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url('/fonts/outfit/outfit-v14-latin-500.woff2') format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Outfit';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url('/fonts/outfit/outfit-v14-latin-600.woff2') format('woff2');
-  }
-
   footer {
     width: 100vw;
     max-width: 100%;
@@ -173,7 +157,7 @@
   }
 
   .credit-text {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Proxima Nova', sans-serif;
     font-size: 0.82rem;
     font-weight: 500;
     color: hsl(0, 0%, 88%);

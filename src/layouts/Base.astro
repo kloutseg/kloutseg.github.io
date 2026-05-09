@@ -578,8 +578,6 @@ const { title } = Astro.props;
     })();
   </script>
   <script>
-    import { prefersReducedMotion } from '../lib/reducedMotion';
-
     declare global {
       interface Window {
         __kloutNavigate?: (href: string, options?: { replace?: boolean }) => void;
@@ -606,6 +604,10 @@ const { title } = Astro.props;
 
     const html = document.documentElement;
     const overlay = document.getElementById('page-transition-overlay') as HTMLElement | null;
+
+    function prefersReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
 
     window.__kloutPageTransition = {
       enterHoldMs: ENTER_HOLD_MS,
