@@ -1269,6 +1269,22 @@
 
   /* Mobile adjustments */
   @media (max-width: 768px) {
+    .slide-section {
+      height: auto;
+      min-height: auto;
+      overflow: visible;
+    }
+
+    .slides-container {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      transform: none;
+    }
+
     .mobile-swipe-hint {
       display: block;
     }
@@ -1341,6 +1357,8 @@
       align-items: stretch;
       width: 100vw !important;
       flex-shrink: 0 !important;
+      scroll-snap-align: start;
+      transform: none;
     }
 
     /* Hide horizontal scrollbar */

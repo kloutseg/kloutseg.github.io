@@ -33,8 +33,141 @@ import Footer from '../components/Footer.svelte';
       })();
     </script>
 
-    {/* Critical: YouSection precisa hidratar cedo para registrar seu pin horizontal antes do stacking seguinte */}
-    <YouSection client:load />
+    {/* Desktop: hidrata para pin horizontal; mobile usa CSS + script inline leve */}
+    <YouSection client:media="(min-width: 769px)" />
+
+    <script is:inline>
+      (() => {
+        const mobileQuery = window.matchMedia('(max-width: 768px)');
+        if (!mobileQuery.matches) return;
+
+        const section = document.getElementById('voce');
+        if (!section) return;
+
+        const slidesContainer = section.querySelector('.slides-container');
+        const slides = Array.from(section.querySelectorAll('.slide'));
+        const progressBars = Array.from(section.querySelectorAll('.progress-bar-bg'));
+        const prevButton = section.querySelector('.swipe-nav-button--prev');
+        const nextButton = section.querySelector('.swipe-nav-button--next');
+        const videoWrapper = section.querySelector('.video-wrapper');
+        const video = section.querySelector('video');
+        const closeButton = section.querySelector('.close-button');
+        const ctaButton = section.querySelector('.cta-button-video');
+        const expandIcon = section.querySelector('.hover-indicator');
+
+        if (!(slidesContainer instanceof HTMLElement)) return;
+
+        let currentSlide = 0;
+        let scrollTimer;
+        let ctaTimer;
+
+        const setProgress = (index) => {
+          progressBars.forEach((bar, idx) => {
+            const fill = bar.querySelector('.progress-bar-fill');
+            if (fill instanceof HTMLElement) {
+              fill.style.transform = idx <= index ? 'scaleX(1)' : 'scaleX(0)';
+            }
+          });
+        };
+
+        const updateButtons = (index) => {
+          if (prevButton instanceof HTMLButtonElement) {
+            prevButton.disabled = index === 0;
+            prevButton.classList.toggle('is-hidden', index === 0);
+          }
+
+          if (nextButton instanceof HTMLButtonElement) {
+            nextButton.disabled = index >= slides.length - 1;
+            nextButton.classList.toggle('is-hidden', index >= slides.length - 1);
+          }
+        };
+
+        const updateCurrentSlide = (index) => {
+          currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+          setProgress(currentSlide);
+          updateButtons(currentSlide);
+        };
+
+        const scrollToSlide = (index) => {
+          const target = Math.max(0, Math.min(index, slides.length - 1));
+          updateCurrentSlide(target);
+          slidesContainer.scrollTo({
+            left: target * window.innerWidth,
+            behavior: 'smooth',
+          });
+        };
+
+        const closeVideo = () => {
+          const slide = videoWrapper?.closest('.slide');
+          slide?.classList.remove('expanded');
+          videoWrapper?.classList.remove('video-expanded');
+          expandIcon?.classList.remove('is-hidden');
+          closeButton?.classList.remove('visible');
+          ctaButton?.classList.remove('visible');
+          window.clearTimeout(ctaTimer);
+
+          if (video instanceof HTMLVideoElement) {
+            video.pause();
+            video.currentTime = 0;
+            video.load();
+          }
+        };
+
+        const openVideo = () => {
+          const slide = videoWrapper?.closest('.slide');
+          slide?.classList.add('expanded');
+          videoWrapper?.classList.add('video-expanded');
+          expandIcon?.classList.add('is-hidden');
+          closeButton?.classList.add('visible');
+
+          if (video instanceof HTMLVideoElement) {
+            void video.play();
+          }
+
+          window.clearTimeout(ctaTimer);
+          ctaTimer = window.setTimeout(() => {
+            ctaButton?.classList.add('visible');
+          }, 1000);
+        };
+
+        slidesContainer.addEventListener('scroll', () => {
+          const nextSlide = Math.round(slidesContainer.scrollLeft / window.innerWidth);
+          updateCurrentSlide(nextSlide);
+          window.clearTimeout(scrollTimer);
+          scrollTimer = window.setTimeout(() => {
+            updateCurrentSlide(Math.round(slidesContainer.scrollLeft / window.innerWidth));
+          }, 180);
+        }, { passive: true });
+
+        prevButton?.addEventListener('click', () => scrollToSlide(currentSlide - 1));
+        nextButton?.addEventListener('click', () => scrollToSlide(currentSlide + 1));
+
+        if (videoWrapper instanceof HTMLElement) {
+          videoWrapper.addEventListener('click', openVideo);
+          videoWrapper.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openVideo();
+            }
+          });
+        }
+
+        closeButton?.addEventListener('click', (event) => {
+          event.stopPropagation();
+          closeVideo();
+        });
+
+        ctaButton?.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeVideo();
+        });
+
+        updateCurrentSlide(0);
+      })();
+    </script>
 
     {/* Static: CompaniesSection renderiza no SSR e evita layout shift após a YouSection */}
     <CompaniesSection />
