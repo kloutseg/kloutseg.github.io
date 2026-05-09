@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-  gsap.registerPlugin(ScrollTrigger);
+  type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
+  type ScrollTriggerSnap = Parameters<ScrollTriggerPlugin['create']>[0]['snap'];
+  type ScrollTriggerInstance = ReturnType<ScrollTriggerPlugin['create']>;
 
-  const triggers: ScrollTrigger[] = [];
+  let ScrollTrigger: ScrollTriggerPlugin | null = null;
+  const triggers: ScrollTriggerInstance[] = [];
   const pinnedSections = new Set<HTMLElement>();
 
   // Stacking ativo apenas em telas acima de 768px (smartphones usam scroll natural)
@@ -27,7 +28,8 @@
     return customEnd ? `+=${customEnd}` : '+=220%';
   }
 
-  function getSnapConfig(section: HTMLElement): ScrollTrigger.Vars['snap'] | undefined {
+  function getSnapConfig(section: HTMLElement): ScrollTriggerSnap | undefined {
+    type SnapConfig = NonNullable<ScrollTriggerSnap>;
     const snapAttr = section.dataset.stackSnap;
     if (!snapAttr) return undefined;
 
@@ -39,10 +41,11 @@
       duration: { min: 0.12, max: 0.28 },
       ease: 'power1.out',
       inertia: false,
-    };
+    } satisfies SnapConfig;
   }
 
   function createPinTrigger(section: HTMLElement) {
+    if (!ScrollTrigger) return;
     if (isMobile()) return;
     if (pinnedSections.has(section)) return;
     if (section.classList.contains('slide-section')) return;
@@ -90,8 +93,23 @@
   }
 
   onMount(() => {
-    // Aguarda hidratação completa dos componentes
-    setTimeout(() => {
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    let idleCallbackId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const start = async () => {
+      const [{ gsap }, scrollTriggerModule] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+
+      if (cancelled) return;
+
+      ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger);
+
       rebuildTriggers();
 
       // Observer para seções carregadas dinamicamente
@@ -123,7 +141,6 @@
       });
 
       // Debounce para resize — destrói e recria triggers ao cruzar o breakpoint
-      let resizeTimer: ReturnType<typeof setTimeout>;
       const handleResize = () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
@@ -141,12 +158,25 @@
 
       window.addEventListener('resize', handleResize);
 
-      return () => {
+      cleanup = () => {
         observer.disconnect();
         window.removeEventListener('resize', handleResize);
         clearTimeout(resizeTimer);
       };
-    }, 500);
+    };
+
+    if (window.requestIdleCallback) {
+      idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 1200 });
+    } else {
+      timeoutId = window.setTimeout(() => void start(), 450);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleCallbackId !== undefined) window.cancelIdleCallback?.(idleCallbackId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      cleanup?.();
+    };
   });
 
   onDestroy(() => {

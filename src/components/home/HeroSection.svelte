@@ -23,7 +23,6 @@
             <span class="subtitle-part-1">em planos</span>
             <span class="subtitle-part-2">de saúde.</span>
           </span>
-          <span class="subtitle-line subtitle-line-right"></span>
         </span>
       </h1>
     </div>
@@ -271,7 +270,7 @@
     color: hsl(42, 28%, 38%);
   }
 
-  :global(.hero-headline .subtitle .subtitle-line) {
+  :global(.hero-headline .subtitle .subtitle-line-left) {
     display: block;
     width: 6rem;
     height: 1px;
@@ -280,7 +279,6 @@
     transform-origin: left center;
     transform: scaleX(1);
     animation: hero-subtitle-line-enter 1200ms ease-out 620ms backwards;
-
     background: linear-gradient(
       90deg,
       hsl(42, 22%, 42%) 0%,
@@ -291,7 +289,7 @@
   }
 
   :global(.hero-description) {
-    font-size: clamp(1rem, 1.35vw, 1.08rem);
+    font-size: clamp(0.8rem, 1.35vw, 1rem);
     line-height: 1.78;
     color: hsl(214, 20%, 26%);
     font-weight: 400;
@@ -517,22 +515,9 @@
       gap: 0.75rem;
     }
 
-    :global(.hero-headline .subtitle .subtitle-line-left),
-    :global(.hero-headline .subtitle .subtitle-line-right) {
-      display: block;
+    :global(.hero-headline .subtitle .subtitle-line-left) {
       width: 3rem !important;
-      height: 1px;
-      flex-shrink: 0;
-      transform: scaleX(1);
       transform-origin: center center;
-
-      background: linear-gradient(
-        90deg,
-        hsl(42, 22%, 42%) 0%,
-        hsl(42, 28%, 52%) 50%,
-        hsl(42, 22%, 42%) 100%
-      );
-      box-shadow: none;
     }
 
     :global(.hero-headline .subtitle .subtitle-text) {
@@ -592,7 +577,7 @@
   @media (prefers-reduced-motion: reduce) {
     :global(.hero-headline .main-word),
     :global(.hero-headline .subtitle),
-    :global(.hero-headline .subtitle .subtitle-line),
+    :global(.hero-headline .subtitle .subtitle-line-left),
     :global(.divider-line),
     :global(.cta-button),
     :global(.hero-description) {
