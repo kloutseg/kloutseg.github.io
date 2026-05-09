@@ -211,59 +211,63 @@ const qaCases = [
       const hero = document.querySelector('.companies-hero');
       if (!hero) return;
 
-      const heroImage = hero.querySelector('.hero-image');
-      const heroOverlay = hero.querySelector('.hero-overlay');
-      const heroKicker = hero.querySelector('.hero-kicker');
-      const heroTitle = hero.querySelector('.hero-title');
-      const heroDescriptionShell = hero.querySelector('.hero-description-shell');
+      const canAnimateHeroIntro = window.matchMedia('(min-width: 769px)').matches;
 
-      gsap.set([heroKicker, heroTitle, heroDescriptionShell], {
-        autoAlpha: 0,
-        y: 42
-      });
+      if (canAnimateHeroIntro) {
+        const heroImage = hero.querySelector('.hero-image');
+        const heroOverlay = hero.querySelector('.hero-overlay');
+        const heroKicker = hero.querySelector('.hero-kicker');
+        const heroTitle = hero.querySelector('.hero-title');
+        const heroDescriptionShell = hero.querySelector('.hero-description-shell');
 
-      gsap.set(heroImage, {
-        scale: 1.14,
-        autoAlpha: 0.58
-      });
+        gsap.set([heroKicker, heroTitle, heroDescriptionShell], {
+          autoAlpha: 0,
+          y: 42
+        });
 
-      gsap.set(heroOverlay, {
-        autoAlpha: 0.18
-      });
+        gsap.set(heroImage, {
+          scale: 1.14,
+          autoAlpha: 0.58
+        });
 
-      const tl = gsap.timeline({
-        defaults: { ease: 'power2.out' }
-      });
+        gsap.set(heroOverlay, {
+          autoAlpha: 0.18
+        });
 
-      tl.to(heroImage, {
-        scale: 1,
-        autoAlpha: 1,
-        duration: 2.8,
-        ease: 'power3.out'
-      })
-        .to(heroOverlay, {
+        const tl = gsap.timeline({
+          defaults: { ease: 'power2.out' }
+        });
+
+        tl.to(heroImage, {
+          scale: 1,
           autoAlpha: 1,
-          duration: 2.2,
-          ease: 'power2.out'
-        }, 0.18)
-        .to(heroKicker, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.15,
+          duration: 2.8,
           ease: 'power3.out'
-        }, 0.92)
-        .to(heroTitle, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.45,
-          ease: 'power3.out'
-        }, 1.02)
-        .to(heroDescriptionShell, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.2,
-          ease: 'power3.out'
-        }, 1.42);
+        })
+          .to(heroOverlay, {
+            autoAlpha: 1,
+            duration: 2.2,
+            ease: 'power2.out'
+          }, 0.18)
+          .to(heroKicker, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.15,
+            ease: 'power3.out'
+          }, 0.92)
+          .to(heroTitle, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.45,
+            ease: 'power3.out'
+          }, 1.02)
+          .to(heroDescriptionShell, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+          }, 1.42);
+      }
 
       const stepsSection = document.querySelector('.section-steps');
       const stepCards = stepsSection?.querySelectorAll('.step-card');
