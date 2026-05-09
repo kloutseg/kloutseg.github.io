@@ -585,18 +585,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       });
     })();
   </script>
-  <script>
-    declare global {
-      interface Window {
-        __kloutNavigate?: (href: string, options?: { replace?: boolean }) => void;
-        __kloutPageTransition?: {
-          enterHoldMs: number;
-          revealMs: number;
-        };
-        lenisInstance?: { stop?: () => void; start?: () => void; destroy?: () => void; raf?: (time: number) => void };
-      }
-    }
-
+  <script is:inline>
     const TRANSITION_KEY = 'klout:page-transition';
     const TRANSITION_TTL = 4000;
     const EXIT_FADE_MS = 1060;
@@ -605,15 +594,15 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
     const REVEAL_FADE_MS = 1020;
     const REVEAL_READY_TIMEOUT_MS = 1800;
     let isTransitioning = false;
-    let navigationTimer: number | null = null;
-    let revealReadyTimer: number | null = null;
-    let revealTimer: number | null = null;
-    let revealCleanupTimer: number | null = null;
+    let navigationTimer = null;
+    let revealReadyTimer = null;
+    let revealTimer = null;
+    let revealCleanupTimer = null;
 
     const html = document.documentElement;
-    const overlay = document.getElementById('page-transition-overlay') as HTMLElement | null;
+    const overlay = document.getElementById('page-transition-overlay');
 
-    function prefersReducedMotion(): boolean {
+    function prefersReducedMotion() {
       return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
@@ -622,7 +611,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       revealMs: REVEAL_FADE_MS,
     };
 
-    function clearTransitionState(): void {
+    function clearTransitionState() {
       try {
         window.sessionStorage.removeItem(TRANSITION_KEY);
       } catch {
@@ -630,12 +619,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }
     }
 
-    function getFreshTransitionState(): { ts: number } | null {
+    function getFreshTransitionState() {
       try {
         const rawState = window.sessionStorage.getItem(TRANSITION_KEY);
         if (!rawState) return null;
 
-        const transitionState = JSON.parse(rawState) as { ts?: number };
+        const transitionState = JSON.parse(rawState);
         if (typeof transitionState.ts !== 'number') return null;
         if (Date.now() - transitionState.ts > TRANSITION_TTL) return null;
 
@@ -645,11 +634,11 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }
     }
 
-    function canAnimateTransition(): boolean {
+    function canAnimateTransition() {
       return !prefersReducedMotion() && !!overlay;
     }
 
-    function clearTransitionTimers(): void {
+    function clearTransitionTimers() {
       if (navigationTimer !== null) {
         window.clearTimeout(navigationTimer);
         navigationTimer = null;
@@ -671,7 +660,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }
     }
 
-    function resetOverlayState(): void {
+    function resetOverlayState() {
       clearTransitionTimers();
       html.classList.remove('page-transition-enter', 'page-transition-active', 'page-transition-revealing');
       if (!overlay) return;
@@ -681,7 +670,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       window.lenisInstance?.start?.();
     }
 
-    function startNavigation(href: string, options?: { replace?: boolean }): void {
+    function startNavigation(href, options) {
       const targetUrl = new URL(href, window.location.href);
       const isSameDocument =
         targetUrl.origin === window.location.origin &&
@@ -732,7 +721,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }, EXIT_FADE_MS + EXIT_HOLD_MS);
     }
 
-    function revealPage(): void {
+    function revealPage() {
       const transitionState = getFreshTransitionState();
       if (!transitionState) {
         resetOverlayState();
@@ -750,7 +739,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       window.lenisInstance?.stop?.();
       overlay.style.pointerEvents = 'none';
 
-      const startReveal = (): void => {
+      const startReveal = () => {
         if (revealTimer !== null || revealCleanupTimer !== null) return;
 
         if (revealReadyTimer !== null) {
@@ -785,7 +774,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }, REVEAL_READY_TIMEOUT_MS);
     }
 
-    function isEligibleAnchor(anchor: HTMLAnchorElement, event: MouseEvent): boolean {
+    function isEligibleAnchor(anchor, event) {
       const rawHref = anchor.getAttribute('href');
       if (!rawHref) return false;
       if (anchor.target && anchor.target !== '_self') return false;
@@ -815,14 +804,14 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       return true;
     }
 
-    window.__kloutNavigate = (href: string, options?: { replace?: boolean }) => {
+    window.__kloutNavigate = (href, options) => {
       startNavigation(href, options);
     };
 
     document.addEventListener(
       'click',
       (event) => {
-        const target = event.target as Element | null;
+        const target = event.target;
         const anchor = target?.closest('a[href]');
         if (!(anchor instanceof HTMLAnchorElement)) return;
         if (!isEligibleAnchor(anchor, event)) return;
@@ -840,20 +829,20 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }
     });
 
-    function initSmoothScrollWhenQuiet(): void {
+    function initSmoothScrollWhenQuiet() {
       if (prefersReducedMotion() || window.lenisInstance) {
         return;
       }
 
       let started = false;
-      const cleanupInteractionListeners = (): void => {
+      const cleanupInteractionListeners = () => {
         window.removeEventListener('wheel', start);
         window.removeEventListener('touchstart', start);
         window.removeEventListener('keydown', start);
         window.removeEventListener('pointerdown', start);
       };
 
-      const start = (): void => {
+      const start = () => {
         if (started || prefersReducedMotion() || window.lenisInstance) {
           return;
         }
@@ -869,7 +858,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
           const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
           const lenis = new Lenis({
             duration: 2.2,
-            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
             smoothWheel: true,
@@ -882,7 +871,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 
           window.lenisInstance = lenis;
           lenis.on('scroll', ScrollTrigger.update);
-          gsap.ticker.add((time: number) => {
+          gsap.ticker.add((time) => {
             lenis.raf(time * 1000);
           });
           gsap.ticker.lagSmoothing(0);
