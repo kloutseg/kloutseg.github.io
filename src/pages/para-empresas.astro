@@ -40,6 +40,9 @@ const qaCases = [
 <BaseLayout
   title="Para Empresas | Klout"
   description="A Klout apoia empresas na análise de contratos, custos, rede credenciada e alternativas para planos de saúde corporativos."
+  criticalImage="/images/office_hero.webp"
+  criticalImageSrcset="/images/office_hero-640.webp 640w, /images/office_hero-960.webp 960w, /images/office_hero.webp 1920w"
+  criticalImageSizes="100vw"
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
   <SectionStacking client:load />
@@ -50,10 +53,14 @@ const qaCases = [
       <div class="hero-media">
         <img
           src="/images/office_hero.webp"
+          srcset="/images/office_hero-640.webp 640w, /images/office_hero-960.webp 960w, /images/office_hero.webp 1920w"
+          sizes="100vw"
           alt="Escritório contemporâneo com ambiente executivo para decisões corporativas"
           class="hero-image"
           loading="eager"
           fetchpriority="high"
+          width="1920"
+          height="1280"
         />
         <div class="hero-overlay"></div>
       </div>

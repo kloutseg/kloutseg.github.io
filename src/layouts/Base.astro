@@ -2,6 +2,9 @@
 const {
   title,
   description = 'A Klout analisa planos de saúde com critério técnico para ajudar pessoas e empresas a decidir com mais segurança, eficiência e clareza.',
+  criticalImage,
+  criticalImageSrcset,
+  criticalImageSizes,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -42,6 +45,17 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 
   <!-- Preload de imagens críticas -->
   <link rel="preload" as="image" href="/images/logo_v3_blue-126.webp" type="image/webp" />
+  {criticalImage && (
+    <link
+      rel="preload"
+      as="image"
+      href={criticalImage}
+      imagesrcset={criticalImageSrcset}
+      imagesizes={criticalImageSizes}
+      type="image/webp"
+      fetchpriority="high"
+    />
+  )}
 
   <link rel="preload" as="font" href="/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff" type="font/woff" crossorigin>
   <link rel="preload" as="font" href="/fonts/ibm_plex_serif/ibm-plex-serif.woff2" type="font/woff2" crossorigin>

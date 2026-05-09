@@ -67,6 +67,9 @@
     max-width: 100%;
     position: relative;
     background: hsl(214, 61%, 4%);
+    --footer-muted: hsl(214, 18%, 68%);
+    --footer-subtle: hsl(214, 15%, 60%);
+    --footer-rule: hsl(214, 22%, 34%);
     margin: 0;
     box-sizing: border-box;
     z-index: 10;
@@ -130,7 +133,7 @@
     left: 5%;
     right: 5%;
     height: 1px;
-    background: linear-gradient(to right, transparent, hsl(214, 30%, 20%), transparent);
+    background: linear-gradient(to right, transparent, var(--footer-rule), transparent);
   }
 
   .footer-bottom-left {
@@ -210,7 +213,7 @@
   }
 
   .social-icons a {
-    color: hsl(214, 8%, 35%);
+    color: var(--footer-subtle);
     transition: color 0.3s ease, transform 0.3s ease;
     display: flex;
     align-items: center;
@@ -253,7 +256,7 @@
   .contact-line {
     font-size: 0.85rem;
     font-weight: 300;
-    color: hsl(214, 12%, 50%);
+    color: var(--footer-muted);
     letter-spacing: 0.02em;
     line-height: 1.7;
     margin: 0;
@@ -272,7 +275,7 @@
   .copyright {
     font-size: 0.8rem;
     font-weight: 300;
-    color: hsl(214, 12%, 40%);
+    color: var(--footer-muted);
     letter-spacing: 0.02em;
   }
 
@@ -290,7 +293,7 @@
   .footer-bottom-links a {
     font-size: 0.75rem;
     font-weight: 300;
-    color: hsl(214, 15%, 50%);
+    color: var(--footer-muted);
     text-decoration: none;
     letter-spacing: 0.02em;
     transition: color 0.3s ease, opacity 0.3s ease;
@@ -319,7 +322,7 @@
 
   .link-separator {
     font-size: 0.75rem;
-    color: hsl(214, 12%, 30%);
+    color: var(--footer-subtle);
   }
 
   .footer-bottom-right {
