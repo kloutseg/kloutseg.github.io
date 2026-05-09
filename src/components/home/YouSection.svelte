@@ -564,7 +564,7 @@
                 muted
                 playsinline
                 preload="none"
-                poster="/images/video_poster.webp"
+                poster="/images/video_poster-800.webp"
                 width="1920"
                 height="1080"
               ></video>

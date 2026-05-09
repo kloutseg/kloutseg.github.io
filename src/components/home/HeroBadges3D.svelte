@@ -6,7 +6,7 @@
   <!-- Badge 1: Clientes -->
   <div class="badge badge-primary">
     <div class="badge-emblem">
-      <img src="/images/badges/customers_emblem.png" alt="Clientes" class="badge-image" width="250" height="250" />
+      <img src="/images/badges/customers_emblem-76.webp" alt="Clientes" class="badge-image" width="76" height="76" />
     </div>
     <div class="badge-content">
       <span class="badge-number">+250</span>
@@ -17,7 +17,7 @@
   <!-- Badge 2: Parceiras -->
   <div class="badge badge-secondary">
     <div class="badge-emblem">
-      <img src="/images/badges/partnership_emblem.png" alt="Seguradoras" class="badge-image" width="250" height="250" />
+      <img src="/images/badges/partnership_emblem-76.webp" alt="Seguradoras" class="badge-image" width="76" height="76" />
     </div>
     <div class="badge-content">
       <span class="badge-number">Top 1%</span>
@@ -28,7 +28,7 @@
   <!-- Badge 3: Performance -->
   <div class="badge badge-tertiary">
     <div class="badge-emblem">
-      <img src="/images/badges/performance_emblem.png" alt="Performance" class="badge-image" width="250" height="250" />
+      <img src="/images/badges/performance_emblem-76.webp" alt="Performance" class="badge-image" width="76" height="76" />
     </div>
     <div class="badge-content">
       <span class="badge-number">+R$ 20 Milhões</span>
