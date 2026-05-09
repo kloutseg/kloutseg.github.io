@@ -829,73 +829,68 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       }
     });
 
-    function initSmoothScrollWhenQuiet() {
-      if (prefersReducedMotion() || window.lenisInstance) {
-        return;
-      }
-
-      let started = false;
-      const cleanupInteractionListeners = () => {
-        window.removeEventListener('wheel', start);
-        window.removeEventListener('touchstart', start);
-        window.removeEventListener('keydown', start);
-        window.removeEventListener('pointerdown', start);
-      };
-
-      const start = () => {
-        if (started || prefersReducedMotion() || window.lenisInstance) {
-          return;
-        }
-
-        started = true;
-        cleanupInteractionListeners();
-        Promise.all([
-          import('lenis'),
-          import('gsap'),
-          import('gsap/ScrollTrigger'),
-        ]).then(([{ default: Lenis }, gsapModule, scrollTriggerModule]) => {
-          const gsap = gsapModule.gsap;
-          const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
-          const lenis = new Lenis({
-            duration: 2.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            orientation: 'vertical',
-            gestureOrientation: 'vertical',
-            smoothWheel: true,
-            wheelMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-            infinite: false,
-            normalizeWheel: false,
-          });
-
-          window.lenisInstance = lenis;
-          lenis.on('scroll', ScrollTrigger.update);
-          gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-          });
-          gsap.ticker.lagSmoothing(0);
-        }).catch(() => {
-          started = false;
-        });
-      };
-
-      window.addEventListener('wheel', start, { once: true, passive: true });
-      window.addEventListener('touchstart', start, { once: true, passive: true });
-      window.addEventListener('keydown', start, { once: true });
-      window.addEventListener('pointerdown', start, { once: true, passive: true });
-      window.setTimeout(start, 8000);
-    }
-
-    if (document.readyState === 'complete') {
-      initSmoothScrollWhenQuiet();
-    } else {
-      window.addEventListener('load', initSmoothScrollWhenQuiet, { once: true });
-    }
-
     requestAnimationFrame(() => {
       revealPage();
     });
+  </script>
+  <script>
+    const canUseSmoothScroll = () =>
+      window.matchMedia('(min-width: 769px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let smoothScrollStarted = false;
+
+    async function startSmoothScroll() {
+      if (smoothScrollStarted || window.lenisInstance || !canUseSmoothScroll()) return;
+
+      smoothScrollStarted = true;
+
+      try {
+        const [{ default: Lenis }, gsapModule, scrollTriggerModule] = await Promise.all([
+          import('lenis'),
+          import('gsap'),
+          import('gsap/ScrollTrigger'),
+        ]);
+
+        const gsap = gsapModule.gsap;
+        const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+
+        const lenis = new Lenis({
+          duration: 1.65,
+          easing: (t) => 1 - Math.pow(1 - t, 4),
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 0.86,
+          smoothTouch: false,
+          touchMultiplier: 2,
+          infinite: false,
+          normalizeWheel: true,
+        });
+
+        window.lenisInstance = lenis;
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      } catch {
+        smoothScrollStarted = false;
+      }
+    }
+
+    function scheduleSmoothScroll() {
+      if (!canUseSmoothScroll()) return;
+      window.requestAnimationFrame(() => {
+        window.setTimeout(() => void startSmoothScroll(), 120);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', scheduleSmoothScroll, { once: true });
+    } else {
+      scheduleSmoothScroll();
+    }
   </script>
 </body>
 </html>

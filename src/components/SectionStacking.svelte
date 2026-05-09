@@ -169,11 +169,11 @@
 
     timeoutId = window.setTimeout(() => {
       if (window.requestIdleCallback) {
-        idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 600 });
+        idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 500 });
       } else {
         void start();
       }
-    }, 2200);
+    }, 2600);
 
     return () => {
       cancelled = true;
