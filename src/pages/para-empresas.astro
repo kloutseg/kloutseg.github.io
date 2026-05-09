@@ -45,7 +45,7 @@ const qaCases = [
   criticalImageSizes="100vw"
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
-  <SectionStacking client:load />
+  <SectionStacking client:media="(min-width: 769px)" />
 
   <main id="main-content">
     <section id="empresas" class="companies-hero" data-stack-section data-dark-section>
@@ -90,7 +90,7 @@ const qaCases = [
                 Direcionamos o foco em hospitais, laboratórios e clínicas que pesam de verdade na decisão do time, sem transformar o contrato em custo difícil de manter.
             </p>
           </div>
-          <IntroQaRotator client:load items={qaCases} tone="business" />
+          <IntroQaRotator client:visible items={qaCases} tone="business" />
         </div>
       </div>
     </section>
@@ -197,17 +197,19 @@ const qaCases = [
 </BaseLayout>
 
 <script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
-
   const prefersReducedMotion =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReducedMotion) {
-    window.addEventListener('load', () => {
+    window.addEventListener('load', async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+
+      gsap.registerPlugin(ScrollTrigger);
+
       const hero = document.querySelector('.companies-hero');
       if (!hero) return;
 
