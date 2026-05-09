@@ -552,6 +552,14 @@
             aria-label="Expandir vídeo"
           >
             <div class="video-capsule">
+              <img
+                src="/images/video_poster-800.webp"
+                alt="Atendimento personalizado Klout"
+                class="mobile-video-poster"
+                loading="lazy"
+                width="800"
+                height="501"
+              />
               <video
                 bind:this={videoEl}
                 src="/videos/test_01.mp4"
@@ -933,6 +941,10 @@
     object-position: 12% center;
     display: block;
     filter: saturate(0.92) sepia(0.035) hue-rotate(3deg) brightness(0.97) contrast(1.03);
+  }
+
+  .mobile-video-poster {
+    display: none;
   }
 
   .video-overlay {
@@ -1404,7 +1416,7 @@
 
     .slide-1-content {
       order: 2;
-      padding-top: 0.55rem;
+      padding-top: 0.2rem;
     }
 
     .slide-2-content {
@@ -1454,10 +1466,12 @@
       order: 1;
       width: 82vw;
       max-width: 308px;
+      aspect-ratio: 16 / 10;
       height: auto;
       justify-self: center;
       align-self: center;
       flex-shrink: 0;
+      pointer-events: none;
     }
 
     .video-capsule {
@@ -1472,31 +1486,21 @@
         0 1px 4px hsla(214, 61%, 18%, 0.08);
     }
 
-    /* Video expandido no mobile — ocupa tela com margens proporcionais */
-    .video-wrapper.video-expanded {
-      position: relative;
-      width: 100vw;
-      max-width: 100vw;
-      padding: 0;
+    .video-capsule video {
+      display: none;
     }
 
-    .video-wrapper.video-expanded .video-capsule {
-      aspect-ratio: 16 / 9;
-      border-radius: 18px;
-      box-shadow:
-        0 8px 32px hsla(214, 61%, 18%, 0.2),
-        0 2px 8px hsla(214, 61%, 18%, 0.12);
+    .mobile-video-poster {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 12% center;
+      filter: saturate(0.92) sepia(0.035) hue-rotate(3deg) brightness(0.97) contrast(1.03);
     }
 
     .hover-indicator {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-    }
-
-    .expand-icon {
-      width: 20px;
-      height: 20px;
+      display: none;
     }
 
     /* Image capsules for slides 2 and 3 */

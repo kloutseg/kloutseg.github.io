@@ -52,17 +52,11 @@ import Footer from '../components/Footer.svelte';
         const progressBars = Array.from(section.querySelectorAll('.progress-bar-bg'));
         const prevButton = section.querySelector('.swipe-nav-button--prev');
         const nextButton = section.querySelector('.swipe-nav-button--next');
-        const videoWrapper = section.querySelector('.video-wrapper');
-        const video = section.querySelector('video');
-        const closeButton = section.querySelector('.close-button');
-        const ctaButton = section.querySelector('.cta-button-video');
-        const expandIcon = section.querySelector('.hover-indicator');
 
         if (!(slidesContainer instanceof HTMLElement)) return;
 
         let currentSlide = 0;
         let scrollTimer;
-        let ctaTimer;
 
         const setProgress = (index) => {
           progressBars.forEach((bar, idx) => {
@@ -100,39 +94,6 @@ import Footer from '../components/Footer.svelte';
           });
         };
 
-        const closeVideo = () => {
-          const slide = videoWrapper?.closest('.slide');
-          slide?.classList.remove('expanded');
-          videoWrapper?.classList.remove('video-expanded');
-          expandIcon?.classList.remove('is-hidden');
-          closeButton?.classList.remove('visible');
-          ctaButton?.classList.remove('visible');
-          window.clearTimeout(ctaTimer);
-
-          if (video instanceof HTMLVideoElement) {
-            video.pause();
-            video.currentTime = 0;
-            video.load();
-          }
-        };
-
-        const openVideo = () => {
-          const slide = videoWrapper?.closest('.slide');
-          slide?.classList.add('expanded');
-          videoWrapper?.classList.add('video-expanded');
-          expandIcon?.classList.add('is-hidden');
-          closeButton?.classList.add('visible');
-
-          if (video instanceof HTMLVideoElement) {
-            void video.play();
-          }
-
-          window.clearTimeout(ctaTimer);
-          ctaTimer = window.setTimeout(() => {
-            ctaButton?.classList.add('visible');
-          }, 1000);
-        };
-
         slidesContainer.addEventListener('scroll', () => {
           const nextSlide = Math.round(slidesContainer.scrollLeft / window.innerWidth);
           updateCurrentSlide(nextSlide);
@@ -145,28 +106,10 @@ import Footer from '../components/Footer.svelte';
         prevButton?.addEventListener('click', () => scrollToSlide(currentSlide - 1));
         nextButton?.addEventListener('click', () => scrollToSlide(currentSlide + 1));
 
-        if (videoWrapper instanceof HTMLElement) {
-          videoWrapper.addEventListener('click', openVideo);
-          videoWrapper.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              openVideo();
-            }
-          });
-        }
-
-        closeButton?.addEventListener('click', (event) => {
-          event.stopPropagation();
-          closeVideo();
-        });
-
-        ctaButton?.addEventListener('click', (event) => {
-          event.stopPropagation();
-        });
-
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape') closeVideo();
-        });
+        const mobileVideoWrapper = section.querySelector('.video-wrapper');
+        mobileVideoWrapper?.removeAttribute('role');
+        mobileVideoWrapper?.removeAttribute('tabindex');
+        mobileVideoWrapper?.removeAttribute('aria-label');
 
         updateCurrentSlide(0);
       })();
