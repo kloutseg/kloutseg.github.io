@@ -156,14 +156,14 @@ const qaCases = [
         <figure class="criteria-figure">
           <div class="criteria-image-frame">
             <img
-              src="/images/office_03.webp"
-              srcset="/images/office_03-480.webp 480w, /images/office_03-700.webp 700w, /images/office_03-900.webp 900w, /images/office_03.webp 1023w"
-              sizes="(max-width: 768px) 88vw, 480px"
+              src="/images/companies-criteria-meeting-960.webp"
+              srcset="/images/companies-criteria-meeting-480.webp 480w, /images/companies-criteria-meeting-700.webp 700w, /images/companies-criteria-meeting-960.webp 960w, /images/companies-criteria-meeting-1280.webp 1280w"
+              sizes="(max-width: 768px) 88vw, 520px"
               alt="Equipe em reunião corporativa avaliando benefícios de saúde"
               class="criteria-image"
               loading="lazy"
-              width="1023"
-              height="1537"
+              width="1279"
+              height="853"
             />
             <div class="criteria-image-shade"></div>
           </div>
@@ -204,7 +204,15 @@ const qaCases = [
     const scheduleStepsAnimation = () => {
       if (!window.matchMedia('(min-width: 769px)').matches) return;
 
+      const stepsSection = document.querySelector('.section-steps');
+      if (!stepsSection) return;
+
+      let hasStarted = false;
+
       const startStepsAnimation = async () => {
+        if (hasStarted) return;
+        hasStarted = true;
+
         const [{ gsap }, { ScrollTrigger }] = await Promise.all([
           import('gsap'),
           import('gsap/ScrollTrigger'),
@@ -212,7 +220,6 @@ const qaCases = [
 
         gsap.registerPlugin(ScrollTrigger);
 
-        const stepsSection = document.querySelector('.section-steps');
         const stepCards = stepsSection?.querySelectorAll('.step-card');
 
         if (stepsSection && stepCards?.length) {
@@ -244,16 +251,20 @@ const qaCases = [
         }
       };
 
-      const schedule = () => {
-        window.setTimeout(() => void startStepsAnimation(), 1800);
-      };
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          void startStepsAnimation();
+        }, { rootMargin: '360px 0px' });
 
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(schedule, { timeout: 2400 });
+        observer.observe(stepsSection);
         return;
       }
 
-      window.addEventListener('load', schedule, { once: true });
+      window.addEventListener('load', () => {
+        window.setTimeout(() => void startStepsAnimation(), 5000);
+      }, { once: true });
     };
 
     scheduleStepsAnimation();
@@ -744,7 +755,7 @@ const qaCases = [
   .criteria-shell {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(21rem, 0.92fr);
+    grid-template-columns: minmax(0, 0.92fr) minmax(27rem, 1.08fr);
     gap: clamp(2rem, 4.2vw, 4.75rem);
     align-items: center;
     padding-top: clamp(2.2rem, 5vh, 3.4rem);
@@ -843,9 +854,10 @@ const qaCases = [
   .criteria-figure {
     margin: 0;
     position: relative;
-    min-height: clamp(30rem, 72vh, 43rem);
+    aspect-ratio: 3 / 2;
+    min-height: 0;
     display: grid;
-    align-items: end;
+    align-items: stretch;
     padding: 1rem 0 1rem 1rem;
     isolation: isolate;
   }
@@ -853,7 +865,7 @@ const qaCases = [
   .criteria-figure::before {
     content: '';
     position: absolute;
-    inset: 5% 0 14% 12%;
+    inset: 8% 0 12% 10%;
     border-radius: 2.25rem;
     background:
       radial-gradient(circle at 22% 24%, hsla(43, 74%, 60%, 0.22) 0%, transparent 34%),
@@ -864,7 +876,7 @@ const qaCases = [
   .criteria-figure::after {
     content: '';
     position: absolute;
-    inset: 2% 1.25rem 18% 7%;
+    inset: 4% 1.25rem 14% 6%;
     border: 1px solid hsla(214, 34%, 24%, 0.15);
     clip-path: polygon(14% 0, 100% 0, 100% 82%, 84% 100%, 0 100%, 0 16%);
     transform: translate(0.9rem, -0.9rem);
@@ -890,7 +902,7 @@ const qaCases = [
     display: block;
     height: 100%;
     object-fit: cover;
-    object-position: center 24%;
+    object-position: center center;
     filter: saturate(0.9) contrast(1.04) brightness(0.88);
   }
 
@@ -1088,8 +1100,8 @@ const qaCases = [
     }
 
     .criteria-figure {
-      width: min(100%, 48rem);
-      min-height: 32rem;
+      width: min(100%, 54rem);
+      min-height: 0;
       justify-self: end;
     }
   }
@@ -1433,8 +1445,7 @@ const qaCases = [
 
     .criteria-figure {
       order: -1;
-      min-height: min(58vh, 28rem);
-      width: min(100%, 22rem);
+      width: min(100%, 28rem);
       margin: 0 auto;
       padding: 0;
     }
