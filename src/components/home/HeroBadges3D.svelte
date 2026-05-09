@@ -243,4 +243,8 @@
       animation: none;
     }
   }
+
+  :global(html.hero-entry-complete) .badge {
+    animation: none;
+  }
 </style>

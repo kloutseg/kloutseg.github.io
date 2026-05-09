@@ -9,15 +9,20 @@
     const button = document.querySelector('[data-back-to-top]');
     if (!button) return;
 
-    const updateVisibility = () => {
-      button.classList.toggle('is-visible', window.scrollY > 500);
-    };
+    const sentinel = document.createElement('span');
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'position:absolute;top:500px;left:0;width:1px;height:1px;pointer-events:none;';
+    document.body.prepend(sentinel);
+
+    const observer = new IntersectionObserver(([entry]) => {
+      button.classList.toggle('is-visible', !entry.isIntersecting);
+    });
 
     button.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    window.addEventListener('scroll', updateVisibility, { passive: true });
-    updateVisibility();
+
+    observer.observe(sentinel);
   })();
 </script>
 

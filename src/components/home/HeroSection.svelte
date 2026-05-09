@@ -584,4 +584,13 @@
       animation: none;
     }
   }
+
+  :global(html.hero-entry-complete .hero-section .main-word),
+  :global(html.hero-entry-complete .hero-section .subtitle),
+  :global(html.hero-entry-complete .hero-section .subtitle-line-left),
+  :global(html.hero-entry-complete .hero-section .divider-line),
+  :global(html.hero-entry-complete .hero-section .cta-button),
+  :global(html.hero-entry-complete .hero-section .hero-description) {
+    animation: none;
+  }
 </style>

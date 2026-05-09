@@ -171,14 +171,14 @@
             if (fill) {
               if (idx < currentSlide) {
                 // Slides já passados: fill completo
-                gsap.set(fill, { width: '100%' });
+                setProgressFill(fill, 1);
               } else if (idx === currentSlide) {
                 // Slide atual: fill animando
                 const slideProgress = (progress * totalSlides) - currentSlide;
-                gsap.set(fill, { width: `${Math.min(slideProgress * 100, 100)}%` });
+                setProgressFill(fill, Math.min(slideProgress, 1));
               } else {
                 // Slides futuros: fill vazio
-                gsap.set(fill, { width: '0%' });
+                setProgressFill(fill, 0);
               }
             }
           });
@@ -202,15 +202,19 @@
     };
   });
 
+  function setProgressFill(fill: HTMLElement, progress: number) {
+    fill.style.transform = `scaleX(${progress})`;
+  }
+
   // Update progress bars for a given slide index
   function updateProgressBars(currentSlide: number) {
     progressIndicators.forEach((indicator, idx) => {
       const fill = indicator.querySelector('.progress-bar-fill') as HTMLElement;
       if (fill) {
         if (idx <= currentSlide) {
-          gsap.set(fill, { width: '100%' });
+          setProgressFill(fill, 1);
         } else {
-          gsap.set(fill, { width: '0%' });
+          setProgressFill(fill, 0);
         }
       }
     });
@@ -230,7 +234,7 @@
     if (!slidesContainer || !isMobile()) return;
 
     const clampedIndex = Math.max(0, Math.min(targetIndex, slideData.length - 1));
-    const slideWidth = slides[clampedIndex]?.offsetWidth || slidesContainer.clientWidth || window.innerWidth;
+    const slideWidth = window.innerWidth;
 
     mobileCurrentSlide = clampedIndex;
     slidesContainer.scrollTo({
@@ -801,14 +805,17 @@
     left: 0;
     top: 0;
     height: 100%;
-    width: 0%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
     background: linear-gradient(
       90deg,
       hsl(42, 24%, 34%) 0%,
       hsl(42, 28%, 42%) 100%
     );
     border-radius: 999px;
-    transition: width 0.3s ease;
+    transition: transform 0.3s ease;
+    will-change: transform;
   }
 
   /* Slides Container */

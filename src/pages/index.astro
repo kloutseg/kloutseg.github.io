@@ -23,6 +23,16 @@ import Footer from '../components/Footer.svelte';
     {/* Static: Hero é renderizado no HTML inicial e animado via CSS */}
     <HeroSection />
 
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (root.classList.contains('hero-entry-complete')) return;
+        window.setTimeout(() => {
+          root.classList.add('hero-entry-complete');
+        }, 1800);
+      })();
+    </script>
+
     {/* Critical: YouSection precisa hidratar cedo para registrar seu pin horizontal antes do stacking seguinte */}
     <YouSection client:load />
 
