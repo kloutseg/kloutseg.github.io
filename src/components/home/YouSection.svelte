@@ -1,11 +1,14 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import SectionIndicator from './SectionIndicators.svelte';
   import { prefersReducedMotion } from '../../lib/reducedMotion';
 
-  gsap.registerPlugin(ScrollTrigger);
+  type Gsap = typeof import('gsap').gsap;
+  type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
+  type ScrollTriggerInstance = ReturnType<ScrollTriggerPlugin['create']>;
+
+  let gsap: Gsap | null = null;
+  let ScrollTrigger: ScrollTriggerPlugin | null = null;
   const reducedMotion = prefersReducedMotion();
 
   // Stacking horizontal ativo apenas em telas acima de 768px (smartphones usam scroll natural)
@@ -20,7 +23,7 @@
   let slidesContainer: HTMLElement;
   let slides: HTMLElement[] = [];
   let progressIndicators: HTMLElement[] = [];
-  let scrollTriggerInstance: ScrollTrigger | null = null;
+  let scrollTriggerInstance: ScrollTriggerInstance | null = null;
   let slideContentEl: HTMLElement | null = $state(null);
 
   // Mobile swipe state
@@ -64,8 +67,23 @@
     }
   ];
 
+  async function loadScrollAnimationTools() {
+    if (gsap && ScrollTrigger) return;
+
+    const [gsapModule, scrollTriggerModule] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+    ]);
+
+    gsap = gsapModule.gsap;
+    ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
   onMount(() => {
     if (!slidesContainer || !section) return;
+    let cancelled = false;
+    let tween: ReturnType<Gsap['to']> | null = null;
 
     // If user prefers reduced motion, render slides vertically without scroll-jacking
     if (reducedMotion) {
@@ -135,65 +153,71 @@
       };
     }
 
-    const totalSlides = slideData.length;
-    const getScrollDistance = () => (totalSlides - 1) * window.innerHeight * 3.4;
+    void (async () => {
+      await loadScrollAnimationTools();
+      if (cancelled || !gsap || !ScrollTrigger) return;
 
-    // Matar qualquer ScrollTrigger existente nesta seção
-    ScrollTrigger.getAll().forEach(t => {
-      if (t.trigger === section) {
-        t.kill();
-      }
-    });
+      const totalSlides = slideData.length;
+      const getScrollDistance = () => (totalSlides - 1) * window.innerHeight * 3.4;
 
-    // Criar animação horizontal controlada pelo scroll
-    const tween = gsap.to(slidesContainer, {
-      x: `-${(totalSlides - 1) * 100}vw`,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: () => `+=${getScrollDistance()}`,
-        scrub: 1,
-        pin: true,
-        pinSpacing: true, // Adiciona espaço para o pin
-        anticipatePin: 0,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const currentSlide = Math.min(
-            Math.floor(progress * totalSlides),
-            totalSlides - 1
-          );
-
-          // Atualizar indicadores de progresso
-          progressIndicators.forEach((indicator, idx) => {
-            const fill = indicator.querySelector('.progress-bar-fill') as HTMLElement;
-            if (fill) {
-              if (idx < currentSlide) {
-                // Slides já passados: fill completo
-                setProgressFill(fill, 1);
-              } else if (idx === currentSlide) {
-                // Slide atual: fill animando
-                const slideProgress = (progress * totalSlides) - currentSlide;
-                setProgressFill(fill, Math.min(slideProgress, 1));
-              } else {
-                // Slides futuros: fill vazio
-                setProgressFill(fill, 0);
-              }
-            }
-          });
+      // Matar qualquer ScrollTrigger existente nesta seção
+      ScrollTrigger.getAll().forEach(t => {
+        if (t.trigger === section) {
+          t.kill();
         }
-      }
-    });
+      });
 
-    scrollTriggerInstance = tween.scrollTrigger;
-    ScrollTrigger.refresh();
+      // Criar animação horizontal controlada pelo scroll
+      tween = gsap.to(slidesContainer, {
+        x: `-${(totalSlides - 1) * 100}vw`,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${getScrollDistance()}`,
+          scrub: 1,
+          pin: true,
+          pinSpacing: true, // Adiciona espaço para o pin
+          anticipatePin: 0,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const currentSlide = Math.min(
+              Math.floor(progress * totalSlides),
+              totalSlides - 1
+            );
+
+            // Atualizar indicadores de progresso
+            progressIndicators.forEach((indicator, idx) => {
+              const fill = indicator.querySelector('.progress-bar-fill') as HTMLElement;
+              if (fill) {
+                if (idx < currentSlide) {
+                  // Slides já passados: fill completo
+                  setProgressFill(fill, 1);
+                } else if (idx === currentSlide) {
+                  // Slide atual: fill animando
+                  const slideProgress = (progress * totalSlides) - currentSlide;
+                  setProgressFill(fill, Math.min(slideProgress, 1));
+                } else {
+                  // Slides futuros: fill vazio
+                  setProgressFill(fill, 0);
+                }
+              }
+            });
+          }
+        }
+      });
+
+      scrollTriggerInstance = tween.scrollTrigger ?? null;
+      ScrollTrigger.refresh();
+    })();
 
     // Add keyboard listener for ESC key
     window.addEventListener('keydown', handleKeydown);
 
     return () => {
-      tween.kill();
+      cancelled = true;
+      tween?.kill();
       scrollTriggerInstance?.kill();
       window.removeEventListener('keydown', handleKeydown);
       if (ctaTimeout) {
@@ -262,7 +286,7 @@
   }
 
   // Video handlers
-  function handleExpand() {
+  async function handleExpand() {
     if (!videoContainer || !slideContentEl) return;
 
     const slide = videoContainer.closest('.slide');
@@ -275,7 +299,7 @@
 
     // Pause scroll when expanded
     if (scrollTriggerInstance) {
-      scrollTriggerInstance.scrollTrigger?.disable();
+      scrollTriggerInstance.disable();
     }
 
     // Play video
@@ -286,29 +310,11 @@
     const isMobileDevice = isMobile();
 
     if (isMobileDevice) {
-      // Mobile: hide text, expand video proportionally
-      gsap.set(slideContentEl, {
-        opacity: 0,
-        pointerEvents: 'none',
-        display: 'none'
-      });
-
-      // Expand video to fill screen with margins
-      gsap.set(videoContainer, { position: 'relative' });
-      gsap.to(videoContainer, {
-        width: '95vw',
-        maxWidth: '500px',
-        duration: 0.5,
-        ease: 'power3.inOut'
-      });
-
-      gsap.to(videoContainer.querySelector('.video-capsule'), {
-        borderRadius: '18px',
-        duration: 0.5,
-        ease: 'power3.inOut'
-      });
-
+      // Mobile uses CSS state only, keeping GSAP/ScrollTrigger out of the critical path.
     } else {
+      await loadScrollAnimationTools();
+      if (!gsap) return;
+
       // Desktop: hide text with slide animation
       gsap.to(slideContentEl, {
         opacity: 0,
@@ -337,23 +343,25 @@
       });
     }
 
-    // Hide expand icon
-    gsap.to(expandIcon, {
-      opacity: 0,
-      scale: 0,
-      duration: 0.3
-    });
+    if (!isMobileDevice && gsap) {
+      // Hide expand icon
+      gsap.to(expandIcon, {
+        opacity: 0,
+        scale: 0,
+        duration: 0.3
+      });
 
-    // Show close button
-    gsap.fromTo(closeButton,
-      { opacity: 0, y: isMobileDevice ? 20 : 0, x: isMobileDevice ? 0 : -20 },
-      { opacity: 1, y: 0, x: 0, duration: 0.4, delay: 0.5 }
-    );
+      // Show close button
+      gsap.fromTo(closeButton,
+        { opacity: 0, x: -20 },
+        { opacity: 1, x: 0, duration: 0.4, delay: 0.5 }
+      );
+    }
 
     // Show CTA after 1 second of video
     ctaTimeout = setTimeout(() => {
       ctaVisible = true;
-      if (ctaButton && isMobileDevice) {
+      if (ctaButton && isMobileDevice && gsap) {
         gsap.fromTo(ctaButton,
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
@@ -362,7 +370,7 @@
     }, 1000);
   }
 
-  function handleClose() {
+  async function handleClose() {
     if (!videoContainer || !slideContentEl) return;
 
     const slide = videoContainer.closest('.slide');
@@ -389,37 +397,17 @@
 
     // Re-enable scroll
     if (scrollTriggerInstance) {
-      scrollTriggerInstance.scrollTrigger?.enable();
+      scrollTriggerInstance.enable();
     }
 
     const isMobileDevice = isMobile();
 
     if (isMobileDevice) {
-      // Mobile: restore text, collapse video
-      gsap.to(videoContainer, {
-        width: '85vw',
-        maxWidth: '340px',
-        duration: 0.5,
-        ease: 'power3.inOut'
-      });
-
-      gsap.to(videoContainer.querySelector('.video-capsule'), {
-        borderRadius: '18px',
-        duration: 0.5,
-        ease: 'power3.inOut'
-      });
-
-      gsap.to(slideContentEl, {
-        opacity: 1,
-        duration: 0.4,
-        ease: 'power2.out',
-        pointerEvents: 'auto',
-        delay: 0.3,
-        onStart: () => {
-          (slideContentEl as HTMLElement).style.display = '';
-        }
-      });
+      // Mobile restores through CSS state only.
     } else {
+      await loadScrollAnimationTools();
+      if (!gsap) return;
+
       // Desktop: restore text with slide animation
       gsap.to(slideContentEl, {
         opacity: 1,
@@ -451,27 +439,29 @@
       });
     }
 
-    // Hide close button
-    gsap.to(closeButton, {
-      opacity: 0,
-      x: -20,
-      duration: 0.3
-    });
+    if (!isMobileDevice && gsap) {
+      // Hide close button
+      gsap.to(closeButton, {
+        opacity: 0,
+        x: -20,
+        duration: 0.3
+      });
 
-    // Hide CTA button
-    gsap.to(ctaButton, {
-      opacity: 0,
-      y: 20,
-      duration: 0.3
-    });
+      // Hide CTA button
+      gsap.to(ctaButton, {
+        opacity: 0,
+        y: 20,
+        duration: 0.3
+      });
 
-    // Show expand icon again
-    gsap.to(expandIcon, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.4,
-      delay: 0.3
-    });
+      // Show expand icon again
+      gsap.to(expandIcon, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.4,
+        delay: 0.3
+      });
+    }
   }
 
   // Keyboard handler for ESC key
@@ -576,7 +566,7 @@
             </div>
 
             <!-- Expand Icon -->
-            <div class="hover-indicator" bind:this={expandIcon}>
+            <div class="hover-indicator" bind:this={expandIcon} class:is-hidden={isExpanded}>
               <div class="pulse-ring"></div>
               <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
@@ -584,7 +574,7 @@
             </div>
 
             <!-- Close Button (visible when expanded) - Left arrow in bottom-left -->
-            <button class="close-button" bind:this={closeButton} onclick={(e) => { e.stopPropagation(); handleClose(); }} aria-label="Fechar vídeo">
+            <button class="close-button" bind:this={closeButton} class:visible={isExpanded} onclick={(e) => { e.stopPropagation(); handleClose(); }} aria-label="Fechar vídeo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
@@ -978,6 +968,11 @@
       0 12px 28px rgba(0, 0, 0, 0.18);
   }
 
+  .hover-indicator.is-hidden {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
   .pulse-ring {
     display: none;
   }
@@ -1009,6 +1004,12 @@
       background 0.3s ease,
       transform 0.3s ease;
     z-index: 1001;
+  }
+
+  .close-button.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
   }
 
   .close-button:hover {
