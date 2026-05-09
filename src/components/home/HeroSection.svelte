@@ -295,7 +295,8 @@
     font-weight: 400;
     margin: 0 0 1.8rem 0;
     font-family: 'Proxima Nova', sans-serif;
-    animation: hero-description-settle 420ms ease-out 180ms backwards;
+    opacity: 1;
+    transform: none;
   }
 
   @keyframes hero-main-word-enter {
@@ -341,18 +342,6 @@
     to {
       opacity: 1;
       transform: scaleY(1);
-    }
-  }
-
-  @keyframes hero-description-settle {
-    from {
-      opacity: 0.82;
-      transform: translateY(8px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
     }
   }
 
@@ -579,8 +568,7 @@
     :global(.hero-headline .subtitle),
     :global(.hero-headline .subtitle .subtitle-line-left),
     :global(.divider-line),
-    :global(.cta-button),
-    :global(.hero-description) {
+    :global(.cta-button) {
       animation: none;
     }
   }
@@ -589,8 +577,7 @@
   :global(html.hero-entry-complete .hero-section .subtitle),
   :global(html.hero-entry-complete .hero-section .subtitle-line-left),
   :global(html.hero-entry-complete .hero-section .divider-line),
-  :global(html.hero-entry-complete .hero-section .cta-button),
-  :global(html.hero-entry-complete .hero-section .hero-description) {
+  :global(html.hero-entry-complete .hero-section .cta-button) {
     animation: none;
   }
 </style>
