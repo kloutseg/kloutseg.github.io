@@ -15,20 +15,56 @@
   $effect(() => {
     let scrollObserver: IntersectionObserver | null = null;
     let sectionObserver: IntersectionObserver | null = null;
-    let darkObserver: IntersectionObserver | null = null;
     let scrollSentinel: HTMLSpanElement | null = null;
     let wasMobile = window.innerWidth <= MOBILE_BREAKPOINT;
     let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+    let frameId: number | null = null;
+    let observedSections: HTMLElement[] = [];
 
     const cleanupObservers = () => {
       scrollObserver?.disconnect();
       sectionObserver?.disconnect();
-      darkObserver?.disconnect();
       scrollObserver = null;
       sectionObserver = null;
-      darkObserver = null;
       scrollSentinel?.remove();
       scrollSentinel = null;
+      observedSections = [];
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+    };
+
+    const updateSectionState = () => {
+      frameId = null;
+
+      if (window.innerWidth <= MOBILE_BREAKPOINT) return;
+
+      const navbarProbeY = 64;
+      const activeProbeY = Math.round(window.innerHeight * 0.52);
+      let nextIsDark = false;
+      let nextActiveSection = activeSection;
+
+      for (const section of observedSections) {
+        const rect = section.getBoundingClientRect();
+
+        if (rect.top <= navbarProbeY && rect.bottom > navbarProbeY) {
+          nextIsDark = section.hasAttribute('data-dark-section');
+        }
+
+        if (rect.top <= activeProbeY && rect.bottom > activeProbeY) {
+          const sectionId = section.getAttribute('id');
+          if (sectionId) nextActiveSection = sectionId;
+        }
+      }
+
+      isDark = nextIsDark;
+      activeSection = nextActiveSection;
+    };
+
+    const requestSectionStateUpdate = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateSectionState);
     };
 
     const setupObservers = () => {
@@ -66,16 +102,8 @@
         sectionObserver?.observe(section);
       });
 
-      darkObserver = new IntersectionObserver((entries) => {
-        isDark = entries.some(entry => entry.isIntersecting);
-      }, {
-        rootMargin: '-45% 0px -45% 0px',
-        threshold: 0,
-      });
-
-      document.querySelectorAll<HTMLElement>('[data-dark-section]').forEach(section => {
-        darkObserver?.observe(section);
-      });
+      observedSections = Array.from(document.querySelectorAll<HTMLElement>('section'));
+      requestSectionStateUpdate();
     };
 
     setupObservers();
@@ -95,9 +123,13 @@
 
     const handleResize = () => {
       if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(syncResponsiveState, 120);
+      resizeTimer = setTimeout(() => {
+        syncResponsiveState();
+        requestSectionStateUpdate();
+      }, 120);
     };
 
+    window.addEventListener('scroll', requestSectionStateUpdate, { passive: true });
     window.addEventListener('resize', handleResize);
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -109,6 +141,7 @@
 
     return () => {
       cleanupObservers();
+      window.removeEventListener('scroll', requestSectionStateUpdate);
       window.removeEventListener('resize', handleResize);
       if (resizeTimer) clearTimeout(resizeTimer);
       window.removeEventListener('keydown', handleKeyDown);

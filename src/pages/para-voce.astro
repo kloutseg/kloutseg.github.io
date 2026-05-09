@@ -43,7 +43,7 @@ const qaCases = [
   description="Encontre um plano de saúde alinhado à sua rotina, rede de atendimento, cobertura e orçamento com a curadoria técnica da Klout."
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
-  <SectionStacking client:load />
+  <SectionStacking client:media="(min-width: 769px)" />
 
   <main id="main-content">
     <section id="voce" class="for-you-hero" data-stack-section data-dark-section>
@@ -90,6 +90,16 @@ const qaCases = [
       </div>
     </section>
 
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (root.classList.contains('for-you-hero-entry-complete')) return;
+        window.setTimeout(() => {
+          root.classList.add('for-you-hero-entry-complete');
+        }, 2400);
+      })();
+    </script>
+
     <section class="for-you-section section-intro" data-stack-section>
       <div class="section-intro-kicker section-side-kicker">Leitura individual</div>
       <div class="section-shell">
@@ -100,7 +110,7 @@ const qaCases = [
               Em vez de comparar planos de forma superficial, avaliamos o que faz sentido para o seu contexto: rotina, idade, histórico, prioridades médicas, previsibilidade financeira e margem de segurança para o futuro.
             </p>
           </div>
-          <IntroQaRotator client:load items={qaCases} />
+          <IntroQaRotator client:visible items={qaCases} />
         </div>
       </div>
     </section>
@@ -146,7 +156,7 @@ const qaCases = [
       </div>
     </section>
 
-    <CriteriaRevealSection client:load />
+    <CriteriaRevealSection client:visible />
 
     <section class="for-you-section section-cta" data-dark-section>
       <p class="eyebrow section-side-kicker section-side-kicker-light">Próximo passo</p>
@@ -171,109 +181,6 @@ const qaCases = [
   <Footer />
   <BackToTop />
 </BaseLayout>
-
-<script>
-  import { gsap } from 'gsap';
-
-  const prefersReducedMotion =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (!prefersReducedMotion) {
-    window.addEventListener('load', () => {
-      const hero = document.querySelector('.for-you-hero');
-      if (!hero) return;
-
-      const heroImage = hero.querySelector('.hero-image');
-      const heroOverlay = hero.querySelector('.hero-overlay');
-      const heroKicker = hero.querySelector('.hero-kicker');
-      const heroTitle = hero.querySelector('.hero-title');
-      const heroDescriptionShell = hero.querySelector('.hero-description-shell');
-      const heroCaption = hero.querySelector('.hero-caption');
-      const arrivedViaPageTransition =
-        document.documentElement.classList.contains('page-transition-enter');
-
-      if (arrivedViaPageTransition) {
-        gsap.set(heroKicker, {
-          autoAlpha: 1
-        });
-
-        gsap.set([heroTitle, heroDescriptionShell, heroCaption], {
-          autoAlpha: 1,
-          y: 0
-        });
-
-        gsap.set(heroImage, {
-          scale: 1,
-          autoAlpha: 1
-        });
-
-        gsap.set(heroOverlay, {
-          autoAlpha: 1
-        });
-
-        return;
-      }
-
-      gsap.set(heroKicker, {
-        autoAlpha: 0
-      });
-
-      gsap.set([heroTitle, heroDescriptionShell, heroCaption], {
-        autoAlpha: 0,
-        y: 42
-      });
-
-      gsap.set(heroImage, {
-        scale: 1.14,
-        autoAlpha: 1
-      });
-
-      gsap.set(heroOverlay, {
-        autoAlpha: 0.18
-      });
-
-      const tl = gsap.timeline({
-        defaults: { ease: 'power2.out' }
-      });
-
-      tl.to(heroImage, {
-        scale: 1,
-        duration: 2.8,
-        ease: 'power3.out'
-      })
-        .to(heroOverlay, {
-          autoAlpha: 1,
-          duration: 2.2,
-          ease: 'power2.out'
-        }, 0.18)
-        .to(heroKicker, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.15,
-          ease: 'power3.out'
-        }, 0.92)
-        .to(heroTitle, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.45,
-          ease: 'power3.out'
-        }, 1.02)
-        .to(heroDescriptionShell, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.2,
-          ease: 'power3.out'
-        }, 1.42)
-        .to(heroCaption, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.1,
-          ease: 'power3.out'
-        }, 1.7);
-    }, { once: true });
-  }
-</script>
 
 <style>
   .for-you-hero {
@@ -310,6 +217,7 @@ const qaCases = [
     object-fit: cover;
     object-position: center 24%;
     filter: saturate(0.94) contrast(1.02) brightness(0.88);
+    transform-origin: center;
   }
 
   .hero-overlay {
@@ -408,6 +316,88 @@ const qaCases = [
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: hsla(0, 0%, 100%, 0.54);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-image {
+      animation: for-you-hero-image-enter 2200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      will-change: transform;
+    }
+
+    .hero-overlay {
+      animation: for-you-hero-overlay-enter 1800ms ease-out 180ms both;
+    }
+
+    .hero-kicker {
+      animation: for-you-hero-copy-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both;
+    }
+
+    .hero-title {
+      animation: for-you-hero-copy-enter 1100ms cubic-bezier(0.22, 1, 0.36, 1) 860ms both;
+    }
+
+    .hero-description-shell {
+      animation: for-you-hero-copy-enter 980ms cubic-bezier(0.22, 1, 0.36, 1) 1160ms both;
+    }
+
+    .hero-caption {
+      animation: for-you-hero-copy-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) 1380ms both;
+    }
+  }
+
+  :global(html.for-you-hero-entry-complete) .hero-image,
+  :global(html.for-you-hero-entry-complete) .hero-overlay,
+  :global(html.for-you-hero-entry-complete) .hero-kicker,
+  :global(html.for-you-hero-entry-complete) .hero-title,
+  :global(html.for-you-hero-entry-complete) .hero-description-shell,
+  :global(html.for-you-hero-entry-complete) .hero-caption {
+    animation: none;
+  }
+
+  :global(html.for-you-hero-entry-complete) .hero-image {
+    transform: scale(1);
+    will-change: auto;
+  }
+
+  :global(html.for-you-hero-entry-complete) .hero-overlay,
+  :global(html.for-you-hero-entry-complete) .hero-kicker,
+  :global(html.for-you-hero-entry-complete) .hero-title,
+  :global(html.for-you-hero-entry-complete) .hero-description-shell,
+  :global(html.for-you-hero-entry-complete) .hero-caption {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  @keyframes for-you-hero-image-enter {
+    from {
+      transform: scale(1.1);
+    }
+
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes for-you-hero-overlay-enter {
+    from {
+      opacity: 0.18;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes for-you-hero-copy-enter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 2.625rem, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 
   .for-you-section {
