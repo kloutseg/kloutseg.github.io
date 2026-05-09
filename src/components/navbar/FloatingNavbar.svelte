@@ -23,6 +23,14 @@
           const scrollY = window.scrollY;
           scrolled = scrollY > 50;
 
+          if (window.innerWidth <= MOBILE_BREAKPOINT) {
+            isDark = false;
+            activeSection = '';
+            lastActiveSection = '';
+            ticking = false;
+            return;
+          }
+
           const centerX = window.innerWidth / 2;
           const centerY = window.innerHeight / 2;
           const el = document.elementFromPoint(centerX, centerY);

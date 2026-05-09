@@ -100,6 +100,8 @@
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     const start = async () => {
+      if (isMobile()) return;
+
       const [{ gsap }, scrollTriggerModule] = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
