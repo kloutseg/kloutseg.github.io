@@ -530,6 +530,53 @@ const { title } = Astro.props;
   <div class="page-transition-overlay" id="page-transition-overlay" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
   <slot />
+  <script is:inline>
+    (() => {
+      const mobileQuery = window.matchMedia('(max-width: 768px)');
+      const overlay = document.querySelector('.overlay-menu');
+      const toggle = document.querySelector('.menu-toggle-mobile');
+      const close = document.querySelector('.close-btn');
+
+      if (!(overlay instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement)) return;
+
+      const closeMenu = () => {
+        overlay.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      };
+
+      const openMenu = () => {
+        if (!mobileQuery.matches) return;
+        overlay.classList.add('active');
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      };
+
+      toggle.addEventListener('click', openMenu);
+
+      if (close instanceof HTMLButtonElement) {
+        close.addEventListener('click', closeMenu);
+      }
+
+      overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) closeMenu();
+      });
+
+      overlay.querySelectorAll('a[href]').forEach((link) => {
+        link.addEventListener('click', closeMenu);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && overlay.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+
+      mobileQuery.addEventListener('change', () => {
+        if (!mobileQuery.matches) closeMenu();
+      });
+    })();
+  </script>
   <script>
     import { prefersReducedMotion } from '../lib/reducedMotion';
 

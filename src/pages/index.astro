@@ -13,8 +13,8 @@ import Footer from '../components/Footer.svelte';
 ---
 
 <BaseLayout title="Página Inicial">
-  {/* Critical: Navbar precisa estar interativa imediatamente */}
-  <FloatingNavbar client:load />
+  {/* Desktop: navbar hidrata só quando precisa de observers/estado ativo */}
+  <FloatingNavbar client:media="(min-width: 769px)" />
 
   {/* Desktop-only: mobile usa scroll natural e não precisa do stacking/pinning */}
   <SectionStacking client:media="(min-width: 769px)" />
