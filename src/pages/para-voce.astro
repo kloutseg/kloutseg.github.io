@@ -50,6 +50,12 @@ const qaCases = [
       <div class="hero-media">
         <picture class="hero-picture">
           <source
+            type="image/avif"
+            media="(max-width: 768px)"
+            srcset="/images/einstein_01-768.avif 768w, /images/einstein_01-1280.avif 1280w"
+            sizes="100vw"
+          />
+          <source
             type="image/webp"
             media="(max-width: 768px)"
             srcset="/images/einstein_01-768.webp 768w, /images/einstein_01-1280.webp 1280w"
