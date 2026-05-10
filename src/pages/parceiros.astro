@@ -127,7 +127,7 @@ const partnerSections = partners.map((partner, index) => {
   description="Conheça a rede de parceiros da Klout e como a curadoria especializada conecta seguradoras, empresas e clientes com mais eficiência."
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
-  <SectionStacking client:load />
+  <SectionStacking client:media="(min-width: 769px)" />
 
   <main id="main-content">
     <section
@@ -349,24 +349,35 @@ const partnerSections = partners.map((partner, index) => {
 </BaseLayout>
 
 <script>
-  import { gsap } from 'gsap';
-
   const prefersReducedMotion =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let gsapLoadPromise;
+
+  const getGsap = () => {
+    if (!gsapLoadPromise) {
+      gsapLoadPromise = import('gsap').then((module) => module.gsap);
+    }
+
+    return gsapLoadPromise;
+  };
 
   const wait = (ms) =>
     new Promise((resolve) => {
       window.setTimeout(resolve, ms);
     });
 
-  const animateTo = (target, vars) =>
-    new Promise((resolve) => {
+  const animateTo = async (target, vars) => {
+    const gsap = await getGsap();
+
+    return new Promise((resolve) => {
       gsap.to(target, {
         ...vars,
         onComplete: resolve
       });
     });
+  };
 
   const typeValue = async (valueEl, cursorEl, text) => {
     valueEl.textContent = '';
@@ -439,43 +450,19 @@ const partnerSections = partners.map((partner, index) => {
       }
 
       if (heroNotes.length) {
-        if (prefersReducedMotion) {
-          heroNotes.forEach((note, index) => {
-            note.classList.toggle('is-visible', index === 0);
-          });
-        } else {
-          gsap.set(heroNotes, {
-            autoAlpha: 0,
-            y: 8
-          });
-          gsap.set(heroNotes[0], {
-            autoAlpha: 1,
-            y: 0
-          });
+        heroNotes.forEach((note, index) => {
+          note.classList.toggle('is-visible', index === 0);
+        });
 
+        if (!prefersReducedMotion && heroNotes.length > 1) {
           let activeNoteIndex = 0;
-
           window.setInterval(() => {
             const currentNote = heroNotes[activeNoteIndex];
             activeNoteIndex = (activeNoteIndex + 1) % heroNotes.length;
             const nextNote = heroNotes[activeNoteIndex];
 
-            gsap.timeline()
-              .to(currentNote, {
-                autoAlpha: 0,
-                y: -8,
-                duration: 0.36,
-                ease: 'power2.inOut'
-              })
-              .set(currentNote, {
-                y: 8
-              })
-              .to(nextNote, {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.42,
-                ease: 'power2.out'
-              });
+            currentNote.classList.remove('is-visible');
+            nextNote.classList.add('is-visible');
           }, 4160);
         }
       }
@@ -502,7 +489,7 @@ const partnerSections = partners.map((partner, index) => {
         let wheelDeltaX = 0;
         let wheelResetTimer = null;
 
-        const setStagePosition = (openStage) => {
+        const setStagePosition = async (openStage) => {
           if (!(stageTrack instanceof HTMLElement)) return;
           if (isStageAnimating) return;
 
@@ -515,10 +502,30 @@ const partnerSections = partners.map((partner, index) => {
           }
 
           if (prefersReducedMotion) {
-            gsap.set(stageTrack, { xPercent: openStage ? -50 : 0 });
+            stageTrack.style.transform = openStage ? 'translate3d(-50%, 0, 0)' : 'translate3d(0, 0, 0)';
+            if (detailPhotoFrame instanceof HTMLElement) {
+              detailPhotoFrame.style.clipPath = openStage ? 'inset(0 0% 0 0)' : 'inset(0 14% 0 0)';
+              detailPhotoFrame.style.opacity = openStage ? '1' : '0';
+              detailPhotoFrame.style.transform = openStage ? 'scale(1)' : 'scale(1.03)';
+              detailPhotoFrame.style.filter = openStage ? 'blur(0px)' : 'blur(6px)';
+            }
+            if (detailPhoto instanceof HTMLElement) {
+              detailPhoto.style.transform = openStage
+                ? 'translate3d(0, 0, 0) scale(1) rotate(0.001deg)'
+                : 'translate3d(0, 4%, 0) scale(1.14) rotate(0.001deg)';
+            }
+            detailStageElements.forEach((element) => {
+              if (!(element instanceof HTMLElement)) return;
+              if (element === detailPhotoFrame) return;
+              element.style.opacity = openStage ? '1' : '0';
+              element.style.transform = openStage ? 'translate3d(0, 0, 0)' : 'translate3d(20px, 12px, 0)';
+              element.style.filter = openStage ? 'blur(0px)' : 'blur(4px)';
+            });
             isStageAnimating = false;
             return;
           }
+
+          const gsap = await getGsap();
 
           const timeline = gsap.timeline({
             defaults: {
@@ -661,54 +668,14 @@ const partnerSections = partners.map((partner, index) => {
             }, 0.22);
         };
 
-        if (stageTrack) {
-          gsap.set(stageTrack, { xPercent: 0 });
-        }
-
-        if (!prefersReducedMotion && detailStageElements.length) {
-          gsap.set(detailPhotoFrame, {
-            clipPath: 'inset(0 14% 0 0)',
-            scale: 1.03,
-            autoAlpha: 0,
-            filter: 'blur(6px)'
-          });
-          gsap.set(detailPhoto, {
-            scale: 1.14,
-            yPercent: 4,
-            rotate: 0.001
-          });
-          gsap.set([detailCopy, detailFooter], {
-            y: 12,
-            autoAlpha: 0,
-            x: 20,
-            filter: 'blur(4px)'
-          });
-          gsap.set(heroShell, {
-            x: 0,
-            scale: 1,
-            autoAlpha: 1,
-            filter: 'blur(0px)'
-          });
-          gsap.set(heroPanel, {
-            yPercent: 0,
-            scale: 1,
-            filter: 'blur(0px)'
-          });
-          gsap.set(stageVeil, {
-            autoAlpha: 0,
-            scaleX: 0,
-            transformOrigin: '100% 50%'
-          });
-        }
-
         heroSlideTrigger?.addEventListener('click', () => {
           if (isStageOpen) return;
-          setStagePosition(true);
+          void setStagePosition(true);
         });
 
         stageBackButton?.addEventListener('click', () => {
           if (!isStageOpen) return;
-          setStagePosition(false);
+          void setStagePosition(false);
         });
 
         stageSection.addEventListener('touchstart', (event) => {
@@ -728,11 +695,11 @@ const partnerSections = partners.map((partner, index) => {
           if (Math.abs(deltaX) < 56 || Math.abs(deltaX) < Math.abs(deltaY)) return;
 
           if (deltaX < 0 && !isStageOpen) {
-            setStagePosition(true);
+            void setStagePosition(true);
           }
 
           if (deltaX > 0 && isStageOpen) {
-            setStagePosition(false);
+            void setStagePosition(false);
           }
         }, { passive: true });
 
@@ -762,13 +729,13 @@ const partnerSections = partners.map((partner, index) => {
 
           if (wheelDeltaX > 0 && !isStageOpen) {
             wheelDeltaX = 0;
-            setStagePosition(true);
+            void setStagePosition(true);
             return;
           }
 
           if (wheelDeltaX < 0 && isStageOpen) {
             wheelDeltaX = 0;
-            setStagePosition(false);
+            void setStagePosition(false);
           }
         }, { passive: false });
 
@@ -784,6 +751,8 @@ const partnerSections = partners.map((partner, index) => {
               if (!entries.some((entry) => entry.isIntersecting)) return;
 
               observer.disconnect();
+
+              const gsap = await getGsap();
 
               gsap.set(metaBlock, { autoAlpha: 1 });
               gsap.set(rows, { autoAlpha: 0, y: 12 });
@@ -841,12 +810,12 @@ const partnerSections = partners.map((partner, index) => {
 
         if (event.key === 'ArrowRight' && !activeStageController.isStageOpen()) {
           event.preventDefault();
-          activeStageController.setStagePosition(true);
+          void activeStageController.setStagePosition(true);
         }
 
         if (event.key === 'ArrowLeft' && activeStageController.isStageOpen()) {
           event.preventDefault();
-          activeStageController.setStagePosition(false);
+          void activeStageController.setStagePosition(false);
         }
       });
     }, { once: true });
@@ -1370,6 +1339,7 @@ const partnerSections = partners.map((partner, index) => {
     min-height: 100vh;
     display: flex;
     align-items: stretch;
+    transform: translate3d(0, 0, 0);
   }
 
   .partner-stage-panel {
@@ -1669,6 +1639,10 @@ const partnerSections = partners.map((partner, index) => {
     overflow: hidden;
     background: hsl(210, 18%, 86%);
     position: relative;
+    clip-path: inset(0 14% 0 0);
+    opacity: 0;
+    transform: scale(1.03);
+    filter: blur(6px);
   }
 
   .partner-detail-photo {
@@ -1678,6 +1652,7 @@ const partnerSections = partners.map((partner, index) => {
     object-fit: cover;
     object-position: center;
     filter: brightness(0.62) saturate(0.88) contrast(0.94);
+    transform: translate3d(0, 4%, 0) scale(1.14) rotate(0.001deg);
   }
 
   .partner-detail-photo-frame::after {
@@ -1701,6 +1676,9 @@ const partnerSections = partners.map((partner, index) => {
     display: grid;
     align-content: center;
     gap: 0.9rem;
+    opacity: 0;
+    transform: translate3d(20px, 12px, 0);
+    filter: blur(4px);
   }
 
   .partner-detail-kicker {
@@ -1746,6 +1724,9 @@ const partnerSections = partners.map((partner, index) => {
     justify-content: space-between;
     gap: 1rem;
     padding: 0 2rem 1.8rem;
+    opacity: 0;
+    transform: translate3d(20px, 12px, 0);
+    filter: blur(4px);
   }
 
   .partner-detail-skip {
