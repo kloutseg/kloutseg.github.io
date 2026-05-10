@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
 
   export let startDelay = 2600;
+  export let startOnUserIntent = false;
 
   type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
   type ScrollTriggerSnap = Parameters<ScrollTriggerPlugin['create']>[0]['snap'];
@@ -97,12 +98,19 @@
   onMount(() => {
     let cancelled = false;
     let cleanup: (() => void) | undefined;
+    let cleanupIntentListeners: (() => void) | undefined;
     let resizeTimer: ReturnType<typeof setTimeout>;
     let idleCallbackId: number | undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let startRequested = false;
 
     const start = async () => {
+      if (startRequested) return;
       if (isMobile()) return;
+
+      startRequested = true;
+      cleanupIntentListeners?.();
+      cleanupIntentListeners = undefined;
 
       const [{ gsap }, scrollTriggerModule] = await Promise.all([
         import('gsap'),
@@ -171,18 +179,54 @@
 
     const resolvedStartDelay = Number.isFinite(startDelay) ? Math.max(0, startDelay) : 2600;
 
-    timeoutId = window.setTimeout(() => {
-      if (window.requestIdleCallback) {
-        idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 500 });
-      } else {
-        void start();
-      }
-    }, resolvedStartDelay);
+    const scheduleStart = (delay: number) => {
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+
+      timeoutId = window.setTimeout(() => {
+        if (window.requestIdleCallback) {
+          idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 500 });
+        } else {
+          void start();
+        }
+      }, delay);
+    };
+
+    const requestImmediateStart = () => {
+      if (startRequested) return;
+      if (idleCallbackId !== undefined) window.cancelIdleCallback?.(idleCallbackId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      window.requestAnimationFrame(() => void start());
+    };
+
+    if (startOnUserIntent) {
+      const handleIntent = () => requestImmediateStart();
+      const handleKeyIntent = (event: KeyboardEvent) => {
+        if (!['ArrowDown', 'PageDown', ' ', 'Spacebar', 'End'].includes(event.key)) return;
+        requestImmediateStart();
+      };
+
+      window.addEventListener('wheel', handleIntent, { once: true, passive: true });
+      window.addEventListener('touchstart', handleIntent, { once: true, passive: true });
+      window.addEventListener('scroll', handleIntent, { once: true, passive: true });
+      window.addEventListener('keydown', handleKeyIntent, { passive: true });
+
+      cleanupIntentListeners = () => {
+        window.removeEventListener('wheel', handleIntent);
+        window.removeEventListener('touchstart', handleIntent);
+        window.removeEventListener('scroll', handleIntent);
+        window.removeEventListener('keydown', handleKeyIntent);
+      };
+    }
+
+    scheduleStart(resolvedStartDelay);
 
     return () => {
       cancelled = true;
-      if (idleCallbackId !== undefined) window.cancelIdleCallback?.(idleCallbackId);
+      if (window.requestIdleCallback) {
+        if (idleCallbackId !== undefined) window.cancelIdleCallback?.(idleCallbackId);
+      }
       if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      cleanupIntentListeners?.();
       cleanup?.();
     };
   });
