@@ -127,9 +127,6 @@ const partnerSections = partners.map((partner, index) => {
   description="Conheça a rede de parceiros da Klout e como a curadoria especializada conecta seguradoras, empresas e clientes com mais eficiência."
   smoothScrollDelay={6500}
 >
-  <FloatingNavbar client:media="(min-width: 769px)" />
-  <SectionStacking client:media="(min-width: 769px)" startDelay={6500} startOnUserIntent />
-
   <main id="main-content">
     <section
       id="parceiros"
@@ -347,6 +344,8 @@ const partnerSections = partners.map((partner, index) => {
   </main>
 
   <Footer />
+  <FloatingNavbar client:media="(min-width: 769px)" />
+  <SectionStacking client:media="(min-width: 769px)" startDelay={6500} startOnUserIntent />
 </BaseLayout>
 
 <script>
@@ -959,12 +958,6 @@ const partnerSections = partners.map((partner, index) => {
     line-height: 0.88;
     letter-spacing: -0.075em;
     color: hsl(214, 42%, 14%);
-    text-wrap: balance;
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-    transition:
-      opacity var(--partners-hero-main-duration) cubic-bezier(0.22, 1, 0.36, 1),
-      transform var(--partners-hero-main-duration) cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .partners-page-hero-visual {
