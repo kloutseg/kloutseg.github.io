@@ -5,12 +5,13 @@ const {
   criticalImage,
   criticalImageSrcset,
   criticalImageSizes,
+  smoothScrollDelay = 2600,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-smooth-scroll-delay={smoothScrollDelay}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -895,8 +896,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 
     function scheduleSmoothScroll() {
       if (!canUseSmoothScroll()) return;
+      const configuredDelay = Number(document.documentElement.dataset.smoothScrollDelay);
+      const smoothScrollStartDelay = Number.isFinite(configuredDelay)
+        ? Math.max(0, configuredDelay)
+        : 2600;
       const schedule = () => {
-        window.setTimeout(() => void startSmoothScroll(), 2600);
+        window.setTimeout(() => void startSmoothScroll(), smoothScrollStartDelay);
       };
 
       if ('requestIdleCallback' in window) {

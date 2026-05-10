@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
 
+  export let startDelay = 2600;
+
   type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
   type ScrollTriggerSnap = Parameters<ScrollTriggerPlugin['create']>[0]['snap'];
   type ScrollTriggerInstance = ReturnType<ScrollTriggerPlugin['create']>;
@@ -167,13 +169,15 @@
       };
     };
 
+    const resolvedStartDelay = Number.isFinite(startDelay) ? Math.max(0, startDelay) : 2600;
+
     timeoutId = window.setTimeout(() => {
       if (window.requestIdleCallback) {
         idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 500 });
       } else {
         void start();
       }
-    }, 2600);
+    }, resolvedStartDelay);
 
     return () => {
       cancelled = true;
