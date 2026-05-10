@@ -125,7 +125,6 @@ const partnerSections = partners.map((partner, index) => {
 <BaseLayout
   title="Parceiros | Klout"
   description="Conheça a rede de parceiros da Klout e como a curadoria especializada conecta seguradoras, empresas e clientes com mais eficiência."
-  smoothScrollDelay={6500}
 >
   <main id="main-content">
     <section
@@ -345,7 +344,7 @@ const partnerSections = partners.map((partner, index) => {
 
   <Footer />
   <FloatingNavbar client:media="(min-width: 769px)" />
-  <SectionStacking client:media="(min-width: 769px)" startDelay={6500} startOnUserIntent />
+  <SectionStacking client:media="(min-width: 769px)" startDelay={0} />
 </BaseLayout>
 
 <script>
