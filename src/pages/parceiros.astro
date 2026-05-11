@@ -344,7 +344,12 @@ const partnerSections = partners.map((partner, index) => {
 
   <Footer />
   <FloatingNavbar client:media="(min-width: 769px)" />
-  <SectionStacking client:media="(min-width: 769px)" startDelay={0} />
+  <SectionStacking
+    client:media="(min-width: 769px)"
+    startDelay={0}
+    waitForInteraction={true}
+    fallbackDelay={12000}
+  />
 </BaseLayout>
 
 <script>

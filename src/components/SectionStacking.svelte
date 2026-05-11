@@ -2,6 +2,8 @@
   import { onMount, onDestroy } from 'svelte';
 
   export let startDelay = 2600;
+  export let waitForInteraction = false;
+  export let fallbackDelay = 6200;
 
   type ScrollTriggerPlugin = typeof import('gsap/ScrollTrigger').ScrollTrigger;
   type ScrollTriggerSnap = Parameters<ScrollTriggerPlugin['create']>[0]['snap'];
@@ -97,9 +99,54 @@
   onMount(() => {
     let cancelled = false;
     let cleanup: (() => void) | undefined;
+    let started = false;
     let resizeTimer: ReturnType<typeof setTimeout>;
     let idleCallbackId: number | undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let fallbackTimeoutId: ReturnType<typeof setTimeout> | undefined;
+    let interactionTimeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const interactionEvents = ['wheel', 'touchstart', 'pointerdown', 'scroll'] as const;
+
+    const removeInteractionListeners = () => {
+      interactionEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, handleInteraction, true);
+      });
+      window.removeEventListener('keydown', handleKeyInteraction, true);
+    };
+
+    const scheduleStart = (delay = 0) => {
+      if (started || cancelled) return;
+      started = true;
+      removeInteractionListeners();
+      if (fallbackTimeoutId !== undefined) window.clearTimeout(fallbackTimeoutId);
+
+      const run = () => {
+        if (cancelled) return;
+
+        if (window.requestIdleCallback) {
+          idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 500 });
+        } else {
+          void start();
+        }
+      };
+
+      if (delay > 0) {
+        interactionTimeoutId = window.setTimeout(run, delay);
+      } else {
+        run();
+      }
+    };
+
+    function handleInteraction() {
+      scheduleStart(120);
+    }
+
+    function handleKeyInteraction(event: KeyboardEvent) {
+      const scrollKeys = new Set(['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' ']);
+      if (!scrollKeys.has(event.key)) return;
+      scheduleStart(120);
+    }
 
     const start = async () => {
       if (isMobile()) return;
@@ -172,17 +219,32 @@
     const resolvedStartDelay = Number.isFinite(startDelay) ? Math.max(0, startDelay) : 2600;
 
     timeoutId = window.setTimeout(() => {
-      if (window.requestIdleCallback) {
-        idleCallbackId = window.requestIdleCallback(() => void start(), { timeout: 500 });
-      } else {
-        void start();
+      if (waitForInteraction) {
+        interactionEvents.forEach((eventName) => {
+          window.addEventListener(eventName, handleInteraction, {
+            capture: true,
+            passive: true,
+          });
+        });
+        window.addEventListener('keydown', handleKeyInteraction, true);
+
+        const resolvedFallbackDelay = Number.isFinite(fallbackDelay)
+          ? Math.max(0, fallbackDelay)
+          : 6200;
+        fallbackTimeoutId = window.setTimeout(() => scheduleStart(), resolvedFallbackDelay);
+        return;
       }
+
+      scheduleStart();
     }, resolvedStartDelay);
 
     return () => {
       cancelled = true;
+      removeInteractionListeners();
       if (idleCallbackId !== undefined) window.cancelIdleCallback?.(idleCallbackId);
       if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      if (fallbackTimeoutId !== undefined) window.clearTimeout(fallbackTimeoutId);
+      if (interactionTimeoutId !== undefined) window.clearTimeout(interactionTimeoutId);
       cleanup?.();
     };
   });
