@@ -1065,6 +1065,7 @@ const partnerSections = partners.map((partner, index) => {
 
   .partners-page-hero-visual {
     position: relative;
+    isolation: isolate;
     justify-self: end;
     width: min(100%, 34rem, calc(100vh - 10.4rem));
     aspect-ratio: 1 / 1;
@@ -1081,14 +1082,20 @@ const partnerSections = partners.map((partner, index) => {
   }
 
   .partners-page-hero-map {
+    --partners-map-mask: url('/images/brasil.svg');
+    position: relative;
+    z-index: 0;
     width: min(115%, 39.1rem);
     aspect-ratio: 1 / 1;
-    background: hsl(40, 22%, 93.6%);
-    -webkit-mask-image: url('/images/brasil.svg');
+    background:
+      radial-gradient(circle at 34% 22%, hsla(0, 0%, 100%, 1) 0%, hsla(0, 0%, 100%, 0.64) 24%, transparent 48%),
+      radial-gradient(circle at 70% 74%, hsla(42, 18%, 84%, 0.22) 0%, transparent 30%),
+      linear-gradient(135deg, hsl(0, 0%, 97.6%) 0%, hsl(42, 18%, 93.5%) 54%, hsl(210, 16%, 90.5%) 100%);
+    -webkit-mask-image: var(--partners-map-mask);
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: contain;
-    mask-image: url('/images/brasil.svg');
+    mask-image: var(--partners-map-mask);
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;
@@ -1096,8 +1103,38 @@ const partnerSections = partners.map((partner, index) => {
     transform-origin: 50% 50%;
     transition: transform calc(var(--partners-hero-main-duration) + 220ms) cubic-bezier(0.22, 1, 0.36, 1);
     filter:
-      drop-shadow(0 22px 34px hsla(214, 28%, 14%, 0.12))
-      drop-shadow(0 8px 16px hsla(214, 18%, 12%, 0.08));
+      drop-shadow(-3px -3px 0 hsla(0, 0%, 100%, 0.82))
+      drop-shadow(4px 6px 0 hsla(42, 14%, 82%, 0.38))
+      drop-shadow(12px 16px 24px hsla(214, 20%, 22%, 0.13));
+  }
+
+  .partners-page-hero-map::before,
+  .partners-page-hero-map::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    -webkit-mask-image: var(--partners-map-mask);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    mask-image: var(--partners-map-mask);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+
+  .partners-page-hero-map::before {
+    background:
+      linear-gradient(145deg, hsla(0, 0%, 100%, 0.72) 0%, transparent 34%),
+      linear-gradient(315deg, hsla(214, 14%, 30%, 0.075) 0%, transparent 48%);
+    mix-blend-mode: soft-light;
+  }
+
+  .partners-page-hero-map::after {
+    transform: translate3d(0.22rem, 0.28rem, 0);
+    background: hsla(214, 18%, 26%, 0.06);
+    z-index: -1;
   }
 
   .partners-page-hero-node {

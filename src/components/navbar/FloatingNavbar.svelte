@@ -329,19 +329,17 @@
       </ul>
     </div>
     <div class="right-content">
-      <div
-        class="consultant-button"
-        aria-hidden="true"
-      >
-        <button
+      <div class="consultant-button">
+        <a
+          href="/analise"
           aria-label="Entrar em contato com um consultor"
-          onclick={() => navigateWithTransition('/analise')}
+          onclick={(e) => { e.preventDefault(); navigateWithTransition('/analise'); }}
         >
           <svg class="phone-icon" width="16" height="16" viewBox="0 0 24 24" stroke="none">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
           <span class="button-text">Falar com consultor</span>
-        </button>
+        </a>
       </div>
 
       <button
@@ -637,7 +635,7 @@
     animation: navbar-item-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) 360ms backwards;
   }
 
-  :global(.consultant-button button) {
+  :global(.consultant-button :is(button, a)) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -653,6 +651,7 @@
     cursor: pointer;
     margin: 0;
     outline: none;
+    text-decoration: none;
     overflow: hidden;
     flex-shrink: 0;
     z-index: 2;
@@ -668,7 +667,7 @@
       0 8px 18px hsla(214, 26%, 14%, 0.06);
   }
 
-  :global(.consultant-button:hover button) {
+  :global(.consultant-button:hover :is(button, a)) {
     width: 200px;
     background: hsla(45, 40%, 55%, 0.04);
     border-color: hsla(45, 40%, 55%, 0.2);
@@ -710,12 +709,12 @@
     color: hsl(215, 30%, 85%);
   }
 
-  :global(.consultant-button button:focus-visible) {
+  :global(.consultant-button :is(button, a):focus-visible) {
     box-shadow: 0 0 0 3px hsla(214, 85%, 55%, 0.2);
     outline: none;
   }
 
-  :global(.floating-navbar.dark .consultant-button button:focus-visible) {
+  :global(.floating-navbar.dark .consultant-button :is(button, a):focus-visible) {
     box-shadow: 0 0 0 3px hsla(215, 30%, 50%, 0.35);
     outline: none;
   }
@@ -932,7 +931,7 @@
     box-shadow: 0 0 10px hsla(42, 30%, 60%, 0.1);
   }
 
-  :global(.floating-navbar.dark .consultant-button button) {
+  :global(.floating-navbar.dark .consultant-button :is(button, a)) {
     color: hsl(214, 18%, 84%);
     background: linear-gradient(
       180deg,
@@ -952,20 +951,20 @@
                border-color 1s ease;
   }
 
-  :global(.floating-navbar.dark .consultant-button button:hover) {
+  :global(.floating-navbar.dark .consultant-button :is(button, a):hover) {
     color: hsl(210, 26%, 92%);
     text-shadow: none;
   }
 
-  :global(.floating-navbar.dark .consultant-button:hover button) {
+  :global(.floating-navbar.dark .consultant-button:hover :is(button, a)) {
     background: hsla(210, 24%, 68%, 0.08);
     border-color: hsla(210, 20%, 62%, 0.18);
   }
 
-  :global(.floating-navbar.dark .consultant-button button:active) {
+  :global(.floating-navbar.dark .consultant-button :is(button, a):active) {
   }
 
-  :global(.floating-navbar.dark .consultant-button button:focus-visible) {
+  :global(.floating-navbar.dark .consultant-button :is(button, a):focus-visible) {
     box-shadow: 0 0 0 3px hsla(206, 34%, 58%, 0.2);
     outline: none;
   }
@@ -1437,7 +1436,7 @@
     :global(.overlay-menu),
     :global(.overlay-content),
     :global(.overlay-nav li),
-    :global(.consultant-button button),
+    :global(.consultant-button :is(button, a)),
     :global(.consultant-button .phone-icon),
     :global(.consultant-button .button-text) {
       transition: none;
