@@ -925,10 +925,32 @@ const partnerSections = partners.map((partner, index) => {
       });
       };
 
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(setupPartnerStages, { timeout: 4200 });
+      let didSetupPartnerStages = false;
+      let stageSetupObserver;
+
+      const runPartnerStageSetup = () => {
+        if (didSetupPartnerStages) return;
+        didSetupPartnerStages = true;
+        stageSetupObserver?.disconnect();
+        window.removeEventListener('scroll', runPartnerStageSetup, true);
+        window.removeEventListener('keydown', runPartnerStageSetup, true);
+        window.removeEventListener('pointerdown', runPartnerStageSetup, true);
+        setupPartnerStages();
+      };
+
+      const stageSections = Array.from(document.querySelectorAll('.partner-stage-section'));
+
+      if ('IntersectionObserver' in window && stageSections.length) {
+        stageSetupObserver = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          runPartnerStageSetup();
+        }, { rootMargin: '0px', threshold: 0.01 });
+
+        stageSections.forEach((section) => stageSetupObserver.observe(section));
       } else {
-        window.setTimeout(setupPartnerStages, 2600);
+        window.addEventListener('scroll', runPartnerStageSetup, { capture: true, passive: true, once: true });
+        window.addEventListener('keydown', runPartnerStageSetup, { capture: true, once: true });
+        window.addEventListener('pointerdown', runPartnerStageSetup, { capture: true, passive: true, once: true });
       }
     }, { once: true });
   }
@@ -2087,6 +2109,11 @@ const partnerSections = partners.map((partner, index) => {
   }
 
   @media (max-width: 767px) {
+    .partners-page-geo,
+    .partners-page-hero-visual {
+      display: none;
+    }
+
     .partners-page-hero-shell {
       min-height: 100vh;
       padding: 4.55rem 1.25rem 4.45rem;
@@ -2103,89 +2130,6 @@ const partnerSections = partners.map((partner, index) => {
 
     .partners-page-hero-copy {
       max-width: 19rem;
-    }
-
-    .partners-page-hero-visual {
-      width: 100%;
-      min-height: 0;
-      max-height: calc(100vh - 11rem);
-    }
-
-    .partners-page-hero-map {
-      width: min(115%, 23.575rem);
-    }
-
-    .partners-page-hero-node {
-      width: 3.2rem;
-      height: 3.2rem;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .partners-page-hero-node::after {
-      inset: 0.24rem;
-    }
-
-    .partners-page-hero-node-logo {
-      max-width: 2.54rem;
-      max-height: 2.2rem;
-    }
-
-    .partners-page-hero-node-logo-alice {
-      max-width: 2.32rem;
-      max-height: 2.2rem;
-    }
-
-    .partners-page-hero-node-logo-porto {
-      max-width: 2.21rem;
-    }
-
-    .partners-page-hero-node-logo.partners-page-hero-node-logo-bradesco {
-      max-width: 2.32rem;
-      max-height: 2.2rem;
-    }
-
-    .partners-page-hero-node-logo.partners-page-hero-node-logo-sulamerica {
-      max-width: 2.72rem;
-      max-height: 2.2rem;
-    }
-
-    .partners-page-hero-node-logo-omint {
-      max-width: 2.21rem;
-    }
-
-    .partners-page-hero-node-logo-amil {
-      max-width: 2.13rem;
-    }
-
-    .partners-page-hero-node-alice {
-      top: 20%;
-      left: 32%;
-    }
-
-    .partners-page-hero-node-porto {
-      top: 31%;
-      right: 13%;
-    }
-
-    .partners-page-hero-node-bradesco {
-      top: 47%;
-      right: 6%;
-    }
-
-    .partners-page-hero-node-sulamerica {
-      top: 44%;
-      left: 9%;
-    }
-
-    .partners-page-hero-node-omint {
-      bottom: 24%;
-      left: 35%;
-    }
-
-    .partners-page-hero-node-amil {
-      bottom: 16%;
-      right: 19%;
     }
 
     .partners-page-hero-rail {
