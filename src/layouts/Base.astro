@@ -5,6 +5,7 @@ const {
   criticalImage,
   criticalImageSrcset,
   criticalImageSizes,
+  preloadFonts = true,
   smoothScrollDelay = 2600,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -58,8 +59,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
     />
   )}
 
-  <link rel="preload" as="font" href="/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff" type="font/woff" crossorigin>
-  <link rel="preload" as="font" href="/fonts/ibm_plex_serif/ibm-plex-serif.woff2" type="font/woff2" crossorigin>
+  {preloadFonts && (
+    <>
+      <link rel="preload" as="font" href="/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff" type="font/woff" crossorigin>
+      <link rel="preload" as="font" href="/fonts/ibm_plex_serif/ibm-plex-serif.woff2" type="font/woff2" crossorigin>
+    </>
+  )}
 
   <!-- Estilos básicos -->
   <style>

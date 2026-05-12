@@ -90,12 +90,15 @@ const addressItems = [
       <div class="about-klout-shell">
         <div class="about-klout-units-grid">
           <figure class="about-klout-units-photo-frame">
-            <img
-              src="/images/office_units_placeholder.png"
-              alt="Ambiente de escritório contemporâneo da Klout para reuniões presenciais"
-              class="about-klout-units-photo"
-              loading="lazy"
-            />
+            <picture>
+              <source srcset="/images/office_units.webp" type="image/webp" />
+              <img
+                src="/images/office_units.png"
+                alt="Ambiente de escritório contemporâneo da Klout para reuniões presenciais"
+                class="about-klout-units-photo"
+                loading="lazy"
+              />
+            </picture>
           </figure>
 
           <div class="about-klout-units-copy">
@@ -516,6 +519,12 @@ const addressItems = [
     background: hsl(214, 12%, 88%);
     box-shadow:
       28px 0 56px hsla(214, 24%, 12%, 0.06);
+  }
+
+  .about-klout-units-photo-frame picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .about-klout-units-photo {
