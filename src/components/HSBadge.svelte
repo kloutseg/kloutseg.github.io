@@ -55,29 +55,8 @@
   class="hs-badge"
   style="--width: {currentSize.width}; --px: {currentSize.paddingX}; --py: {currentSize.paddingY}; --font-size: {currentFontSize}; --text-size: {currentTextSize};"
 >
-  <!-- Outer glow effect -->
-  <div class="outer-glow"></div>
-
-  <!-- Decorative M in background -->
-  <div class="decorative-m">
-    <span class="m-text">M</span>
-  </div>
-
-  <!-- Subtle grid pattern overlay -->
-  <div class="grid-pattern"></div>
-
-  <!-- Top corner accents -->
-  <div class="corner-accent top-left" style="top: {currentCornerPos.top}; left: {currentCornerPos.left}; width: {currentCornerSize.width}; height: {currentCornerSize.height};"></div>
-  <div class="corner-accent top-right" style="top: {currentCornerPos.top}; right: {currentCornerPos.right}; width: {currentCornerSize.width}; height: {currentCornerSize.height};"></div>
-
-  <!-- Bottom corner accents -->
-  <div class="corner-accent bottom-left" style="bottom: {currentCornerPos.bottom}; left: {currentCornerPos.left}; width: {currentCornerSize.width}; height: {currentCornerSize.height};"></div>
-  <div class="corner-accent bottom-right" style="bottom: {currentCornerPos.bottom}; right: {currentCornerPos.right}; width: {currentCornerSize.width}; height: {currentCornerSize.height};"></div>
-
-  <!-- Content -->
   <div class="content">
     <div class="hs-content">
-      <!-- HS Typography -->
       <div class="hs-text">HS</div>
       <div class="divider" style="width: {currentDividerWidth};"></div>
     </div>
@@ -85,16 +64,6 @@
       High<br/>Standards
     </p>
   </div>
-
-  <!-- Top metallic bar -->
-  <div class="metallic-bar top"></div>
-
-  <!-- Bottom metallic bar -->
-  <div class="metallic-bar bottom"></div>
-
-  <!-- Side accent lines -->
-  <div class="side-accent left"></div>
-  <div class="side-accent right"></div>
 </div>
 
 <style>
@@ -112,86 +81,38 @@
     cursor: pointer;
   }
 
+  .hs-badge::before {
+    content: 'M';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    font-size: 280px;
+    font-weight: 700;
+    line-height: 1;
+    user-select: none;
+    background:
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 2px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0.1) 100%);
+    -webkit-background-clip: text, text;
+    background-clip: text, text;
+    box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+    opacity: 1;
+    transition: box-shadow 0.4s ease, filter 0.4s ease;
+  }
+
   .hs-badge:hover {
     border-color: rgba(220, 38, 38, 0.4);
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(220, 38, 38, 0.1);
   }
 
-  .outer-glow {
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.03);
-    transition: box-shadow 0.4s ease;
-  }
-
-  .hs-badge:hover .outer-glow {
+  .hs-badge:hover::before {
     box-shadow: inset 0 0 60px rgba(220, 38, 38, 0.15);
-  }
-
-  .decorative-m {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .m-text {
-    font-size: 280px;
-    font-weight: 700;
-    line-height: 1;
-    user-select: none;
-    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.05));
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0.1) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transition: all 0.4s ease;
-  }
-
-  .hs-badge:hover .m-text {
     filter: drop-shadow(0 0 40px rgba(220, 38, 38, 0.4));
-    background: linear-gradient(180deg, rgba(220, 38, 38, 0.25) 0%, rgba(139, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.3) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .grid-pattern {
-    position: absolute;
-    inset: 0;
-    opacity: 0.02;
-    background-image: repeating-linear-gradient(0deg, #fff 0px, #fff 1px, transparent 1px, transparent 2px);
-    background-size: 2px 2px;
-  }
-
-  .corner-accent {
-    position: absolute;
-    border-color: rgba(255, 255, 255, 0.1);
-    border-style: solid;
-    transition: border-color 0.4s ease;
-  }
-
-  .hs-badge:hover .corner-accent {
-    border-color: rgba(220, 38, 38, 0.5);
-  }
-
-  .corner-accent.top-left {
-    border-width: 2px 0 0 2px;
-  }
-
-  .corner-accent.top-right {
-    border-width: 2px 2px 0 0;
-  }
-
-  .corner-accent.bottom-left {
-    border-width: 0 0 2px 2px;
-  }
-
-  .corner-accent.bottom-right {
-    border-width: 0 2px 2px 0;
   }
 
   .content {
@@ -242,48 +163,4 @@
     margin: 0;
   }
 
-  .metallic-bar {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
-    box-shadow: none;
-    transition: all 0.4s ease;
-  }
-
-  .hs-badge:hover .metallic-bar {
-    background: linear-gradient(to right, transparent, #dc2626, transparent);
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
-  }
-
-  .metallic-bar.top {
-    top: 0;
-  }
-
-  .metallic-bar.bottom {
-    bottom: 0;
-  }
-
-  .side-accent {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.05), transparent);
-    transition: background 0.4s ease;
-  }
-
-  .hs-badge:hover .side-accent {
-    background: linear-gradient(to bottom, transparent, rgba(220, 38, 38, 0.3), transparent);
-  }
-
-  .side-accent.left {
-    left: 0;
-  }
-
-  .side-accent.right {
-    right: 0;
-  }
 </style>
