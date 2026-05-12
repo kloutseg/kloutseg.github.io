@@ -475,7 +475,7 @@
 
   <header class="page-header">
     <a href="/" class="logo-link" bind:this={logoLink} aria-label="Voltar à página inicial">
-      <img src="/images/logo_simple_light.png" alt="Klout" class="logo-image" />
+      <img src="/images/logo_simple_light-126.webp" alt="Klout" class="logo-image" width="126" height="39" />
     </a>
     <div class="header-progress">
       {#if formType}

@@ -5,6 +5,7 @@ const {
   criticalImage,
   criticalImageSrcset,
   criticalImageSizes,
+  criticalImageType = 'image/webp',
   preloadFonts = true,
   smoothScrollDelay = 2600,
 } = Astro.props;
@@ -54,7 +55,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       href={criticalImage}
       imagesrcset={criticalImageSrcset}
       imagesizes={criticalImageSizes}
-      type="image/webp"
+      type={criticalImageType}
       fetchpriority="high"
     />
   )}

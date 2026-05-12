@@ -25,6 +25,9 @@ const addressItems = [
 <BaseLayout
   title="A Klout"
   description="Conheça a Klout, consultoria especializada em planos de saúde que une análise técnica, curadoria e orientação estratégica."
+  criticalImage="/images/about_klout_hero_consultive.webp"
+  criticalImageSrcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w"
+  criticalImageSizes="100vw"
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
   <SectionStacking client:load />
@@ -33,11 +36,15 @@ const addressItems = [
     <section id="a-klout" class="about-klout-hero" data-stack-section data-dark-section>
       <div class="about-klout-hero-media">
         <img
-          src="/images/office_hero_04.webp"
-          alt="Ambiente real da Klout para reuniões e atendimento consultivo"
+          src="/images/about_klout_hero_consultive.webp"
+          srcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w"
+          sizes="100vw"
+          alt="Conversa consultiva em ambiente acolhedor para orientação em saúde"
           class="about-klout-hero-image"
           loading="eager"
           fetchpriority="high"
+          width="1536"
+          height="1024"
         />
         <div class="about-klout-hero-overlay"></div>
       </div>
@@ -91,12 +98,18 @@ const addressItems = [
         <div class="about-klout-units-grid">
           <figure class="about-klout-units-photo-frame">
             <picture>
-              <source srcset="/images/office_units.webp" type="image/webp" />
+              <source
+                srcset="/images/office_units-700.webp 700w, /images/office_units-960.webp 960w, /images/office_units.webp 1774w"
+                sizes="(max-width: 1023px) 100vw, 50vw"
+                type="image/webp"
+              />
               <img
                 src="/images/office_units.png"
                 alt="Ambiente de escritório contemporâneo da Klout para reuniões presenciais"
                 class="about-klout-units-photo"
                 loading="lazy"
+                width="1774"
+                height="887"
               />
             </picture>
           </figure>

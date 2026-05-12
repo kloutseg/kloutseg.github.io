@@ -554,6 +554,8 @@
             <div class="video-capsule">
               <img
                 src="/images/video_poster-800.webp"
+                srcset="/images/video_poster-480.webp 480w, /images/video_poster-800.webp 800w"
+                sizes="(max-width: 768px) 72vw, 520px"
                 alt="Atendimento personalizado Klout"
                 class="mobile-video-poster"
                 loading="lazy"
@@ -607,8 +609,8 @@
             <div class="image-capsule">
               <img
                 src="/images/consulting_01.webp"
-                srcset="/images/consulting_01-700.webp 700w, /images/consulting_01-1000.webp 1000w, /images/consulting_01.webp 1280w"
-                sizes="(max-width: 768px) 82vw, 520px"
+                srcset="/images/consulting_01-480.webp 480w, /images/consulting_01-700.webp 700w, /images/consulting_01-1000.webp 1000w, /images/consulting_01.webp 1280w"
+                sizes="(max-width: 768px) 50vw, 520px"
                 alt="Consultoria personalizada"
                 loading="lazy"
                 width="1280"
@@ -632,8 +634,8 @@
             <div class="image-capsule">
               <img
                 src="/images/family_01.webp"
-                srcset="/images/family_01-700.webp 700w, /images/family_01-1000.webp 1000w, /images/family_01.webp 1400w"
-                sizes="(max-width: 768px) 82vw, 520px"
+                srcset="/images/family_01-480.webp 480w, /images/family_01-700.webp 700w, /images/family_01-1000.webp 1000w, /images/family_01.webp 1400w"
+                sizes="(max-width: 768px) 50vw, 520px"
                 alt="Família e proteção"
                 loading="lazy"
                 width="1400"
