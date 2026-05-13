@@ -21,7 +21,7 @@ async function startSmoothScroll() {
 
     const lenis = new Lenis({
       duration: 1.65,
-      easing: (t: number) => 1 - Math.pow(1 - t, 4),
+      easing: (t) => 1 - Math.pow(1 - t, 4),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
@@ -34,7 +34,7 @@ async function startSmoothScroll() {
 
     window.lenisInstance = lenis;
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time: number) => {
+    gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
     gsap.ticker.lagSmoothing(0);
