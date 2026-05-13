@@ -2110,22 +2110,24 @@ const partnerSections = partners.map((partner, index) => {
   }
 
   @media (max-width: 767px) {
-    .partners-page-geo,
-    .partners-page-hero-visual {
-      display: none;
+    .partners-page-hero {
+      min-height: 92vh;
+      min-height: 92svh;
     }
 
     .partners-page-hero-shell {
-      min-height: 100vh;
-      padding: 4.55rem 1.25rem 4.45rem;
+      min-height: 92vh;
+      min-height: 92svh;
+      padding: 5.1rem 1.25rem 4.85rem;
       grid-template-columns: 1fr;
-      align-content: center;
-      gap: 1.15rem;
+      grid-template-rows: auto minmax(15.5rem, 1fr);
+      align-content: start;
+      gap: 0.55rem;
     }
 
     .partners-page-hero-title {
       max-width: 9ch;
-      font-size: clamp(2.5rem, 11vw, 3.7rem);
+      font-size: clamp(2.35rem, 10.5vw, 3.45rem);
       line-height: 0.95;
     }
 
@@ -2133,17 +2135,110 @@ const partnerSections = partners.map((partner, index) => {
       max-width: 19rem;
     }
 
+    .partners-page-hero-visual {
+      width: min(100%, 19.75rem);
+      max-height: none;
+      justify-self: center;
+      align-self: center;
+    }
+
+    .partners-page-hero-map {
+      width: min(112%, 21rem);
+      filter:
+        drop-shadow(-3px -3px 0 hsla(0, 0%, 100%, 0.82))
+        drop-shadow(2px 3px 0 hsla(42, 16%, 74%, 0.38))
+        drop-shadow(8px 12px 16px hsla(214, 24%, 20%, 0.13));
+    }
+
+    .partners-page-hero-node {
+      width: 2.85rem;
+      height: 2.85rem;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 12px 26px hsla(214, 34%, 8%, 0.18),
+        0 8px 18px hsla(214, 30%, 10%, 0.12),
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.07),
+        inset 0 -10px 16px hsla(220, 52%, 8%, 0.14);
+    }
+
+    .partners-page-hero-node::after {
+      inset: 0.22rem;
+    }
+
+    .partners-page-hero-node-logo {
+      max-width: 2.22rem;
+      max-height: 1.95rem;
+    }
+
+    .partners-page-hero-node-logo-alice {
+      max-width: 2.02rem;
+      max-height: 1.95rem;
+    }
+
+    .partners-page-hero-node-logo-porto {
+      max-width: 1.95rem;
+    }
+
+    .partners-page-hero-node-logo.partners-page-hero-node-logo-bradesco {
+      max-width: 2.42rem;
+      max-height: 2rem;
+    }
+
+    .partners-page-hero-node-logo.partners-page-hero-node-logo-sulamerica {
+      max-width: 2.42rem;
+      max-height: 2rem;
+    }
+
+    .partners-page-hero-node-logo-omint {
+      max-width: 1.95rem;
+    }
+
+    .partners-page-hero-node-logo-amil {
+      max-width: 1.86rem;
+    }
+
+    .partners-page-hero-node-alice {
+      top: 19%;
+      left: 32%;
+    }
+
+    .partners-page-hero-node-porto {
+      top: 31%;
+      right: 13%;
+    }
+
+    .partners-page-hero-node-bradesco {
+      top: 47%;
+      right: 7%;
+    }
+
+    .partners-page-hero-node-sulamerica {
+      top: 44%;
+      left: 9%;
+    }
+
+    .partners-page-hero-node-omint {
+      bottom: 24%;
+      left: 35%;
+    }
+
+    .partners-page-hero-node-amil {
+      bottom: 16%;
+      right: 18%;
+    }
+
     .partners-page-hero-rail {
       left: 1.25rem;
       right: 1.25rem;
-      bottom: 1.35rem;
+      bottom: 1.05rem;
       align-items: flex-end;
       gap: 1rem;
     }
 
     .partners-page-hero-notes {
       width: min(100%, 14rem);
-      min-height: 4.65rem;
+      min-height: 4.25rem;
     }
 
     .partners-page-hero-note {
