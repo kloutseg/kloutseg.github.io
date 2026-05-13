@@ -543,9 +543,9 @@ const partnerSections = partners.map((partner, index) => {
             }, 1400);
           }
         } else {
-          window.requestAnimationFrame(() => {
+          window.setTimeout(() => {
             window.requestAnimationFrame(revealHero);
-          });
+          }, 360);
         }
       }
 
@@ -1048,7 +1048,7 @@ const partnerSections = partners.map((partner, index) => {
   .partners-page-hero-title {
     margin: 0;
     max-width: 8ch;
-    font-family: 'IBM Plex Serif', serif;
+    font-family: var(--font-serif);
     font-size: clamp(3.9rem, 6.8vw, 6.8rem);
     font-weight: 400;
     line-height: 0.88;
@@ -1408,7 +1408,7 @@ const partnerSections = partners.map((partner, index) => {
     bottom: 0;
     margin: 0;
     max-width: 34ch;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
     font-size: 0.72rem;
     font-weight: 400;
     line-height: 1.68;
@@ -1638,7 +1638,7 @@ const partnerSections = partners.map((partner, index) => {
 
   .partner-hero-meta-kicker {
     margin: 0;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
     font-size: 0.62rem;
     font-weight: 300;
     line-height: 1;
@@ -1659,7 +1659,7 @@ const partnerSections = partners.map((partner, index) => {
     grid-template-columns: max-content minmax(0, 1fr) max-content;
     align-items: baseline;
     column-gap: 0.55rem;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
     font-size: clamp(0.76rem, 0.98vw, 0.9rem);
     font-weight: 300;
     line-height: 1.9;
@@ -1787,7 +1787,7 @@ const partnerSections = partners.map((partner, index) => {
 
   .partner-detail-kicker {
     margin: 0 0 0.55rem;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
     font-size: 0.64rem;
     font-weight: 300;
     letter-spacing: 0.18em;
@@ -1798,7 +1798,7 @@ const partnerSections = partners.map((partner, index) => {
   .partner-detail-title {
     margin: 0;
     max-width: 9ch;
-    font-family: 'IBM Plex Serif', serif;
+    font-family: var(--font-serif);
     font-size: clamp(2rem, 3vw, 3.25rem);
     font-weight: 400;
     line-height: 0.96;
@@ -1810,7 +1810,7 @@ const partnerSections = partners.map((partner, index) => {
   .partner-detail-description {
     margin: 0;
     max-width: 34ch;
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.96rem;
     font-weight: 400;
     line-height: 1.78;
@@ -1836,7 +1836,7 @@ const partnerSections = partners.map((partner, index) => {
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
     font-size: 0.72rem;
     font-weight: 300;
     letter-spacing: 0.18em;
@@ -1894,7 +1894,7 @@ const partnerSections = partners.map((partner, index) => {
 
   .partners-page-closing-kicker {
     margin: 0;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
     font-size: 0.68rem;
     font-weight: 300;
     line-height: 1;
@@ -1906,7 +1906,7 @@ const partnerSections = partners.map((partner, index) => {
   .partners-page-closing-title {
     margin: 0;
     max-width: 11ch;
-    font-family: 'IBM Plex Serif', serif;
+    font-family: var(--font-serif);
     font-size: clamp(3rem, 5.2vw, 5.6rem);
     font-weight: 400;
     line-height: 0.94;
@@ -1918,7 +1918,7 @@ const partnerSections = partners.map((partner, index) => {
   .partners-page-closing-description {
     margin: 0;
     max-width: 34ch;
-    font-family: 'Proxima Nova', sans-serif;
+    font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.78;
