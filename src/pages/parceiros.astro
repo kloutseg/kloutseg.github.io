@@ -126,7 +126,7 @@ const partnerSections = partners.map((partner, index) => {
   description="Conheça a rede de parceiros da Klout e como a curadoria especializada conecta seguradoras, empresas e clientes com mais eficiência."
   preloadFonts={false}
   loadCustomFonts={false}
-  smoothScrollDelay={12000}
+  smoothScrollDelay={900}
 >
   <main id="main-content">
     <section
@@ -570,7 +570,6 @@ const partnerSections = partners.map((partner, index) => {
       const setupPartnerStages = () => {
       const stageControllers = Array.from(document.querySelectorAll('.partner-stage-section')).map((stageSection) => {
         const heroSlideTrigger = stageSection.querySelector('.partner-hero-slide-trigger');
-        const stageVeil = stageSection.querySelector('.partner-stage-veil');
         const stageTrack = stageSection.querySelector('.partner-stage-track');
         const heroShell = stageSection.querySelector('.partner-hero-shell');
         const heroPanel = stageSection.querySelector('.partner-hero-panel');
@@ -610,22 +609,19 @@ const partnerSections = partners.map((partner, index) => {
           if (prefersReducedMotion) {
             stageTrack.style.transform = openStage ? 'translate3d(-50%, 0, 0)' : 'translate3d(0, 0, 0)';
             if (detailPhotoFrame instanceof HTMLElement) {
-              detailPhotoFrame.style.clipPath = openStage ? 'inset(0 0% 0 0)' : 'inset(0 14% 0 0)';
               detailPhotoFrame.style.opacity = openStage ? '1' : '0';
-              detailPhotoFrame.style.transform = openStage ? 'scale(1)' : 'scale(1.03)';
-              detailPhotoFrame.style.filter = openStage ? 'blur(0px)' : 'blur(6px)';
+              detailPhotoFrame.style.transform = openStage ? 'translate3d(0, 0, 0)' : 'translate3d(1rem, 0, 0)';
             }
             if (detailPhoto instanceof HTMLElement) {
               detailPhoto.style.transform = openStage
-                ? 'translate3d(0, 0, 0) scale(1) rotate(0.001deg)'
-                : 'translate3d(0, 4%, 0) scale(1.14) rotate(0.001deg)';
+                ? 'translate3d(0, 0, 0) scale(1.02) rotate(0.001deg)'
+                : 'translate3d(0, 0, 0) scale(1.02) rotate(0.001deg)';
             }
             detailStageElements.forEach((element) => {
               if (!(element instanceof HTMLElement)) return;
               if (element === detailPhotoFrame) return;
               element.style.opacity = openStage ? '1' : '0';
-              element.style.transform = openStage ? 'translate3d(0, 0, 0)' : 'translate3d(20px, 12px, 0)';
-              element.style.filter = openStage ? 'blur(0px)' : 'blur(4px)';
+              element.style.transform = openStage ? 'translate3d(0, 0, 0)' : 'translate3d(1rem, 0, 0)';
             });
             isStageAnimating = false;
             return;
@@ -635,8 +631,8 @@ const partnerSections = partners.map((partner, index) => {
 
           const timeline = gsap.timeline({
             defaults: {
-              duration: 0.84,
-              ease: 'power2.inOut'
+              duration: 0.68,
+              ease: 'power2.out'
             },
             onComplete: () => {
               isStageAnimating = false;
@@ -645,132 +641,97 @@ const partnerSections = partners.map((partner, index) => {
 
           if (openStage) {
             timeline
-              .set(stageVeil, {
+              .set(detailStageElements, {
                 autoAlpha: 0,
-                scaleX: 0,
-                transformOrigin: '100% 50%'
+                x: 18,
+                clearProps: 'filter'
               }, 0)
-              .to(stageVeil, {
-                autoAlpha: 0.7,
-                scaleX: 1,
-                duration: 0.42,
+              .set(detailPhotoFrame, {
+                x: 20,
+                autoAlpha: 0,
+                clearProps: 'clipPath,filter'
+              }, 0)
+              .set(detailPhoto, {
+                scale: 1.02,
+                yPercent: 0,
+                rotate: 0.001
+              }, 0)
+              .to(stageTrack, {
+                xPercent: -50,
+                duration: 0.72,
                 ease: 'power2.inOut'
               }, 0)
-              .to(stageTrack, { xPercent: -50 }, 0.1)
               .to(heroShell, {
-                x: -18,
-                scale: 0.992,
-                autoAlpha: 0.76,
-                filter: 'blur(4px)'
-              }, 0.02)
+                autoAlpha: 0.82,
+                scale: 0.995,
+                duration: 0.44,
+                ease: 'power2.out'
+              }, 0)
               .to(heroPanel, {
-                yPercent: -1.1,
-                scale: 0.992,
-                filter: 'blur(1px)'
-              }, 0.02)
-              .fromTo(detailPhotoFrame, {
-                clipPath: 'inset(0 14% 0 0)',
-                scale: 1.03,
-                autoAlpha: 0,
-                filter: 'blur(6px)'
-              }, {
-                clipPath: 'inset(0 0% 0 0)',
-                scale: 1,
+                scale: 0.996,
+                duration: 0.44,
+                ease: 'power2.out'
+              }, 0)
+              .to(detailPhotoFrame, {
+                x: 0,
                 autoAlpha: 1,
-                filter: 'blur(0px)',
-                duration: 0.72,
+                duration: 0.52,
                 ease: 'power2.out'
               }, 0.16)
-              .fromTo(detailPhoto, {
-                scale: 1.14,
-                yPercent: 4,
-                rotate: 0.001
-              }, {
+              .to(detailPhoto, {
                 scale: 1,
-                yPercent: 0,
-                rotate: 0.001,
-                duration: 1.02,
-                ease: 'expo.out'
-              }, 0.2)
-              .fromTo([detailCopy, detailFooter], {
-                x: 20,
-                y: 12,
-                autoAlpha: 0,
-                filter: 'blur(4px)',
-              }, {
-                x: 0,
-                y: 0,
-                autoAlpha: 1,
-                filter: 'blur(0px)',
-                duration: 0.52,
-                stagger: 0.05,
+                duration: 0.62,
                 ease: 'power2.out'
-              }, 0.26)
-              .to(stageVeil, {
-                scaleX: 0,
-                transformOrigin: '0% 50%',
-                autoAlpha: 0,
-                duration: 0.46,
-                ease: 'power2.inOut'
-              }, 0.28);
+              }, 0.16)
+              .to([detailCopy, detailFooter], {
+                x: 0,
+                autoAlpha: 1,
+                duration: 0.48,
+                stagger: 0.04,
+                ease: 'power2.out'
+              }, 0.22);
 
             return;
           }
 
           timeline
-            .set(stageVeil, {
-              autoAlpha: 0,
-              scaleX: 0,
-              transformOrigin: '0% 50%'
-            }, 0)
-            .to(stageVeil, {
-              autoAlpha: 0.68,
-              scaleX: 1,
-              duration: 0.4,
-              ease: 'power2.inOut'
-            }, 0)
             .to([detailCopy, detailFooter], {
-              x: 0,
-              y: 10,
+              x: 16,
               autoAlpha: 0,
-              filter: 'blur(4px)',
               duration: 0.28,
-              stagger: 0.04,
+              stagger: 0.03,
               ease: 'power2.in'
             }, 0)
             .to(detailPhotoFrame, {
-              clipPath: 'inset(0 14% 0 0)',
-              scale: 1.03,
-              autoAlpha: 0.5,
-              filter: 'blur(6px)',
-              duration: 0.34,
+              x: 20,
+              autoAlpha: 0,
+              duration: 0.3,
               ease: 'power2.in'
-            }, 0.02)
+            }, 0)
             .to(detailPhoto, {
-              scale: 1.08,
-              yPercent: -2,
-              rotate: 0.001,
-              duration: 0.34,
+              scale: 1.02,
+              duration: 0.3,
               ease: 'power2.in'
-            }, 0.02)
-            .to(stageTrack, { xPercent: 0 }, 0.08)
+            }, 0)
+            .to(stageTrack, {
+              xPercent: 0,
+              duration: 0.72,
+              ease: 'power2.inOut'
+            }, 0.06)
             .to(heroShell, {
               x: 0,
               scale: 1,
               autoAlpha: 1,
-              filter: 'blur(0px)'
-            }, 0.18)
+              clearProps: 'filter',
+              duration: 0.46,
+              ease: 'power2.out'
+            }, 0.22)
             .to(heroPanel, {
               yPercent: 0,
               scale: 1,
-              filter: 'blur(0px)'
-            }, 0.18)
-            .to(stageVeil, {
-              scaleX: 0,
-              transformOrigin: '100% 50%',
-              autoAlpha: 0,
-              duration: 0.42,
-              ease: 'power2.inOut'
+              clearProps: 'filter',
+              duration: 0.46,
+              ease: 'power2.out'
             }, 0.22);
         };
 
@@ -1477,25 +1438,7 @@ const partnerSections = partners.map((partner, index) => {
   }
 
   .partner-stage-veil {
-    position: absolute;
-    inset: 0;
-    z-index: 6;
-    pointer-events: none;
-    opacity: 0;
-    transform: scaleX(0);
-    background:
-      linear-gradient(
-        90deg,
-        hsla(40, 30%, 97%, 0.52) 0%,
-        hsla(38, 24%, 95%, 0.7) 34%,
-        hsla(204, 28%, 94%, 0.78) 68%,
-        hsla(208, 24%, 92%, 0.58) 100%
-      );
-    box-shadow:
-      inset 0 0 0 1px hsla(0, 0%, 100%, 0.04),
-      0 0 42px hsla(42, 20%, 88%, 0.08);
-    mix-blend-mode: screen;
-    backdrop-filter: blur(5px) saturate(1.02);
+    display: none;
   }
 
   .partner-stage-track {
@@ -1803,10 +1746,8 @@ const partnerSections = partners.map((partner, index) => {
     overflow: hidden;
     background: hsl(210, 18%, 86%);
     position: relative;
-    clip-path: inset(0 14% 0 0);
     opacity: 0;
-    transform: scale(1.03);
-    filter: blur(6px);
+    transform: translate3d(20px, 0, 0);
   }
 
   .partner-detail-photo {
@@ -1816,7 +1757,7 @@ const partnerSections = partners.map((partner, index) => {
     object-fit: cover;
     object-position: center;
     filter: brightness(0.62) saturate(0.88) contrast(0.94);
-    transform: translate3d(0, 4%, 0) scale(1.14) rotate(0.001deg);
+    transform: translate3d(0, 0, 0) scale(1.02) rotate(0.001deg);
   }
 
   .partner-detail-photo-frame::after {
@@ -1841,8 +1782,7 @@ const partnerSections = partners.map((partner, index) => {
     align-content: center;
     gap: 0.9rem;
     opacity: 0;
-    transform: translate3d(20px, 12px, 0);
-    filter: blur(4px);
+    transform: translate3d(18px, 0, 0);
   }
 
   .partner-detail-kicker {
@@ -1889,8 +1829,7 @@ const partnerSections = partners.map((partner, index) => {
     gap: 1rem;
     padding: 0 2rem 1.8rem;
     opacity: 0;
-    transform: translate3d(20px, 12px, 0);
-    filter: blur(4px);
+    transform: translate3d(18px, 0, 0);
   }
 
   .partner-detail-skip {

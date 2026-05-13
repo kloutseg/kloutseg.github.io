@@ -1,4 +1,6 @@
 ---
+import smoothScrollScriptUrl from '../scripts/smooth-scroll.ts?url';
+
 const {
   title,
   description = 'A Klout analisa planos de saúde com critério técnico para ajudar pessoas e empresas a decidir com mais segurança, eficiência e clareza.',
@@ -867,51 +869,10 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       revealPage();
     });
   </script>
-  <script>
+  <script is:inline define:vars={{ smoothScrollScriptUrl }}>
     const canUseSmoothScroll = () =>
       window.matchMedia('(min-width: 769px)').matches &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    let smoothScrollStarted = false;
-
-    async function startSmoothScroll() {
-      if (smoothScrollStarted || window.lenisInstance || !canUseSmoothScroll()) return;
-
-      smoothScrollStarted = true;
-
-      try {
-        const [{ default: Lenis }, gsapModule, scrollTriggerModule] = await Promise.all([
-          import('lenis'),
-          import('gsap'),
-          import('gsap/ScrollTrigger'),
-        ]);
-
-        const gsap = gsapModule.gsap;
-        const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
-
-        const lenis = new Lenis({
-          duration: 1.65,
-          easing: (t) => 1 - Math.pow(1 - t, 4),
-          orientation: 'vertical',
-          gestureOrientation: 'vertical',
-          smoothWheel: true,
-          wheelMultiplier: 0.86,
-          smoothTouch: false,
-          touchMultiplier: 2,
-          infinite: false,
-          normalizeWheel: true,
-        });
-
-        window.lenisInstance = lenis;
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-      } catch {
-        smoothScrollStarted = false;
-      }
-    }
 
     function scheduleSmoothScroll() {
       if (!canUseSmoothScroll()) return;
@@ -919,16 +880,15 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       const smoothScrollStartDelay = Number.isFinite(configuredDelay)
         ? Math.max(0, configuredDelay)
         : 2600;
-      const schedule = () => {
-        window.setTimeout(() => void startSmoothScroll(), smoothScrollStartDelay);
-      };
 
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(schedule, { timeout: 3200 });
-        return;
-      }
+      window.setTimeout(() => {
+        if (window.lenisInstance || !canUseSmoothScroll()) return;
 
-      window.addEventListener('load', schedule, { once: true });
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = smoothScrollScriptUrl;
+        document.body.appendChild(script);
+      }, smoothScrollStartDelay);
     }
 
     if (document.readyState === 'loading') {
