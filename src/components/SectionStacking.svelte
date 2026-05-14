@@ -22,7 +22,9 @@
   }
 
   function hasFollowingSection(section: HTMLElement): boolean {
-    const allSections = Array.from(document.querySelectorAll<HTMLElement>('section'));
+    const allSections = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-stack-section]:not(.slide-section)')
+    );
     const index = allSections.indexOf(section);
     return index >= 0 && index < allSections.length - 1;
   }

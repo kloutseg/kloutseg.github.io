@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../../layouts/Base.astro';
+import FloatingNavbar from '../navbar/FloatingNavbar.svelte';
+import Footer from '../Footer.svelte';
+import BackToTop from '../BackToTop.astro';
+
+const {
+  title,
+  description,
+  eyebrow,
+  heading,
+  updatedAt = '14 de maio de 2026',
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} smoothScrollDelay={0}>
+  <FloatingNavbar client:media="(min-width: 769px)" />
+
+  <main id="main-content" class="legal-page">
+    <section class="legal-hero">
+      <div class="legal-shell">
+        <p class="legal-eyebrow">{eyebrow}</p>
+        <h1>{heading}</h1>
+        <p class="legal-updated">Atualizada em {updatedAt}</p>
+      </div>
+    </section>
+
+    <section class="legal-content">
+      <div class="legal-shell legal-shell--content">
+        <slot />
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <BackToTop />
+</BaseLayout>
+
+<style>
+  .legal-page {
+    min-height: 100vh;
+    background: hsl(42, 24%, 98%);
+    color: hsl(214, 40%, 15%);
+  }
+
+  .legal-hero {
+    padding: clamp(7rem, 12vw, 10rem) 1.5rem 3rem;
+    background:
+      linear-gradient(180deg, hsla(214, 61%, 6%, 0.96) 0%, hsla(214, 61%, 9%, 0.94) 100%),
+      url('/images/office_hero-1440.webp') center / cover;
+    color: hsl(214, 61%, 96%);
+  }
+
+  .legal-shell {
+    width: min(100%, 68rem);
+    margin: 0 auto;
+  }
+
+  .legal-shell--content {
+    display: grid;
+    gap: 2.25rem;
+  }
+
+  .legal-eyebrow {
+    margin: 0 0 0.75rem;
+    color: hsl(42, 44%, 62%);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .legal-hero h1 {
+    max-width: 13ch;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 8vw, 6.4rem);
+    font-weight: 400;
+    line-height: 0.95;
+  }
+
+  .legal-updated {
+    margin: 1.25rem 0 0;
+    color: hsl(214, 22%, 78%);
+    font-size: 0.95rem;
+  }
+
+  .legal-content {
+    padding: clamp(3rem, 6vw, 5.5rem) 1.5rem;
+  }
+
+  :global(.legal-section) {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  :global(.legal-section h2) {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    font-weight: 400;
+    line-height: 1.12;
+    color: hsl(214, 45%, 16%);
+  }
+
+  :global(.legal-section h3) {
+    margin: 1rem 0 0;
+    font-size: 1rem;
+    line-height: 1.3;
+    color: hsl(214, 40%, 18%);
+  }
+
+  :global(.legal-section p),
+  :global(.legal-section li) {
+    margin: 0;
+    color: hsl(214, 18%, 29%);
+    font-size: 1rem;
+    line-height: 1.72;
+  }
+
+  :global(.legal-section ul) {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  :global(.legal-callout) {
+    padding: 1.1rem 1.2rem;
+    border-left: 3px solid hsl(42, 38%, 46%);
+    background: hsl(42, 28%, 94%);
+  }
+
+  :global(.legal-table-wrap) {
+    overflow-x: auto;
+  }
+
+  :global(.legal-table) {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 46rem;
+    font-size: 0.95rem;
+  }
+
+  :global(.legal-table th),
+  :global(.legal-table td) {
+    padding: 0.85rem;
+    border-bottom: 1px solid hsla(214, 22%, 34%, 0.14);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  :global(.legal-table th) {
+    color: hsl(214, 45%, 16%);
+    background: hsl(214, 22%, 95%);
+    font-weight: 700;
+  }
+
+  :global(.legal-link) {
+    color: hsl(214, 55%, 28%);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  @media (max-width: 768px) {
+    .legal-hero {
+      padding-top: 5.5rem;
+    }
+
+    .legal-hero h1 {
+      max-width: 11ch;
+    }
+  }
+</style>

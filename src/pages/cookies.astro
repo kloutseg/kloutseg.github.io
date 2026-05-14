@@ -1,0 +1,123 @@
+---
+import LegalDocument from '../components/legal/LegalDocument.astro';
+---
+
+<LegalDocument
+  title="Política de Cookies | Klout"
+  description="Política de Cookies da Klout para cookies necessários, analíticos, comportamentais e de marketing."
+  eyebrow="Cookies"
+  heading="Política de Cookies"
+>
+  <article class="legal-section">
+    <h2>1. O que são cookies</h2>
+    <p>
+      Cookies e tecnologias similares são pequenos identificadores usados para reconhecer o navegador, manter funcionalidades, medir audiência, entender interações e, quando autorizado, personalizar campanhas e experiências.
+    </p>
+  </article>
+
+  <article class="legal-section">
+    <h2>2. Como usamos cookies</h2>
+    <p>
+      Usamos cookies necessários para o funcionamento do site e, mediante consentimento, tecnologias analíticas, de experiência e de marketing. O usuário pode aceitar, rejeitar ou configurar cookies opcionais no banner e alterar a escolha a qualquer momento pelo link no rodapé.
+    </p>
+  </article>
+
+  <article class="legal-section">
+    <h2>3. Categorias</h2>
+    <div class="legal-table-wrap">
+      <table class="legal-table">
+        <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Finalidade</th>
+            <th>Exemplos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Necessários</td>
+            <td>Sempre ativos</td>
+            <td>Funcionamento do site, segurança, armazenamento da preferência de consentimento, transição de páginas e operação técnica do formulário.</td>
+            <td>Preferência de cookies da Klout, armazenamento de sessão, recursos técnicos do Jotform.</td>
+          </tr>
+          <tr>
+            <td>Analíticos</td>
+            <td>Dependem de consentimento</td>
+            <td>Medição de audiência, páginas visitadas, eventos, origem de tráfego e desempenho do conteúdo.</td>
+            <td>Google Analytics 4, Matomo, dados reportados em Looker Studio.</td>
+          </tr>
+          <tr>
+            <td>Experiência e comportamento</td>
+            <td>Dependem de consentimento</td>
+            <td>Mapas de calor, gravações de sessão, cliques, rolagem e melhoria de usabilidade.</td>
+            <td>Microsoft Clarity ou Hotjar, se adotados.</td>
+          </tr>
+          <tr>
+            <td>Marketing</td>
+            <td>Dependem de consentimento</td>
+            <td>Medição de campanhas, remarketing, personalização de anúncios e atribuição comercial.</td>
+            <td>Google Ads, Meta Pixel, LinkedIn Insight Tag ou tags futuras.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="legal-section">
+    <h2>4. Ferramentas previstas</h2>
+    <ul>
+      <li><strong>Google Tag Manager:</strong> gerencia tags e respeita as escolhas recebidas pelo banner.</li>
+      <li><strong>Google Analytics 4:</strong> mede audiência e eventos quando cookies analíticos forem aceitos.</li>
+      <li><strong>Google Search Console:</strong> ajuda a analisar presença orgânica e não depende de banner no navegador.</li>
+      <li><strong>Looker Studio:</strong> consolida relatórios e não coleta dados diretamente do visitante.</li>
+      <li><strong>Microsoft Clarity ou Hotjar:</strong> podem registrar interações comportamentais quando a categoria de experiência for aceita.</li>
+      <li><strong>Matomo:</strong> poderá substituir ou complementar GA4, preferencialmente com configuração de privacidade e consentimento.</li>
+    </ul>
+  </article>
+
+  <article class="legal-section">
+    <h2>5. Consentimento e bloqueio prévio</h2>
+    <p>
+      Cookies não necessários devem permanecer bloqueados até que o usuário faça uma escolha. Quando Google Tag Manager ou Google Analytics forem usados, o site deve iniciar o Consent Mode com armazenamento analítico e publicitário negado, atualizando o estado apenas após o consentimento.
+    </p>
+  </article>
+
+  <article class="legal-section">
+    <h2>6. Jotform</h2>
+    <p>
+      O formulário de análise poderá ser incorporado via Jotform. Essa ferramenta pode usar tecnologias próprias para segurança, prevenção de abuso, envio do formulário e funcionamento da integração. Quando houver cookies não essenciais da ferramenta, eles deverão respeitar as preferências aplicáveis.
+    </p>
+  </article>
+
+  <article class="legal-section">
+    <h2>7. Como alterar preferências</h2>
+    <p>
+      Você pode alterar sua escolha pelo botão “Preferências de cookies” no rodapé do site. Também é possível apagar cookies e dados locais diretamente nas configurações do navegador.
+    </p>
+    <p>
+      <button type="button" class="cookie-inline-button" data-open-cookie-preferences>Gerenciar preferências</button>
+    </p>
+  </article>
+
+  <article class="legal-section">
+    <h2>8. Alterações nesta Política</h2>
+    <p>
+      Esta Política será atualizada quando novas ferramentas, cookies ou finalidades forem adicionados. A tabela final de cookies deve ser revisada após a definição entre GA4, Matomo, Clarity e Hotjar.
+    </p>
+  </article>
+</LegalDocument>
+
+<style>
+  .cookie-inline-button {
+    min-height: 42px;
+    padding: 0.7rem 1rem;
+    border: 1px solid hsl(42, 36%, 48%);
+    border-radius: 8px;
+    background: hsl(42, 34%, 42%);
+    color: white;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+</style>

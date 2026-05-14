@@ -50,9 +50,15 @@
   <div class="footer-bottom">
     <div class="footer-bottom-left">
       <div class="footer-bottom-links">
-        <a href="/privacidade">Política de Privacidade</a>
+        <a href="/privacidade">Privacidade</a>
         <span class="link-separator">&bull;</span>
         <a href="/cookies">Cookies</a>
+        <span class="link-separator">&bull;</span>
+        <a href="/termos">Termos</a>
+        <span class="link-separator">&bull;</span>
+        <button type="button" class="footer-preferences-link" data-open-cookie-preferences>
+          Preferências
+        </button>
       </div>
     </div>
     <div class="footer-bottom-center">
@@ -126,8 +132,9 @@
 
   .footer-bottom {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
+    gap: 1.5rem;
     padding: 2rem 4rem;
     border-top: none;
     position: relative;
@@ -148,6 +155,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    min-width: 0;
   }
 
   .footer-bottom-center {
@@ -294,11 +302,14 @@
   .footer-bottom-links {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    min-width: 0;
   }
 
   /* Underline no hover (melhoria 4) + micro-interação (melhoria 6) */
-  .footer-bottom-links a {
+  .footer-bottom-links a,
+  .footer-preferences-link {
     font-size: 0.75rem;
     font-weight: 300;
     color: var(--footer-muted);
@@ -308,7 +319,16 @@
     position: relative;
   }
 
-  .footer-bottom-links a::after {
+  .footer-preferences-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .footer-bottom-links a::after,
+  .footer-preferences-link::after {
     content: '';
     position: absolute;
     bottom: -2px;
@@ -319,12 +339,14 @@
     transition: width 0.3s ease;
   }
 
-  .footer-bottom-links a:hover {
+  .footer-bottom-links a:hover,
+  .footer-preferences-link:hover {
     color: hsl(214, 60%, 75%);
     opacity: 0.9;
   }
 
-  .footer-bottom-links a:hover::after {
+  .footer-bottom-links a:hover::after,
+  .footer-preferences-link:hover::after {
     width: 100%;
   }
 
