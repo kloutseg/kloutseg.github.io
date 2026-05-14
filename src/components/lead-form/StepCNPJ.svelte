@@ -18,7 +18,7 @@
     onPrev = () => {}
   }: {
     formData: {
-      temCnpj: boolean | null;
+      temCnpj: boolean | 'later' | null;
       cnpjNumero: string;
       cnpjCidade: string;
       cnpjUf: string;
@@ -51,30 +51,26 @@
 
   function handleCnpjBlur() {
     if (formData.temCnpj === true) {
-      const error = formData.cnpjNumero.replace(/\D/g, '').length === 14 ? '' : 'CNPJ incompleto';
+      const error = formData.cnpjNumero.trim() && formData.cnpjNumero.replace(/\D/g, '').length !== 14 ? 'CNPJ incompleto' : '';
       onUpdate('validation_cnpjNumero', { touched: true, error });
     }
   }
 
   function handleCidadeBlur() {
     if (formData.temCnpj === true) {
-      const error = formData.cnpjCidade.trim() ? '' : 'Informe a cidade';
-      onUpdate('validation_cnpjCidade', { touched: true, error });
+      onUpdate('validation_cnpjCidade', { touched: true, error: '' });
     }
   }
 
   function handleUfBlur() {
     if (formData.temCnpj === true) {
-      const error = formData.cnpjUf ? '' : 'Selecione a UF';
-      onUpdate('validation_cnpjUf', { touched: true, error });
+      onUpdate('validation_cnpjUf', { touched: true, error: '' });
     }
   }
 
   function isStepValid(): boolean {
-    if (formData.temCnpj !== true) return true;
-    return formData.cnpjNumero.replace(/\D/g, '').length === 14
-      && formData.cnpjCidade.trim().length > 0
-      && formData.cnpjUf.length === 2;
+    if (formData.temCnpj !== true || !formData.cnpjNumero.trim()) return true;
+    return formData.cnpjNumero.replace(/\D/g, '').length === 14;
   }
 </script>
 
@@ -116,6 +112,19 @@
           <span class="toggle-desc">Quero seguir como contratação individual</span>
         </span>
       </button>
+      <button
+        type="button"
+        class="toggle-button"
+        class:active={formData.temCnpj === 'later'}
+        onclick={() => onUpdate('temCnpj', formData.temCnpj === 'later' ? null : 'later')}
+        aria-pressed={formData.temCnpj === 'later'}
+        aria-label="Prefiro informar depois"
+      >
+        <span class="toggle-copy">
+          <span class="toggle-title">Prefiro informar depois.</span>
+          <span class="toggle-desc">Seguimos agora e completamos esse dado no atendimento</span>
+        </span>
+      </button>
     </div>
   </div>
 
@@ -123,9 +132,9 @@
     <div class="form-group">
       <div class="prompt-row">
         <label for="lead-cnpj-numero" class="input-label">
-          Número do CNPJ <span class="required-asterisk">*</span>
+          Número do CNPJ
         </label>
-        <span class="prompt-hint">Apenas números válidos</span>
+        <span class="prompt-hint">Opcional</span>
       </div>
       <input
         type="text"
@@ -152,7 +161,7 @@
       <div class="cidade-uf-row">
         <div class="cidade-field">
           <label for="lead-cnpj-cidade" class="input-label">
-            Cidade <span class="required-asterisk">*</span>
+            Cidade
           </label>
           <input
             type="text"
@@ -175,7 +184,7 @@
 
         <div class="uf-field">
           <label for="lead-cnpj-uf" class="input-label">
-            UF <span class="required-asterisk">*</span>
+            UF
           </label>
           <select
             id="lead-cnpj-uf"
@@ -187,7 +196,7 @@
             aria-invalid={validation.cnpjUf.touched && !!validation.cnpjUf.error}
             aria-describedby={validation.cnpjUf.error ? 'lead-cnpj-uf-error' : undefined}
           >
-            <option value="" disabled selected>UF</option>
+            <option value="" selected>Prefiro informar depois.</option>
             {#each UFS as uf}
               <option value={uf}>{uf}</option>
             {/each}
@@ -259,7 +268,7 @@
 
   .toggle-group {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.75rem;
     margin-top: 0.25rem;
   }

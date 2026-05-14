@@ -8,7 +8,6 @@
     validateEmail,
     validatePlanoSaude,
     validateBeneficiarios,
-    validateIdades,
     validateInvestimento,
     formatTelefone
   } from '../../lib/form-validation';
@@ -53,7 +52,7 @@
     email: { touched: false, error: '' } as FieldValidation
   });
 
-  let cnpjData = $state({ temCnpj: null as boolean | null, cnpjNumero: '', cnpjCidade: '', cnpjUf: '' });
+  let cnpjData = $state({ temCnpj: null as boolean | 'later' | null, cnpjNumero: '', cnpjCidade: '', cnpjUf: '' });
   let cnpjValidation = $state({
     cnpjNumero: { touched: false, error: '' } as FieldValidation,
     cnpjCidade: { touched: false, error: '' } as FieldValidation,
@@ -266,9 +265,9 @@
           cnpjValidation.cnpjNumero.touched = true;
           cnpjValidation.cnpjCidade.touched = true;
           cnpjValidation.cnpjUf.touched = true;
-          cnpjValidation.cnpjNumero.error = cnpjData.cnpjNumero.replace(/\D/g, '').length === 14 ? '' : 'CNPJ incompleto';
-          cnpjValidation.cnpjCidade.error = cnpjData.cnpjCidade.trim() ? '' : 'Informe a cidade';
-          cnpjValidation.cnpjUf.error = cnpjData.cnpjUf ? '' : 'Selecione a UF';
+          cnpjValidation.cnpjNumero.error = cnpjData.cnpjNumero.trim() && cnpjData.cnpjNumero.replace(/\D/g, '').length !== 14 ? 'CNPJ incompleto' : '';
+          cnpjValidation.cnpjCidade.error = '';
+          cnpjValidation.cnpjUf.error = '';
           if (cnpjValidation.cnpjNumero.error || cnpjValidation.cnpjCidade.error || cnpjValidation.cnpjUf.error) return;
         }
       }
@@ -281,9 +280,8 @@
       }
       if (b2cStep === 4) {
         beneficiariosValidation.numBeneficiarios.touched = true;
-        beneficiariosValidation.idadesBeneficiarios.touched = true;
         beneficiariosValidation.numBeneficiarios.error = validateBeneficiarios(beneficiariosData.numBeneficiarios);
-        beneficiariosValidation.idadesBeneficiarios.error = validateIdades(beneficiariosData.idadesBeneficiarios);
+        beneficiariosValidation.idadesBeneficiarios.error = '';
         if (beneficiariosValidation.numBeneficiarios.error || beneficiariosValidation.idadesBeneficiarios.error) return;
         isSubmitting = true;
         await submitForm();

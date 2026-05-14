@@ -2,8 +2,7 @@
   import FormStep from './FormStep.svelte';
   import SubmitButton from './SubmitButton.svelte';
   import {
-    validateBeneficiarios,
-    validateIdades
+    validateBeneficiarios
   } from '../../lib/form-validation';
   import type { FieldValidation } from '../../lib/form-store';
 
@@ -29,6 +28,8 @@
     onPrev?: () => void;
   } = $props();
 
+  let informarIdadesDepois = $state(false);
+
   function setNumBeneficiarios(n: number) {
     if (n < 1 || n > 30) return;
     onUpdate('numBeneficiarios', n);
@@ -50,13 +51,17 @@
     onUpdate('idadesBeneficiarios', currentIdades);
   }
 
+  function toggleInformarIdadesDepois() {
+    informarIdadesDepois = !informarIdadesDepois;
+    onUpdate('validation_idadesBeneficiarios', { touched: true, error: '' });
+  }
+
   function handleNumBlur(e: FocusEvent) {
     onUpdate('validation_numBeneficiarios', { touched: true, error: validateBeneficiarios(formData.numBeneficiarios) });
   }
 
   function isStepValid(): boolean {
-    return !validateBeneficiarios(formData.numBeneficiarios)
-      && !validateIdades(formData.idadesBeneficiarios);
+    return !validateBeneficiarios(formData.numBeneficiarios);
   }
 </script>
 
@@ -121,34 +126,50 @@
     <div class="idades-section">
       <div class="prompt-row">
         <span class="input-label" id="idades-label">
-          Idade de cada beneficiário <span class="required-asterisk">*</span>
+          Idade de cada beneficiário
         </span>
-        <span class="prompt-hint">Use anos completos</span>
+        <span class="prompt-hint">Opcional</span>
       </div>
 
-      <div class="idades-grid" role="group" aria-labelledby="idades-label">
-        {#each formData.idadesBeneficiarios as _, i}
-          <div class="idade-cell">
-            <label for="idade-{i}" class="idade-cell-label">
-              {i + 1}{#if i === 0}º{:else}º{/if}
-            </label>
-            <input
-              type="number"
-              id="idade-{i}"
-              class="idade-input"
-              value={formData.idadesBeneficiarios[i] || ''}
-              oninput={(e) => updateIdade(i, (e.currentTarget as HTMLInputElement).value)}
-              min="0"
-              max="120"
-              inputmode="numeric"
-              placeholder="—"
-              aria-label="Idade do beneficiário {i + 1}"
-            />
-          </div>
-        {/each}
+      <div class="skip-option">
+        <button
+          type="button"
+          class="skip-button"
+          class:active={informarIdadesDepois}
+          onclick={toggleInformarIdadesDepois}
+          aria-pressed={informarIdadesDepois}
+        >
+          Prefiro informar depois.
+        </button>
       </div>
 
-      <p class="field-note">Essas idades ajudam a estimar faixa de preço e elegibilidade das opções disponíveis.</p>
+      {#if !informarIdadesDepois}
+        <div class="idades-grid" role="group" aria-labelledby="idades-label">
+          {#each formData.idadesBeneficiarios as _, i}
+            <div class="idade-cell">
+              <label for="idade-{i}" class="idade-cell-label">
+                {i + 1}{#if i === 0}º{:else}º{/if}
+              </label>
+              <input
+                type="number"
+                id="idade-{i}"
+                class="idade-input"
+                value={formData.idadesBeneficiarios[i] || ''}
+                oninput={(e) => updateIdade(i, (e.currentTarget as HTMLInputElement).value)}
+                min="0"
+                max="120"
+                inputmode="numeric"
+                placeholder="—"
+                aria-label="Idade do beneficiário {i + 1}"
+              />
+            </div>
+          {/each}
+        </div>
+
+        <p class="field-note">Essas idades ajudam a estimar faixa de preço e elegibilidade das opções disponíveis.</p>
+      {:else}
+        <p class="field-note">Seguimos agora e completamos as idades no atendimento.</p>
+      {/if}
 
       {#if validation.idadesBeneficiarios.touched && validation.idadesBeneficiarios.error}
         <p class="error-message" role="alert">
@@ -291,6 +312,40 @@
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
+  }
+
+  .skip-option {
+    display: flex;
+  }
+
+  .skip-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border-radius: 14px;
+    border: 1.5px solid hsl(214, 15%, 30%);
+    background: hsla(214, 20%, 14%, 0.42);
+    color: hsl(214, 15%, 65%);
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .skip-button:hover {
+    border-color: hsl(214, 15%, 45%);
+    color: hsl(214, 15%, 78%);
+    background: hsla(214, 20%, 16%, 0.55);
+  }
+
+  .skip-button.active {
+    border-color: hsl(45, 40%, 55%);
+    background: hsla(45, 30%, 50%, 0.1);
+    color: hsl(45, 30%, 75%);
+    box-shadow: 0 0 12px hsla(45, 40%, 55%, 0.15);
   }
 
   .idades-grid {
@@ -440,6 +495,11 @@
       grid-template-rows: repeat(auto-fill, auto);
       grid-auto-flow: row;
       gap: 0.75rem 0.875rem;
+    }
+
+    .skip-option,
+    .skip-button {
+      width: 100%;
     }
 
     .idade-input {
