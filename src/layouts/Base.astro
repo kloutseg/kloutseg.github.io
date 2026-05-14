@@ -1,5 +1,4 @@
 ---
-import smoothScrollScriptUrl from '../scripts/smooth-scroll.js?url';
 import CookieConsent from '../components/CookieConsent.astro';
 
 const {
@@ -929,7 +928,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       revealPage();
     });
   </script>
-  <script is:inline define:vars={{ smoothScrollScriptUrl }}>
+  <script>
     const canUseSmoothScroll = () =>
       window.matchMedia('(min-width: 769px)').matches &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -944,10 +943,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       window.setTimeout(() => {
         if (window.lenisInstance || !canUseSmoothScroll()) return;
 
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = smoothScrollScriptUrl;
-        document.body.appendChild(script);
+        void import('../scripts/smooth-scroll.js');
       }, smoothScrollStartDelay);
     }
 
