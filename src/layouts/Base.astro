@@ -564,6 +564,64 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       font-family: var(--font-sans);
     }
 
+    :global(:where(
+      .cta-button,
+      .cta-button-video,
+      .for-you-button,
+      .companies-button,
+      .companies-cta-button,
+      .about-klout-proof-cta,
+      .about-klout-cta-link,
+      .detail-cta,
+      .maps-button,
+      .gold-cta-button,
+      .curation-interlude__cta,
+      .qa-button,
+      .cookie-consent__button,
+      .cookie-inline-button,
+      .form-submit-button,
+      .back-step-button,
+      .home-button,
+      .type-button,
+      .toggle-button,
+      .cargo-option,
+      .back-button,
+      .mobile-atendimento-link,
+      .footer-preferences-link,
+      .consultant-button :is(a, button)
+    )) {
+      font-weight: 400 !important;
+    }
+
+    :global(:where(
+      .cta-button,
+      .cta-button-video,
+      .for-you-button,
+      .companies-button,
+      .companies-cta-button,
+      .about-klout-proof-cta,
+      .about-klout-cta-link,
+      .detail-cta,
+      .maps-button,
+      .gold-cta-button,
+      .curation-interlude__cta,
+      .qa-button,
+      .cookie-consent__button,
+      .cookie-inline-button,
+      .form-submit-button,
+      .back-step-button,
+      .home-button,
+      .type-button,
+      .toggle-button,
+      .cargo-option,
+      .back-button,
+      .mobile-atendimento-link,
+      .footer-preferences-link,
+      .consultant-button :is(a, button)
+    ) :where(.button-label, .button-text, .button-title, .qa-button-label)) {
+      font-weight: inherit !important;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .page-transition-overlay {
         transform: none;

@@ -1220,17 +1220,18 @@
     justify-content: center;
     gap: 0.5rem;
     margin-top: 3rem;
-    padding: 0.15rem 0;
-    border: none;
+    padding: 11px 18px;
+    border: 1px solid hsla(42, 34%, 58%, 0.34);
+    border-radius: 16px;
     font-family: 'Proxima Nova', sans-serif;
-    font-size: 0.94rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     text-decoration: none;
     color: hsl(42, 48%, 72%);
-    background: transparent;
-    box-shadow: none;
+    background: hsla(42, 28%, 20%, 0.18);
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.08);
     position: relative;
     transition:
       color 0.35s ease,
@@ -1238,17 +1239,7 @@
   }
 
   .curation-interlude__cta::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 1.5rem;
-    bottom: -0.2rem;
-    height: 1px;
-    background: linear-gradient(90deg, hsla(42, 48%, 72%, 0.92) 0%, hsla(42, 48%, 72%, 0.18) 100%);
-    transform-origin: left center;
-    transition:
-      transform 0.35s ease,
-      opacity 0.35s ease;
+    content: none;
   }
 
   .curation-interlude__cta:hover {
@@ -1257,7 +1248,7 @@
   }
 
   .curation-interlude__cta:hover::after {
-    transform: scaleX(1.08);
+    transform: none;
   }
 
   .curation-interlude__cta:active {

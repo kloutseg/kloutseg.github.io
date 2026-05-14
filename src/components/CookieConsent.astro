@@ -124,22 +124,21 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
 <div class="cookie-consent" data-cookie-consent hidden>
   <div class="cookie-consent__panel" role="region" aria-labelledby="cookie-consent-title" aria-describedby="cookie-consent-description">
     <div class="cookie-consent__copy">
-      <p class="cookie-consent__kicker">Privacidade</p>
-      <h2 id="cookie-consent-title">Controle de cookies</h2>
+      <h2 id="cookie-consent-title">Cookies e privacidade</h2>
       <p id="cookie-consent-description">
-        Usamos cookies necessários para o site funcionar. Com sua autorização, usamos tecnologias analíticas e de comportamento para entender a navegação e melhorar a experiência.
+        Usamos cookies essenciais e, com sua permissão, dados de navegação para melhorar sua experiência.
       </p>
     </div>
 
     <div class="cookie-consent__actions">
       <button type="button" class="cookie-consent__button cookie-consent__button--primary" data-consent-accept>
-        Aceitar todos
-      </button>
-      <button type="button" class="cookie-consent__button" data-consent-reject>
-        Rejeitar opcionais
+        Aceitar
       </button>
       <button type="button" class="cookie-consent__button cookie-consent__button--ghost" data-consent-configure>
         Configurar
+      </button>
+      <button type="button" class="cookie-consent__button cookie-consent__button--text" data-consent-reject>
+        Rejeitar
       </button>
     </div>
   </div>
@@ -164,6 +163,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
           <strong>Necessários</strong>
           <small>Essenciais para segurança, funcionamento do site, formulário e preferências de consentimento.</small>
         </span>
+        <span class="cookie-switch cookie-switch--locked" aria-hidden="true"></span>
         <input type="checkbox" checked disabled />
       </label>
 
@@ -172,6 +172,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
           <strong>Analíticos</strong>
           <small>Medem audiência e desempenho, como GA4, Matomo ou relatórios conectados.</small>
         </span>
+        <span class="cookie-switch" aria-hidden="true"></span>
         <input type="checkbox" data-consent-category="analytics" />
       </label>
 
@@ -180,6 +181,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
           <strong>Experiência e comportamento</strong>
           <small>Mapas de calor, gravações de sessão e melhoria de usabilidade, como Clarity ou Hotjar.</small>
         </span>
+        <span class="cookie-switch" aria-hidden="true"></span>
         <input type="checkbox" data-consent-category="experience" />
       </label>
 
@@ -188,6 +190,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
           <strong>Marketing</strong>
           <small>Mensuração de campanhas, remarketing e personalização de anúncios.</small>
         </span>
+        <span class="cookie-switch" aria-hidden="true"></span>
         <input type="checkbox" data-consent-category="marketing" />
       </label>
     </div>
@@ -334,33 +337,40 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
 
   .cookie-consent {
     position: fixed;
-    inset: auto 1rem 1rem 1rem;
+    right: auto;
+    bottom: 1.2rem;
+    left: 1.2rem;
     z-index: 30000;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     pointer-events: none;
   }
 
   .cookie-consent__panel {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1.25rem;
-    width: min(100%, 62rem);
-    padding: 1.2rem;
-    border: 1px solid hsla(214, 22%, 34%, 0.32);
+    grid-template-columns: minmax(0, 1fr) 7.8rem;
+    align-items: center;
+    gap: 0.82rem;
+    width: min(calc(100vw - 2.4rem), 28rem);
+    padding: 0.82rem;
+    border: 1px solid hsla(42, 20%, 74%, 0.3);
     border-radius: 8px;
-    background: hsla(214, 61%, 7%, 0.96);
-    color: hsl(214, 61%, 94%);
-    box-shadow: 0 24px 60px hsla(214, 45%, 8%, 0.28);
+    background:
+      linear-gradient(180deg, hsla(42, 24%, 99%, 0.92), hsla(42, 18%, 96%, 0.9));
+    color: hsl(214, 40%, 15%);
+    box-shadow:
+      0 10px 28px hsla(214, 28%, 12%, 0.12),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.72);
+    backdrop-filter: blur(14px) saturate(1.04);
     pointer-events: auto;
   }
 
   .cookie-consent__kicker {
-    margin: 0 0 0.25rem;
-    color: hsl(42, 44%, 62%);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    margin: 0 0 0.12rem;
+    color: hsla(42, 24%, 38%, 0.76);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -368,52 +378,79 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
   .cookie-modal h2 {
     margin: 0;
     font-family: var(--font-serif);
-    font-size: clamp(1.28rem, 2vw, 1.75rem);
+    font-size: 1.08rem;
     font-weight: 400;
-    line-height: 1.1;
+    line-height: 1.12;
+    color: hsl(214, 28%, 18%);
   }
 
   .cookie-consent p {
-    margin: 0.55rem 0 0;
-    max-width: 58rem;
-    color: hsl(214, 22%, 78%);
-    font-size: 0.94rem;
-    line-height: 1.5;
+    margin: 0.26rem 0 0;
+    max-width: 20rem;
+    color: hsl(214, 14%, 36%);
+    font-size: 0.78rem;
+    line-height: 1.42;
   }
 
   .cookie-consent__actions {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.28rem;
+    justify-content: center;
   }
 
   .cookie-consent__button {
-    min-height: 42px;
-    padding: 0.68rem 0.95rem;
-    border: 1px solid hsla(214, 18%, 58%, 0.36);
+    min-height: 31px;
+    width: 100%;
+    padding: 0.42rem 0.58rem;
+    border: 1px solid hsla(214, 18%, 40%, 0.16);
     border-radius: 8px;
-    background: hsla(214, 18%, 16%, 0.62);
-    color: hsl(214, 61%, 92%);
+    background: hsla(0, 0%, 100%, 0.52);
+    color: hsl(214, 34%, 20%);
     font: inherit;
-    font-size: 0.88rem;
-    font-weight: 700;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
     cursor: pointer;
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.55);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .cookie-consent__button:hover {
-    border-color: hsl(42, 44%, 62%);
+    border-color: hsla(42, 34%, 42%, 0.44);
+    background: hsla(42, 24%, 99%, 0.86);
+    transform: translateY(-1px);
   }
 
   .cookie-consent__button--primary {
-    border-color: hsl(42, 36%, 48%);
-    background: linear-gradient(135deg, hsl(42, 34%, 42%) 0%, hsl(40, 28%, 30%) 100%);
+    border-color: hsla(42, 34%, 38%, 0.86);
+    background: linear-gradient(135deg, hsl(42, 28%, 43%) 0%, hsl(40, 24%, 32%) 100%);
     color: white;
+    box-shadow:
+      0 7px 18px hsla(42, 28%, 18%, 0.16),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.14);
   }
 
   .cookie-consent__button--ghost {
     background: transparent;
+    border-color: hsla(214, 18%, 40%, 0.12);
+    color: hsl(214, 18%, 32%);
+  }
+
+  .cookie-consent__button--text {
+    min-height: 26px;
+    border-color: transparent;
+    background: transparent;
+    color: hsl(214, 12%, 42%);
+    box-shadow: none;
+  }
+
+  .cookie-consent__button--text:hover {
+    background: transparent;
+    color: hsl(214, 28%, 18%);
+    transform: none;
   }
 
   .cookie-modal {
@@ -422,26 +459,29 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     z-index: 30010;
     display: grid;
     place-items: center;
-    padding: 1rem;
+    padding: 1.25rem;
   }
 
   .cookie-modal__backdrop {
     position: absolute;
     inset: 0;
-    background: hsla(214, 61%, 4%, 0.68);
-    backdrop-filter: blur(6px);
+    background: hsla(214, 38%, 8%, 0.34);
+    backdrop-filter: blur(7px);
   }
 
   .cookie-modal__dialog {
     position: relative;
-    width: min(100%, 46rem);
-    max-height: min(90vh, 48rem);
+    width: min(100%, 39rem);
+    max-height: min(90vh, 44rem);
     overflow: auto;
-    padding: 1.35rem;
+    padding: 1.1rem;
     border-radius: 8px;
-    background: hsl(42, 24%, 98%);
+    border: 1px solid hsla(42, 20%, 78%, 0.46);
+    background: hsla(42, 24%, 98%, 0.98);
     color: hsl(214, 40%, 15%);
-    box-shadow: 0 30px 80px hsla(214, 45%, 8%, 0.35);
+    box-shadow:
+      0 20px 58px hsla(214, 45%, 8%, 0.2),
+      inset 0 1px 0 hsla(0, 0%, 100%, 0.78);
   }
 
   .cookie-modal__header,
@@ -460,7 +500,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     height: 2.4rem;
     border: 1px solid hsla(214, 22%, 34%, 0.18);
     border-radius: 8px;
-    background: white;
+    background: hsla(0, 0%, 100%, 0.72);
     color: hsl(214, 40%, 15%);
     font-size: 1.5rem;
     line-height: 1;
@@ -469,8 +509,8 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
 
   .cookie-modal__options {
     display: grid;
-    gap: 0.75rem;
-    margin: 1.35rem 0;
+    gap: 0.62rem;
+    margin: 1.1rem 0;
   }
 
   .cookie-option {
@@ -478,39 +518,76 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 1rem;
     align-items: center;
-    padding: 1rem;
-    border: 1px solid hsla(214, 22%, 34%, 0.16);
+    padding: 0.86rem;
+    border: 1px solid hsla(214, 22%, 34%, 0.11);
     border-radius: 8px;
-    background: white;
+    background: hsla(0, 0%, 100%, 0.58);
   }
 
   .cookie-option strong {
     display: block;
     margin-bottom: 0.28rem;
-    font-size: 0.98rem;
+    font-size: 0.92rem;
   }
 
   .cookie-option small {
     display: block;
     color: hsl(214, 18%, 34%);
-    font-size: 0.86rem;
+    font-size: 0.8rem;
     line-height: 1.45;
   }
 
   .cookie-option input {
-    width: 1.25rem;
-    height: 1.25rem;
-    accent-color: hsl(42, 34%, 42%);
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cookie-switch {
+    position: relative;
+    width: 2rem;
+    height: 1.08rem;
+    border-radius: 999px;
+    background: hsl(214, 14%, 82%);
+    box-shadow: inset 0 1px 2px hsla(214, 24%, 18%, 0.16);
+    transition: background 0.2s ease;
+  }
+
+  .cookie-switch::after {
+    content: '';
+    position: absolute;
+    top: 0.16rem;
+    left: 0.16rem;
+    width: 0.76rem;
+    height: 0.76rem;
+    border-radius: 999px;
+    background: white;
+    box-shadow: 0 1px 3px hsla(214, 24%, 18%, 0.18);
+    transition: transform 0.2s ease;
+  }
+
+  .cookie-option input:checked + .cookie-switch,
+  .cookie-option:has(input:checked) .cookie-switch {
+    background: hsl(42, 30%, 44%);
+  }
+
+  .cookie-option input:checked + .cookie-switch::after,
+  .cookie-option:has(input:checked) .cookie-switch::after {
+    transform: translateX(0.92rem);
+  }
+
+  .cookie-switch--locked {
+    opacity: 0.72;
   }
 
   .cookie-option--locked {
-    background: hsl(214, 22%, 96%);
+    background: hsla(214, 22%, 96%, 0.72);
   }
 
   .cookie-modal__link {
     color: hsl(214, 50%, 24%);
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }
@@ -524,13 +601,20 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
 
   @media (max-width: 768px) {
     .cookie-consent {
-      inset: auto 0 0 0;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      left: 0.75rem;
     }
 
     .cookie-consent__panel {
       grid-template-columns: 1fr;
-      border-radius: 8px 8px 0 0;
-      padding: 1rem;
+      gap: 0.72rem;
+      border-radius: 8px;
+      padding: 0.82rem;
+    }
+
+    .cookie-consent p {
+      font-size: 0.78rem;
     }
 
     .cookie-consent__actions,
@@ -542,6 +626,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
 
     .cookie-consent__button {
       width: 100%;
+      min-height: 30px;
     }
   }
 </style>
