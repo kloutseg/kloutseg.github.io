@@ -307,7 +307,6 @@
     min-width: 0;
   }
 
-  /* Underline no hover (melhoria 4) + micro-interação (melhoria 6) */
   .footer-bottom-links a,
   .footer-preferences-link {
     font-size: 0.75rem;
@@ -315,39 +314,20 @@
     color: var(--footer-muted);
     text-decoration: none;
     letter-spacing: 0.02em;
-    transition: color 0.3s ease, opacity 0.3s ease;
-    position: relative;
+    transition: color 0.3s ease;
   }
 
   .footer-preferences-link {
-    padding: 0;
     border: 0;
     background: transparent;
     font-family: inherit;
+    line-height: inherit;
     cursor: pointer;
-  }
-
-  .footer-bottom-links a::after,
-  .footer-preferences-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: hsl(214, 60%, 75%);
-    transition: width 0.3s ease;
   }
 
   .footer-bottom-links a:hover,
   .footer-preferences-link:hover {
-    color: hsl(214, 60%, 75%);
-    opacity: 0.9;
-  }
-
-  .footer-bottom-links a:hover::after,
-  .footer-preferences-link:hover::after {
-    width: 100%;
+    color: hsl(214, 26%, 72%);
   }
 
   .link-separator {
