@@ -817,23 +817,25 @@
   .curation-interlude__cta {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    justify-content: flex-start;
+    gap: 0.75rem;
     margin-top: 3rem;
-    padding: 11px 18px;
-    border: 1px solid hsla(42, 34%, 58%, 0.34);
-    border-radius: 16px;
-    font-family: 'Proxima Nova', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: none;
+    padding: 0 0 0.38rem;
+    border: 0;
+    border-bottom: 1px solid hsla(42, 48%, 72%, 0.48);
+    border-radius: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     text-decoration: none;
     color: hsl(42, 48%, 72%);
-    background: hsla(42, 28%, 20%, 0.18);
-    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.08);
+    background: transparent;
+    box-shadow: none;
     position: relative;
     transition:
+      border-color 0.35s ease,
       color 0.35s ease,
       transform 0.35s ease;
   }
@@ -844,7 +846,8 @@
 
   .curation-interlude__cta:hover {
     color: hsl(42, 56%, 80%);
-    transform: translateY(-1px);
+    border-color: hsla(42, 56%, 80%, 0.72);
+    transform: translateX(2px);
   }
 
   .curation-interlude__cta:hover::after {
@@ -852,7 +855,7 @@
   }
 
   .curation-interlude__cta:active {
-    transform: translateY(0);
+    transform: translateX(0);
   }
 
   .curation-interlude__cta:focus-visible {
@@ -1126,14 +1129,11 @@
 
     .curation-interlude__cta {
       margin-top: 2.1rem;
-      padding: 0.15rem 0;
+      padding: 0 0 0.34rem;
       font-size: 0.8rem;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.1em;
     }
 
-    .curation-interlude__cta::after {
-      right: 1.35rem;
-    }
   }
 
   @media (max-width: 480px) {

@@ -25,7 +25,7 @@
 			<a href="/a-klout" class="about-link">A Klout</a>
       <p class="contact-line">Klout Corretora de Seguros LTDA</p>
       <p class="contact-line">CNPJ: 60772160/0001-80</p>
-      <p class="contact-line">Telefone: (11) 97142-1515</p>
+      <p class="contact-line">Telefone: (11) 92550-6721</p>
       <p class="contact-line">Endereço: R. Sena Madureira, 151 - Vila Mariana<br />São Paulo - SP, 04021-050</p>
       <a href="mailto:contato@klout.com.br" class="contact-line contact-link">contato&#64;klout.com.br</a>
       <div class="social-icons">
