@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/Base.astro';
 import FloatingNavbar from '../navbar/FloatingNavbar.svelte';
 import Footer from '../Footer.svelte';
 import BackToTop from '../BackToTop.astro';
+import { buildKloutPageSchema } from '../../lib/schema';
 
 const {
   title,
@@ -10,10 +11,29 @@ const {
   eyebrow,
   heading,
   updatedAt = '14 de maio de 2026',
+  updatedAtIso = '2026-05-14',
 } = Astro.props;
+
+const structuredData = buildKloutPageSchema({
+  path: Astro.url.pathname,
+  title,
+  description,
+  pageType: 'WebPage',
+  mainEntity: {
+    '@type': 'CreativeWork',
+    '@id': `${new URL(Astro.url.pathname, Astro.site).toString()}#policy`,
+    name: heading,
+    description,
+    publisher: {
+      '@id': 'https://www.kloutseguros.com.br/#organization',
+    },
+    inLanguage: 'pt-BR',
+    dateModified: updatedAtIso,
+  },
+});
 ---
 
-<BaseLayout title={title} description={description} smoothScrollDelay={0}>
+<BaseLayout title={title} description={description} smoothScrollDelay={0} structuredData={structuredData}>
   <FloatingNavbar client:media="(min-width: 769px)" />
 
   <main id="main-content" class="legal-page">

@@ -5,6 +5,7 @@ import SectionStacking from '../components/SectionStacking.svelte';
 import Footer from '../components/Footer.svelte';
 import BackToTop from '../components/BackToTop.astro';
 import IntroQaRotator from '../components/for-you/IntroQaRotator.svelte';
+import { kloutCompaniesSchema } from '../lib/schema';
 
 const qaCases = [
   {
@@ -43,6 +44,7 @@ const qaCases = [
   criticalImage="/images/companies_hero_consulting.webp"
   criticalImageSrcset="/images/companies_hero_consulting-640.webp 640w, /images/companies_hero_consulting-960.webp 960w, /images/companies_hero_consulting-1440.webp 1440w, /images/companies_hero_consulting.webp 1536w"
   criticalImageSizes="100vw"
+  structuredData={kloutCompaniesSchema}
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
   <SectionStacking client:media="(min-width: 769px)" />

@@ -1,5 +1,6 @@
 ---
 import CookieConsent from '../components/CookieConsent.astro';
+import { buildKloutPageSchema } from '../lib/schema';
 
 const {
   title,
@@ -11,8 +12,17 @@ const {
   preloadFonts = true,
   loadCustomFonts = true,
   smoothScrollDelay = 2600,
+  structuredData: providedStructuredData,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const pageTitle = title || 'Guia de Estilo';
+const structuredData =
+  providedStructuredData ??
+  buildKloutPageSchema({
+    path: Astro.url.pathname,
+    title: pageTitle,
+    description,
+  });
 ---
 
 <!DOCTYPE html>
@@ -24,7 +34,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title || 'Guia de Estilo'}</title>
+  <title>{pageTitle}</title>
   <meta name="description" content={description}>
   <link rel="canonical" href={canonicalUrl}>
   <script is:inline>
@@ -140,6 +150,10 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
       <link rel="preload" as="font" href="/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff" type="font/woff" crossorigin>
       <link rel="preload" as="font" href="/fonts/ibm_plex_serif/ibm-plex-serif.woff2" type="font/woff2" crossorigin>
     </>
+  )}
+
+  {structuredData && (
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData, null, 2)} />
   )}
 
   <!-- Estilos básicos -->

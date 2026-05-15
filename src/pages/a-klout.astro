@@ -4,6 +4,7 @@ import FloatingNavbar from '../components/navbar/FloatingNavbar.svelte';
 import SectionStacking from '../components/SectionStacking.svelte';
 import Footer from '../components/Footer.svelte';
 import BackToTop from '../components/BackToTop.astro';
+import { kloutAboutSchema } from '../lib/schema';
 
 const addressItems = [
   {
@@ -28,6 +29,7 @@ const addressItems = [
   criticalImage="/images/about_klout_hero_consultive.webp"
   criticalImageSrcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w"
   criticalImageSizes="100vw"
+  structuredData={kloutAboutSchema}
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
   <SectionStacking client:load />

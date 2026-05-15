@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/Base.astro';
 import LeadForm from '../components/lead-form/LeadForm.svelte';
+import { kloutAnalysisSchema } from '../lib/schema';
 ---
 
 <BaseLayout
   title="Solicitar Análise | Klout"
   description="Solicite uma análise da Klout para comparar planos de saúde, revisar custos e entender alternativas adequadas ao seu perfil."
+  structuredData={kloutAnalysisSchema}
 >
   <main id="main-content">
     <LeadForm client:load />

@@ -6,6 +6,7 @@ import Footer from '../components/Footer.svelte';
 import BackToTop from '../components/BackToTop.astro';
 import IntroQaRotator from '../components/for-you/IntroQaRotator.svelte';
 import CriteriaRevealSection from '../components/for-you/CriteriaRevealSection.svelte';
+import { kloutForYouSchema } from '../lib/schema';
 
 const qaCases = [
   {
@@ -45,6 +46,7 @@ const qaCases = [
   criticalImageSrcset="/images/einstein_01-768.avif 768w, /images/einstein_01-1280.avif 1280w, /images/einstein_01-1920.avif 1920w"
   criticalImageSizes="100vw"
   criticalImageType="image/avif"
+  structuredData={kloutForYouSchema}
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
   <SectionStacking client:media="(min-width: 769px)" />
