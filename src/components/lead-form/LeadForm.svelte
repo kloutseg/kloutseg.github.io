@@ -25,6 +25,8 @@
 
   gsap.registerPlugin(ScrollTrigger);
   const reducedMotion = prefersReducedMotion();
+  const JOTFORM_B2C_FORM_ID = import.meta.env.PUBLIC_JOTFORM_B2C_FORM_ID || '261337164438055';
+  const JOTFORM_B2B_FORM_ID = import.meta.env.PUBLIC_JOTFORM_B2B_FORM_ID || '261337328053050';
 
   // ═══════════════════════════════════════════
   // FORM TYPE & STATE
@@ -407,7 +409,7 @@
     }
 
     console.log('Submitting lead data:', allData);
-    await new Promise<void>((resolve) => { setTimeout(() => resolve(), 1500); });
+    await submitToJotform(allData);
 
     if (typeof sessionStorage !== 'undefined') {
       sessionStorage.setItem('lead_form_data', JSON.stringify(allData));
@@ -423,6 +425,109 @@
         window.location.href = '/obrigado';
       }
     }
+  }
+
+  function splitFullName(value: string) {
+    const parts = value.trim().split(/\s+/).filter(Boolean);
+    if (parts.length <= 1) return { first: parts[0] || '', last: '' };
+    return { first: parts.slice(0, -1).join(' '), last: parts[parts.length - 1] };
+  }
+
+  function booleanChoice(value: boolean | 'later' | null | undefined) {
+    if (value === true) return 'Sim';
+    if (value === false) return 'Não';
+    if (value === 'later') return 'Prefiro informar depois.';
+    return '';
+  }
+
+  function formatIdades(idades: number[]) {
+    const filledAges = idades.filter((idade) => Number.isInteger(idade) && idade >= 0);
+    if (!filledAges.length) return 'Prefiro informar depois.';
+    return filledAges.map((idade, index) => `${index + 1}: ${idade} anos`).join('\n');
+  }
+
+  function addJotformField(form: HTMLFormElement, name: string, value: string | number | boolean | null | undefined) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value == null ? '' : String(value);
+    form.appendChild(input);
+  }
+
+  function submitToJotform(data: any) {
+    if (typeof document === 'undefined') return Promise.resolve();
+
+    return new Promise<void>((resolve) => {
+      const formId = data.type === 'b2b' ? JOTFORM_B2B_FORM_ID : JOTFORM_B2C_FORM_ID;
+      const iframeName = `jotform-submit-${formId}-${Date.now()}`;
+      const iframe = document.createElement('iframe');
+      const form = document.createElement('form');
+
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        form.remove();
+        setTimeout(() => iframe.remove(), 500);
+        resolve();
+      };
+
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      iframe.onload = finish;
+
+      form.method = 'post';
+      form.action = `https://submit.jotform.com/submit/${formId}`;
+      form.target = iframeName;
+      form.acceptCharset = 'utf-8';
+      form.style.display = 'none';
+
+      addJotformField(form, 'formID', formId);
+      addJotformField(form, 'simple_spc', `${formId}-${formId}`);
+      addJotformField(form, 'website', '');
+      addJotformField(form, 'submitSource', 'site-klout');
+
+      if (data.type === 'b2c') {
+        const name = splitFullName(data.nome);
+        addJotformField(form, 'q3_nome[first]', name.first);
+        addJotformField(form, 'q3_nome[last]', name.last);
+        addJotformField(form, 'q4_email', data.email);
+        addJotformField(form, 'q5_telefone[full]', data.telefone);
+        addJotformField(form, 'q8_temCnpj', booleanChoice(data.temCnpj));
+        addJotformField(form, 'q9_cnpj', data.cnpjNumero);
+        addJotformField(form, 'q10_cidadeCnpj', data.cnpjCidade);
+        addJotformField(form, 'q12_ufCnpj', data.cnpjUf);
+        addJotformField(form, 'q13_planoDe', data.planoSaude);
+        addJotformField(form, 'q14_investimentoMensal', data.investimentoMensal);
+        addJotformField(form, 'q15_numeroDe', data.numBeneficiarios);
+        addJotformField(form, 'q16_idadesDos', formatIdades(data.idadesBeneficiarios));
+        addJotformField(form, 'q17_tipo', 'b2c');
+        addJotformField(form, 'q18_origem', '/analise');
+      } else {
+        const name = splitFullName(data.nomeInterlocutor);
+        addJotformField(form, 'q3_nome[first]', name.first);
+        addJotformField(form, 'q3_nome[last]', name.last);
+        addJotformField(form, 'q4_telefone[full]', data.telefone);
+        addJotformField(form, 'q5_email', data.email);
+        addJotformField(form, 'q6_cargo', data.cargo);
+        addJotformField(form, 'q7_cnpj', data.cnpj);
+        addJotformField(form, 'q8_razaoSocial', data.razaoSocial);
+        addJotformField(form, 'q9_site', data.site);
+        addJotformField(form, 'q10_cidade', data.cidade);
+        addJotformField(form, 'q11_uf', data.uf);
+        addJotformField(form, 'q12_temPlano', booleanChoice(data.temPlanoSaude));
+        addJotformField(form, 'q13_operadora', data.operadoraPlano);
+        addJotformField(form, 'q14_numeroDe', data.numVidas);
+        addJotformField(form, 'q15_tipo', 'b2b');
+        addJotformField(form, 'q16_origem', '/analise');
+      }
+
+      document.body.appendChild(iframe);
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(finish, 2500);
+    });
   }
 
   function goBack() {

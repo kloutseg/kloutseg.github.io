@@ -258,6 +258,11 @@ const initPartnersPage = () => {
         isStageOpen = openStage;
 
         if (openStage && detailPhoto instanceof HTMLImageElement && !detailPhoto.currentSrc) {
+          detailPhoto.closest('picture')?.querySelectorAll('source[data-srcset]').forEach((source) => {
+            const deferredSrcset = source.dataset.srcset;
+            if (deferredSrcset) source.srcset = deferredSrcset;
+          });
+
           const deferredSrc = detailPhoto.dataset.src;
           if (deferredSrc) detailPhoto.src = deferredSrc;
         }

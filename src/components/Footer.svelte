@@ -22,10 +22,11 @@
 		</div>
 
 		<div class="footer-contact">
-			<a href="/sobre" class="about-link">A Klout</a>
-      <p class="contact-line">CNPJ: 00.000.000/0001-00</p>
-      <p class="contact-line">Rua Exemplo, 1000 — Sala 1<br />São Paulo — SP, 01000-000</p>
-      <p class="contact-line">+55 (11) 0000-0000</p>
+			<a href="/a-klout" class="about-link">A Klout</a>
+      <p class="contact-line">Klout Corretora de Seguros LTDA</p>
+      <p class="contact-line">CNPJ: 60772160/0001-80</p>
+      <p class="contact-line">Telefone: (11) 97142-1515</p>
+      <p class="contact-line">Endereço: R. Sena Madureira, 151 - Vila Mariana<br />São Paulo - SP, 04021-050</p>
       <a href="mailto:contato@klout.com.br" class="contact-line contact-link">contato&#64;klout.com.br</a>
       <div class="social-icons">
         <a href="https://instagram.com/klout" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

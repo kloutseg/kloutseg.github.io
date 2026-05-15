@@ -20,6 +20,7 @@ const partners = [
     panelBorder: 'hsla(210, 24%, 92%, 0.07)',
     reading: 'coordenação e jornada',
     focus: 'modelo assistencial',
+    detailPhotoWebp: '/images/partners/partner_01.webp',
   },
   {
     slug: 'porto',
@@ -37,6 +38,8 @@ const partners = [
     panelBorder: 'hsla(210, 18%, 88%, 0.05)',
     reading: 'rede ampla e estabilidade',
     focus: 'cobertura corporativa previsível',
+    detailPhotoAvif: '/images/partners/partner_02.avif',
+    detailPhotoWebp: '/images/partners/partner_02.webp',
   },
   {
     slug: 'bradesco',
@@ -54,6 +57,8 @@ const partners = [
     panelBorder: 'hsla(210, 24%, 92%, 0.06)',
     reading: 'rede e previsibilidade',
     focus: 'capilaridade assistencial',
+    detailPhotoAvif: '/images/partners/partner_03.avif',
+    detailPhotoWebp: '/images/partners/partner_03.webp',
   },
   {
     slug: 'sulamerica',
@@ -71,6 +76,9 @@ const partners = [
     panelBorder: 'hsla(208, 24%, 92%, 0.07)',
     reading: 'flexibilidade e desenho',
     focus: 'elegibilidade corporativa',
+    detailPhotoAvif: '/images/partners/partner_04.avif',
+    detailPhotoWebp: '/images/partners/partner_04.webp',
+    detailPhotoPosition: 'center bottom',
   },
   {
     slug: 'omint',
@@ -88,6 +96,8 @@ const partners = [
     panelBorder: 'hsla(42, 18%, 82%, 0.06)',
     reading: 'padrão premium e rede',
     focus: 'cobertura executiva',
+    detailPhotoAvif: '/images/partners/partner_05.avif',
+    detailPhotoWebp: '/images/partners/partner_05.webp',
   },
   {
     slug: 'amil',
@@ -105,6 +115,8 @@ const partners = [
     panelBorder: 'hsla(210, 26%, 92%, 0.06)',
     reading: 'capilaridade e acesso',
     focus: 'escala de cobertura',
+    detailPhotoAvif: '/images/partners/partner_06.avif',
+    detailPhotoWebp: '/images/partners/partner_06.webp',
   },
 ];
 
@@ -265,14 +277,23 @@ const partnerSections = partners.map((partner, index) => {
           >
             <div class="partner-detail-shell">
               <div class="partner-detail-body">
-                <figure class="partner-detail-photo-frame">
-                  <img
-                    data-src="/images/partners/partner_01.webp"
-                    alt={`Imagem editorial da seção da operadora ${partner.name}`}
-                    class="partner-detail-photo"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <figure
+                  class="partner-detail-photo-frame"
+                  style={`--partner-detail-photo-position: ${partner.detailPhotoPosition ?? 'center'}`}
+                >
+                  <picture class="partner-detail-picture">
+                    {partner.detailPhotoAvif && (
+                      <source data-srcset={partner.detailPhotoAvif} type="image/avif" />
+                    )}
+                    <source data-srcset={partner.detailPhotoWebp} type="image/webp" />
+                    <img
+                      data-src={partner.detailPhotoWebp}
+                      alt={`Imagem editorial da seção da operadora ${partner.name}`}
+                      class="partner-detail-photo"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 </figure>
 
                 <div class="partner-detail-copy">
@@ -1166,13 +1187,14 @@ const partnerSections = partners.map((partner, index) => {
     display: grid;
     grid-template-columns: 50vw minmax(0, 1fr);
     align-items: center;
+    height: 100vh;
     min-height: 100vh;
   }
 
   .partner-detail-photo-frame {
     margin: 0;
-    height: 100%;
-    min-height: 100%;
+    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
     background: hsl(210, 18%, 86%);
     position: relative;
@@ -1180,12 +1202,18 @@ const partnerSections = partners.map((partner, index) => {
     transform: translate3d(20px, 0, 0);
   }
 
+  .partner-detail-picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .partner-detail-photo {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: var(--partner-detail-photo-position, center);
     filter: brightness(0.62) saturate(0.88) contrast(0.94);
     transform: translate3d(0, 0, 0) scale(1.02) rotate(0.001deg);
   }
@@ -1679,10 +1707,12 @@ const partnerSections = partners.map((partner, index) => {
 
     .partner-detail-body {
       grid-template-columns: 1fr;
+      height: auto;
       min-height: auto;
     }
 
     .partner-detail-photo-frame {
+      height: 52vh;
       min-height: 52vh;
     }
 
