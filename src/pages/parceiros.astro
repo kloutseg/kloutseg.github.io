@@ -360,7 +360,7 @@ const partnerSections = partners.map((partner, index) => {
 </BaseLayout>
 
 <script is:inline>
-  window.addEventListener('load', () => {
+  const loadPartnersScript = () => {
     window.requestAnimationFrame(() => {
       const script = document.createElement('script');
       script.type = 'module';
@@ -369,7 +369,13 @@ const partnerSections = partners.map((partner, index) => {
       script.src = '/scripts/partners-page.js';
       document.head.appendChild(script);
     });
-  }, { once: true });
+  };
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', loadPartnersScript, { once: true });
+  } else {
+    loadPartnersScript();
+  }
 </script>
 
 <style>

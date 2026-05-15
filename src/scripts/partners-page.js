@@ -166,7 +166,7 @@ const initPartnersPage = () => {
         });
       });
       window.addEventListener('keydown', handleKeyInteraction, true);
-      fallbackTimer = window.setTimeout(() => void startStacking(), 12000);
+      fallbackTimer = window.setTimeout(() => void startStacking(), 2200);
     };
 
     scheduleStacking();
@@ -584,7 +584,7 @@ const initPartnersPage = () => {
 
 if (typeof window !== 'undefined') {
   if (document.readyState === 'loading') {
-    window.addEventListener('load', initPartnersPage, { once: true });
+    window.addEventListener('DOMContentLoaded', initPartnersPage, { once: true });
   } else {
     initPartnersPage();
   }
