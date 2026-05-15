@@ -215,19 +215,22 @@ const partnerSections = partners.map((partner, index) => {
       >
         <div class="partner-stage-veil" aria-hidden="true"></div>
         <div class="partner-stage-track">
-          <article class="partner-stage-panel partner-stage-panel-hero">
+          <article
+            class={`partner-stage-panel partner-stage-panel-hero ${partner.slug === 'alice' ? 'partner-stage-panel-hero-alice' : ''}`}
+            style={`--partner-panel-glow-a: ${partner.panelGlowA}; --partner-panel-glow-b: ${partner.panelGlowB}; --partner-panel-from: ${partner.panelFrom}; --partner-panel-mid: ${partner.panelMid}; --partner-panel-to: ${partner.panelTo};`}
+          >
             <div class="partner-hero-shell">
               <div
-                class="partner-hero-panel"
-                style={`--partner-logo-image: url('${partner.logoMaskPath}'); --partner-logo-width: ${partner.logoWidth}; --partner-logo-max-height: ${partner.logoMaxHeight}; --partner-logo-width-mobile: ${partner.logoWidthMobile}; --partner-logo-max-height-mobile: ${partner.logoMaxHeightMobile}; --partner-panel-glow-a: ${partner.panelGlowA}; --partner-panel-glow-b: ${partner.panelGlowB}; --partner-panel-from: ${partner.panelFrom}; --partner-panel-mid: ${partner.panelMid}; --partner-panel-to: ${partner.panelTo}; --partner-panel-border: ${partner.panelBorder};`}
+                class={`partner-hero-logo-shell partner-hero-logo-shell-standalone ${partner.slug === 'alice' ? 'partner-hero-logo-shell-alice' : ''}`}
+                style={`--partner-logo-width: ${partner.logoWidth}; --partner-logo-max-height: ${partner.logoMaxHeight}; --partner-logo-width-mobile: ${partner.logoWidthMobile}; --partner-logo-max-height-mobile: ${partner.logoMaxHeightMobile};`}
               >
-                <div class="partner-hero-logo-shell">
-                  <div
-                    class="partner-hero-logo"
-                    role="img"
-                    aria-label={`Logo da operadora ${partner.name}`}
-                  ></div>
-                </div>
+                <img
+                  src={partner.logoMaskPath}
+                  alt={`Logo da operadora ${partner.name}`}
+                  class="partner-hero-logo"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
 
               <aside class="partner-hero-meta" aria-label={`Informações da operadora ${partner.name}`}>
@@ -894,6 +897,7 @@ const partnerSections = partners.map((partner, index) => {
 
   .partner-stage-track {
     width: 200vw;
+    height: 100vh;
     min-height: 100vh;
     display: flex;
     align-items: stretch;
@@ -903,6 +907,7 @@ const partnerSections = partners.map((partner, index) => {
   .partner-stage-panel {
     position: relative;
     width: 100vw;
+    height: 100vh;
     min-height: 100vh;
     flex: 0 0 100vw;
     overflow: hidden;
@@ -913,14 +918,25 @@ const partnerSections = partners.map((partner, index) => {
     display: flex;
     align-items: center;
     background:
-      radial-gradient(circle at top left, hsla(42, 42%, 72%, 0.18) 0%, transparent 38%),
-      radial-gradient(circle at top right, hsla(206, 56%, 68%, 0.2) 0%, transparent 34%),
+      linear-gradient(90deg, transparent 0 50%, hsl(42, 30%, 97.6%) 50% 100%),
+      radial-gradient(circle at 82% 18%, hsla(206, 42%, 70%, 0.16) 0%, transparent 20%),
+      radial-gradient(circle at 18% 18%, var(--partner-panel-glow-a, hsla(207, 58%, 38%, 0.28)) 0%, transparent 32%),
+      radial-gradient(circle at 42% 70%, var(--partner-panel-glow-b, hsla(222, 64%, 10%, 0.42)) 0%, transparent 38%),
       linear-gradient(
         180deg,
-        hsl(42, 30%, 97.6%) 0%,
-        hsl(206, 34%, 95.8%) 54%,
-        hsl(210, 28%, 93.2%) 100%
+        var(--partner-panel-from, hsl(214, 58%, 9%)) 0%,
+        var(--partner-panel-mid, hsl(216, 54%, 7%)) 52%,
+        var(--partner-panel-to, hsl(216, 64%, 6%)) 100%
       );
+  }
+
+  .partner-stage-panel-hero-alice {
+    background:
+      linear-gradient(90deg, transparent 0 50%, hsl(42, 30%, 97.6%) 50% 100%),
+      radial-gradient(circle at 82% 18%, hsla(206, 42%, 70%, 0.16) 0%, transparent 20%),
+      radial-gradient(circle at 18% 18%, hsla(207, 58%, 38%, 0.32) 0%, transparent 32%),
+      radial-gradient(circle at 78% 70%, hsla(222, 64%, 10%, 0.44) 0%, transparent 38%),
+      linear-gradient(180deg, hsl(214, 58%, 9%) 0%, hsl(216, 64%, 6%) 100%);
   }
 
   .partner-hero-shell {
@@ -942,86 +958,8 @@ const partnerSections = partners.map((partner, index) => {
     position: absolute;
     right: clamp(2rem, 4vw, 4rem);
     bottom: clamp(1.35rem, 2.8vh, 2.2rem);
-    z-index: 2;
+    z-index: 10;
     --control-hover-x: 4px;
-  }
-
-  .partner-hero-panel {
-    width: min(46vw, 42rem);
-    height: clamp(30rem, calc(100vh - 9rem), 44rem);
-    min-height: 30rem;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    isolation: isolate;
-    transform: translateY(2rem);
-    border-radius: 16px;
-    background:
-      radial-gradient(circle at 20% 14%, var(--partner-panel-glow-a, hsla(208, 46%, 54%, 0.18)) 0%, transparent 18%),
-      radial-gradient(circle at 82% 86%, var(--partner-panel-glow-b, hsla(220, 62%, 10%, 0.3)) 0%, transparent 30%),
-      linear-gradient(
-        160deg,
-        var(--partner-panel-from, hsl(211, 34%, 32%)) 0%,
-        var(--partner-panel-mid, hsl(214, 38%, 24%)) 42%,
-        var(--partner-panel-to, hsl(218, 44%, 17%)) 100%
-      );
-    border: 1px solid var(--partner-panel-border, hsla(210, 24%, 92%, 0.07));
-    box-shadow:
-      0 42px 82px hsla(214, 34%, 8%, 0.26),
-      0 12px 28px hsla(214, 30%, 10%, 0.16),
-      inset 0 1px 0 hsla(0, 0%, 100%, 0.07),
-      inset 0 -14px 20px hsla(220, 52%, 8%, 0.16);
-  }
-
-  .partner-hero-panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(125deg, hsla(0, 0%, 100%, 0.06) 0%, transparent 18%, transparent 56%, hsla(220, 48%, 10%, 0.11) 100%),
-      radial-gradient(circle at 22% 12%, hsla(0, 0%, 100%, 0.08) 0%, transparent 20%),
-      radial-gradient(circle at 72% 58%, hsla(220, 48%, 10%, 0.12) 0%, transparent 24%),
-      radial-gradient(circle at 88% 92%, hsla(220, 58%, 6%, 0.16) 0%, transparent 20%),
-      repeating-linear-gradient(
-        105deg,
-        hsla(0, 0%, 100%, 0.012) 0 1px,
-        transparent 1px 7px
-      ),
-      linear-gradient(180deg, hsla(210, 60%, 76%, 0.04) 0%, transparent 34%, hsla(222, 52%, 10%, 0.12) 100%);
-    opacity: 0.78;
-    mix-blend-mode: soft-light;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .partner-hero-panel::after {
-    content: '';
-    position: absolute;
-    inset: 0.7rem;
-    border-radius: 10px;
-    border: 1px solid hsla(211, 34%, 18%, 0.38);
-    box-shadow:
-      inset 0 1px 0 hsla(210, 38%, 48%, 0.07),
-      inset 0 18px 24px hsla(0, 0%, 100%, 0.01),
-      inset 0 -22px 30px hsla(220, 48%, 8%, 0.24),
-      inset 14px 0 20px hsla(217, 44%, 10%, 0.08),
-      inset -18px 0 24px hsla(217, 44%, 10%, 0.16),
-      inset 0 0 0 1px hsla(214, 28%, 12%, 0.24),
-      0 1px 2px hsla(214, 42%, 8%, 0.05);
-    background:
-      linear-gradient(180deg, hsla(0, 0%, 100%, 0.016) 0%, transparent 14%, transparent 74%, hsla(220, 48%, 8%, 0.12) 100%),
-      linear-gradient(90deg, hsla(0, 0%, 100%, 0.01) 0%, transparent 10%, transparent 78%, hsla(220, 48%, 8%, 0.11) 100%),
-      radial-gradient(circle at 18% 12%, hsla(0, 0%, 100%, 0.03) 0%, transparent 16%),
-      radial-gradient(circle at 86% 84%, hsla(220, 42%, 7%, 0.12) 0%, transparent 22%),
-      linear-gradient(
-        180deg,
-        hsla(212, 32%, 26%, 0.045) 0%,
-        hsla(214, 30%, 21%, 0.024) 38%,
-        hsla(217, 36%, 12%, 0.058) 100%
-      );
-    pointer-events: none;
-    z-index: 0;
   }
 
   .partner-hero-logo-shell {
@@ -1034,39 +972,31 @@ const partnerSections = partners.map((partner, index) => {
     justify-content: center;
   }
 
+  .partner-hero-logo-shell-standalone {
+    width: min(46vw, 42rem);
+    min-height: clamp(30rem, calc(100vh - 9rem), 44rem);
+    padding: clamp(2rem, 4vw, 4rem);
+    transform: translate(-7rem, 2rem);
+  }
+
+  .partner-hero-logo-shell-alice {
+    transform: translate(-7rem, 2rem);
+  }
+
   .partner-hero-logo {
     display: block;
-    width: var(--partner-logo-width, min(100%, 24rem));
-    max-height: var(--partner-logo-max-height, min(100%, 36rem));
-    aspect-ratio: 180 / 92;
-    background:
-      radial-gradient(circle at 22% 16%, hsla(0, 0%, 100%, 0.24) 0%, transparent 24%),
-      radial-gradient(circle at 80% 76%, hsla(42, 24%, 70%, 0.09) 0%, transparent 22%),
-      repeating-linear-gradient(
-        105deg,
-        hsla(0, 0%, 100%, 0.042) 0 1px,
-        hsla(40, 18%, 84%, 0.024) 1px 3px,
-        transparent 3px 8px
-      ),
-      repeating-linear-gradient(
-        18deg,
-        hsla(42, 20%, 66%, 0.02) 0 1px,
-        transparent 1px 7px
-      ),
-      linear-gradient(180deg, hsl(42, 24%, 89%) 0%, hsl(40, 20%, 83%) 100%);
-    background-blend-mode: screen, soft-light, overlay, normal, normal;
-    -webkit-mask-image: var(--partner-logo-image);
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    -webkit-mask-size: contain;
-    mask-image: var(--partner-logo-image);
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: contain;
+    width: min(var(--partner-logo-width, min(100%, 24rem)), 32rem);
+    max-height: min(var(--partner-logo-max-height, min(100%, 36rem)), 23rem);
+    height: auto;
+    object-fit: contain;
     filter:
-      drop-shadow(0 14px 24px hsla(214, 42%, 8%, 0.2))
-      drop-shadow(0 1px 0 hsla(0, 0%, 100%, 0.08))
-      drop-shadow(0 0 1px hsla(42, 18%, 74%, 0.2));
+      drop-shadow(0 22px 34px hsla(214, 58%, 3%, 0.36))
+      drop-shadow(0 0 1px hsla(0, 0%, 100%, 0.28));
+  }
+
+  .partner-hero-logo-shell-alice .partner-hero-logo {
+    width: var(--partner-logo-width, min(100%, 16rem));
+    max-height: var(--partner-logo-max-height, min(100%, 36rem));
   }
 
   .partner-hero-meta {
@@ -1457,11 +1387,14 @@ const partnerSections = partners.map((partner, index) => {
       column-gap: 2rem;
     }
 
-    .partner-hero-panel {
+    .partner-hero-logo-shell-standalone {
       width: min(70vw, 34rem);
-      height: clamp(27rem, calc(100vh - 8rem), 34rem);
-      min-height: 27rem;
-      transform: translateY(2rem);
+      min-height: clamp(27rem, calc(100vh - 8rem), 34rem);
+      transform: translate(-6rem, 2rem);
+    }
+
+    .partner-hero-logo-shell-alice {
+      transform: translate(-4rem, 2rem);
     }
 
     .partner-hero-meta-block {
@@ -1658,10 +1591,33 @@ const partnerSections = partners.map((partner, index) => {
       row-gap: 1.15rem;
     }
 
-    .partner-hero-panel {
+    .partner-stage-panel-hero {
+      background:
+        linear-gradient(180deg, transparent 0 50%, hsl(42, 30%, 97.6%) 50% 100%),
+        radial-gradient(circle at 82% 68%, hsla(206, 42%, 70%, 0.16) 0%, transparent 20%),
+        radial-gradient(circle at 18% 18%, var(--partner-panel-glow-a, hsla(207, 58%, 38%, 0.28)) 0%, transparent 32%),
+        radial-gradient(circle at 42% 36%, var(--partner-panel-glow-b, hsla(222, 64%, 10%, 0.42)) 0%, transparent 38%),
+        linear-gradient(
+          180deg,
+          var(--partner-panel-from, hsl(214, 58%, 9%)) 0%,
+          var(--partner-panel-mid, hsl(216, 54%, 7%)) 52%,
+          var(--partner-panel-to, hsl(216, 64%, 6%)) 100%
+        );
+    }
+
+    .partner-stage-panel-hero-alice {
+      background:
+        linear-gradient(180deg, transparent 0 50%, hsl(42, 30%, 97.6%) 50% 100%),
+        radial-gradient(circle at 82% 68%, hsla(206, 42%, 70%, 0.16) 0%, transparent 20%),
+        radial-gradient(circle at 18% 18%, hsla(207, 58%, 38%, 0.32) 0%, transparent 32%),
+        radial-gradient(circle at 42% 36%, hsla(222, 64%, 10%, 0.44) 0%, transparent 38%),
+        linear-gradient(180deg, hsl(214, 58%, 9%) 0%, hsl(216, 64%, 6%) 100%);
+    }
+
+    .partner-hero-logo-shell-standalone {
       width: min(100%, 26rem);
-      height: clamp(21rem, 50vh, 27rem);
-      min-height: 21rem;
+      min-height: clamp(21rem, 50vh, 27rem);
+      padding: 1.5rem;
       transform: translateY(1.5rem);
     }
 
@@ -1672,6 +1628,11 @@ const partnerSections = partners.map((partner, index) => {
     }
 
     .partner-hero-logo {
+      width: min(var(--partner-logo-width-mobile, min(100%, 18rem)), 20rem);
+      max-height: min(var(--partner-logo-max-height-mobile, min(68%, 13rem)), 12rem);
+    }
+
+    .partner-hero-logo-shell-alice .partner-hero-logo {
       width: var(--partner-logo-width-mobile, min(100%, 18rem));
       max-height: var(--partner-logo-max-height-mobile, min(68%, 13rem));
     }
