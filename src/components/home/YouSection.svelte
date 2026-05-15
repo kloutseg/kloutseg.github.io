@@ -30,19 +30,6 @@
   let swipeHintEl: HTMLElement | null = $state(null);
   let mobileCurrentSlide = $state(0);
 
-  // Video states
-  let isExpanded = $state(false);
-  let isHovering = $state(false);
-  let videoEl: HTMLVideoElement | null = $state(null);
-  let videoContainer: HTMLElement | null = $state(null);
-  let expandIcon: HTMLElement | null = $state(null);
-  let closeButton: HTMLElement | null = $state(null);
-  let ctaButton: HTMLElement | null = $state(null);
-  let ctaVisible = $state(false);
-
-  // Show CTA after video plays for a few seconds
-  let ctaTimeout: ReturnType<typeof setTimeout> | null = null;
-
   const slideData = [
     {
       number: '01',
@@ -212,17 +199,10 @@
       ScrollTrigger.refresh();
     })();
 
-    // Add keyboard listener for ESC key
-    window.addEventListener('keydown', handleKeydown);
-
     return () => {
       cancelled = true;
       tween?.kill();
       scrollTriggerInstance?.kill();
-      window.removeEventListener('keydown', handleKeydown);
-      if (ctaTimeout) {
-        clearTimeout(ctaTimeout);
-      }
     };
   });
 
@@ -285,192 +265,6 @@
     };
   }
 
-  // Video handlers
-  async function handleExpand() {
-    if (!videoContainer || !slideContentEl) return;
-
-    const slide = videoContainer.closest('.slide');
-    if (slide) {
-      slide.classList.add('expanded');
-    }
-
-    isExpanded = true;
-    isHovering = true;
-
-    // Pause scroll when expanded
-    if (scrollTriggerInstance) {
-      scrollTriggerInstance.disable();
-    }
-
-    // Play video
-    if (videoEl) {
-      videoEl.play();
-    }
-
-    const isMobileDevice = isMobile();
-
-    if (isMobileDevice) {
-      // Mobile uses CSS state only, keeping GSAP/ScrollTrigger out of the critical path.
-    } else {
-      await loadScrollAnimationTools();
-      if (!gsap) return;
-
-      // Desktop: hide text with slide animation
-      gsap.to(slideContentEl, {
-        opacity: 0,
-        x: -100,
-        duration: 0.5,
-        ease: 'power2.in',
-        pointerEvents: 'none'
-      });
-
-      // Expand video to fullscreen
-      gsap.to(videoContainer, {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: 1000,
-        duration: 0.6,
-        ease: 'power3.inOut'
-      });
-
-      gsap.to(videoContainer.querySelector('.video-capsule'), {
-        borderRadius: 0,
-        duration: 0.6,
-        ease: 'power3.inOut'
-      });
-    }
-
-    if (!isMobileDevice && gsap) {
-      // Hide expand icon
-      gsap.to(expandIcon, {
-        opacity: 0,
-        scale: 0,
-        duration: 0.3
-      });
-
-      // Show close button
-      gsap.fromTo(closeButton,
-        { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.4, delay: 0.5 }
-      );
-    }
-
-    // Show CTA after 1 second of video
-    ctaTimeout = setTimeout(() => {
-      ctaVisible = true;
-      if (ctaButton && isMobileDevice && gsap) {
-        gsap.fromTo(ctaButton,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
-        );
-      }
-    }, 1000);
-  }
-
-  async function handleClose() {
-    if (!videoContainer || !slideContentEl) return;
-
-    const slide = videoContainer.closest('.slide');
-    if (slide) {
-      slide.classList.remove('expanded');
-    }
-
-    isExpanded = false;
-    isHovering = false;
-    ctaVisible = false;
-
-    // Clear CTA timeout
-    if (ctaTimeout) {
-      clearTimeout(ctaTimeout);
-      ctaTimeout = null;
-    }
-
-    // Pause video
-    if (videoEl) {
-      videoEl.pause();
-      videoEl.currentTime = 0;
-      videoEl.load();
-    }
-
-    // Re-enable scroll
-    if (scrollTriggerInstance) {
-      scrollTriggerInstance.enable();
-    }
-
-    const isMobileDevice = isMobile();
-
-    if (isMobileDevice) {
-      // Mobile restores through CSS state only.
-    } else {
-      await loadScrollAnimationTools();
-      if (!gsap) return;
-
-      // Desktop: restore text with slide animation
-      gsap.to(slideContentEl, {
-        opacity: 1,
-        x: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-        pointerEvents: 'auto',
-        delay: 0.2
-      });
-
-      // Collapse video back to editorial media frame
-      gsap.to(videoContainer, {
-        position: 'relative',
-        top: 0,
-        left: 0,
-        width: 'min(42vw, 520px)',
-        height: 'auto',
-        zIndex: 1,
-        duration: 0.5,
-        ease: 'power3.inOut',
-        delay: 0.1
-      });
-
-      gsap.to(videoContainer.querySelector('.video-capsule'), {
-        borderRadius: '30px',
-        duration: 0.5,
-        ease: 'power3.inOut',
-        delay: 0.1
-      });
-    }
-
-    if (!isMobileDevice && gsap) {
-      // Hide close button
-      gsap.to(closeButton, {
-        opacity: 0,
-        x: -20,
-        duration: 0.3
-      });
-
-      // Hide CTA button
-      gsap.to(ctaButton, {
-        opacity: 0,
-        y: 20,
-        duration: 0.3
-      });
-
-      // Show expand icon again
-      gsap.to(expandIcon, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.4,
-        delay: 0.3
-      });
-    }
-  }
-
-  // Keyboard handler for ESC key
-  function handleKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape' && isExpanded) {
-      handleClose();
-    }
-  }
-
 </script>
 
 <section id="voce" bind:this={section} class="slide-section">
@@ -530,7 +324,7 @@
         use:slideAction={index}
       >
         {#if index === 0}
-          <!-- First slide with video -->
+          <!-- First slide with poster image -->
           <div class="slide-content slide-1-content" bind:this={slideContentEl}>
             <div class="slide-number">{slide.number}</div>
             <div class="slide-title">{slide.title}</div>
@@ -538,68 +332,21 @@
             <p class="slide-text">{slide.content}</p>
           </div>
 
-          <!-- Video Container -->
-          <div
-            class="video-wrapper"
-            class:video-expanded={isExpanded}
-            bind:this={videoContainer}
-            onmouseenter={() => { if (!isExpanded) isHovering = true; }}
-            onmouseleave={() => { if (!isExpanded) isHovering = false; }}
-            onclick={handleExpand}
-            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleExpand(); } }}
-            role="button"
-            tabindex="0"
-            aria-label="Expandir vídeo"
-          >
+          <!-- Poster Image Container -->
+          <div class="video-wrapper" aria-label="Atendimento personalizado Klout">
             <div class="video-capsule">
               <img
                 src="/images/video_poster-800.webp"
                 srcset="/images/video_poster-480.webp 480w, /images/video_poster-800.webp 800w"
                 sizes="(max-width: 768px) 72vw, 520px"
                 alt="Atendimento personalizado Klout"
-                class="mobile-video-poster"
+                class="video-poster"
                 loading="lazy"
                 width="800"
                 height="501"
               />
-              <video
-                bind:this={videoEl}
-                src="/videos/test_01.mp4"
-                muted
-                playsinline
-                preload="none"
-                poster="/images/video_poster-800.webp"
-                width="1920"
-                height="1080"
-              ></video>
               <div class="video-overlay"></div>
             </div>
-
-            <!-- Expand Icon -->
-            <div class="hover-indicator" bind:this={expandIcon} class:is-hidden={isExpanded}>
-              <div class="pulse-ring"></div>
-              <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-              </svg>
-            </div>
-
-            <!-- Close Button (visible when expanded) - Left arrow in bottom-left -->
-            <button class="close-button" bind:this={closeButton} class:visible={isExpanded} onclick={(e) => { e.stopPropagation(); handleClose(); }} aria-label="Fechar vídeo">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-              </svg>
-              <span class="close-text">Voltar</span>
-            </button>
-
-            <!-- CTA Button (appears during video) -->
-            <a href="/contato" class="cta-button-video" bind:this={ctaButton} onclick={(e) => { e.stopPropagation(); }} class:visible={ctaVisible}>
-              Solicitar análise
-              <svg class="button-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </a>
           </div>
         {:else if index === 1}
           <!-- Second slide with image capsule (reversed: image left, text right) -->
@@ -841,10 +588,6 @@
     gap: clamp(3rem, 5vw, 5.5rem);
   }
 
-  .slide:global(.expanded) {
-    grid-template-columns: 1fr;
-  }
-
   .slide-content {
     max-width: 620px;
     position: relative;
@@ -911,7 +654,7 @@
   }
 
   /* ═══════════════════════════════════════════
-     VIDEO WRAPPER - editorial media frame
+     POSTER IMAGE WRAPPER - editorial media frame
      ═══════════════════════════════════════════ */
   .video-wrapper {
     position: relative;
@@ -933,20 +676,15 @@
     box-shadow:
       0 26px 46px hsla(214, 30%, 14%, 0.12),
       0 8px 18px hsla(214, 26%, 14%, 0.06);
-    transition: border-radius 0.5s ease;
   }
 
-  .video-capsule video {
+  .video-poster {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 12% center;
     display: block;
     filter: saturate(0.92) sepia(0.035) hue-rotate(3deg) brightness(0.97) contrast(1.03);
-  }
-
-  .mobile-video-poster {
-    display: none;
   }
 
   .video-overlay {
@@ -958,144 +696,6 @@
       hsla(214, 48%, 16%, 0.18) 100%
     );
     pointer-events: none;
-  }
-
-  .hover-indicator {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 58px;
-    height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 1;
-    z-index: 10;
-    pointer-events: none;
-    border-radius: 18px;
-    background: hsla(0, 0%, 100%, 0.18);
-    border: 1px solid hsla(0, 0%, 100%, 0.22);
-    backdrop-filter: blur(12px);
-    box-shadow:
-      inset 0 1px 0 hsla(0, 0%, 100%, 0.22),
-      0 12px 28px rgba(0, 0, 0, 0.18);
-  }
-
-  .hover-indicator.is-hidden {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0);
-  }
-
-  .pulse-ring {
-    display: none;
-  }
-
-  .expand-icon {
-    width: 24px;
-    height: 24px;
-    color: white;
-    opacity: 0.92;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.22));
-  }
-
-  /* Close Button - canto inferior esquerdo */
-  .close-button {
-    position: fixed;
-    bottom: 48px;
-    left: 48px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.95rem 1.55rem 0.95rem 1.15rem;
-    background: hsla(0, 0%, 100%, 0.95);
-    border: none;
-    cursor: pointer;
-    border-radius: 18px;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition:
-      background 0.3s ease,
-      transform 0.3s ease;
-    z-index: 1001;
-  }
-
-  .close-button.visible {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-  }
-
-  .close-button:hover {
-    background: hsl(0, 0%, 100%);
-    transform: translateX(-15px);
-  }
-
-  .close-button svg {
-    width: 20px;
-    height: 20px;
-    color: hsl(214, 61%, 18%);
-    flex-shrink: 0;
-  }
-
-  .close-text {
-    font-family: 'Proxima Nova', sans-serif;
-    font-size: 0.925rem;
-    font-weight: 600;
-    color: hsl(214, 61%, 18%);
-    letter-spacing: 0.02em;
-  }
-
-  /* CTA Button - durante o vídeo */
-  .cta-button-video {
-    position: absolute;
-    right: clamp(1rem, 3vw, 3rem);
-    bottom: clamp(1rem, 3vw, 3rem);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
-    padding: 0.95rem 1.7rem;
-    background: linear-gradient(
-      135deg,
-      hsl(45, 50%, 38%) 0%,
-      hsl(45, 45%, 30%) 100%
-    );
-    color: hsl(0, 0%, 100%);
-    border-radius: 18px;
-    font-family: 'Proxima Nova', sans-serif;
-    font-size: 0.975rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-decoration: none;
-    box-shadow:
-      0 4px 20px hsla(45, 50%, 38%, 0.35),
-      0 1px 4px hsla(45, 45%, 30%, 0.25);
-    opacity: 0;
-    transform: translateY(20px);
-    pointer-events: none;
-    transition:
-      opacity 0.5s ease,
-      transform 0.5s ease,
-      box-shadow 0.3s ease;
-    z-index: 20;
-  }
-
-  .cta-button-video.visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .cta-button-video:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      0 8px 32px hsla(45, 50%, 38%, 0.45),
-      0 2px 8px hsla(45, 45%, 30%, 0.3);
-  }
-
-  .cta-button-video .button-arrow {
-    width: 18px;
-    height: 18px;
   }
 
   /* ═══════════════════════════════════════════
@@ -1376,21 +976,7 @@
       display: none;
     }
 
-    /* Quando expandido: vídeo cresce, texto some */
-    .slide:global(.expanded) {
-      justify-content: center;
-      align-items: center;
-    }
-
-    .slide:global(.expanded) .video-wrapper {
-      flex-shrink: 0;
-    }
-
-    .slide:global(.expanded) .slide-content {
-      display: none;
-    }
-
-    /* First slide: video on top, text below */
+    /* First slide: poster image on top, text below */
     .slide:first-child {
       flex-direction: column;
     }
@@ -1479,21 +1065,12 @@
         0 1px 4px hsla(214, 61%, 18%, 0.08);
     }
 
-    .video-capsule video {
-      display: none;
-    }
-
-    .mobile-video-poster {
-      display: block;
+    .video-poster {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: 12% center;
       filter: saturate(0.92) sepia(0.035) hue-rotate(3deg) brightness(0.97) contrast(1.03);
-    }
-
-    .hover-indicator {
-      display: none;
     }
 
     /* Image capsules for slides 2 and 3 */
@@ -1523,51 +1100,6 @@
 
     .image-capsule-wrapper.image-left.slide-3-image {
       transform: rotate(0deg);
-    }
-
-    .close-button {
-      position: fixed;
-      bottom: 24px;
-      left: 16px;
-      padding: 0.65rem 1.25rem 0.65rem 0.85rem;
-      gap: 0.5rem;
-      border-radius: 16px;
-      background: hsla(0, 0%, 100%, 0.98);
-      box-shadow: 0 4px 16px hsla(214, 61%, 18%, 0.15);
-    }
-
-    .close-button svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .close-text {
-      font-size: 0.8rem;
-    }
-
-    .cta-button-video {
-      right: 16px;
-      bottom: 16px;
-      min-height: 48px;
-      padding: 0.85rem 1.4rem;
-      border: 1px solid hsla(42, 30%, 52%, 0.26);
-      border-radius: 16px;
-      box-sizing: border-box;
-      font-size: 0.82rem;
-      background: linear-gradient(
-        135deg,
-        hsl(42, 34%, 42%) 0%,
-        hsl(42, 30%, 36%) 52%,
-        hsl(40, 28%, 30%) 100%
-      );
-      box-shadow:
-        0 10px 22px hsla(42, 28%, 14%, 0.2),
-        inset 0 1px 0 hsla(0, 0%, 100%, 0.12);
-    }
-
-    .cta-button-video .button-arrow {
-      width: 14px;
-      height: 14px;
     }
 
     .curation-interlude {
