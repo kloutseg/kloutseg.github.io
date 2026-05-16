@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://kloutseg.github.io',
+  site: 'https://kloutseguros.com.br',
   integrations: [svelte()],
   devToolbar: {
     enabled: false
