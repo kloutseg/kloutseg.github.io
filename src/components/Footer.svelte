@@ -24,11 +24,9 @@
 		<div class="footer-contact">
 			<a href="/a-klout" class="about-link">A Klout</a>
       <p class="contact-line">Klout Corretora de Seguros LTDA</p>
-      <p class="contact-line">CNPJ principal: 60.772.160/0001-80</p>
-      <p class="contact-line">CNPJ subsidiário: 55.454.842/0001-05</p>
+      <p class="contact-line">CNPJ: 60.772.160/0001-80</p>
       <p class="contact-line">Telefone: (11) 92550-6721</p>
-      <p class="contact-line">Endereço principal: R. Sena Madureira, 151 - Vila Mariana<br />São Paulo - SP, 04021-050</p>
-      <p class="contact-line">Unidade Centro: R. da Quitanda, 96 - Centro Histórico<br />São Paulo - SP, 01012-010</p>
+      <p class="contact-line">R. Sena Madureira, 151 - Vila Mariana<br />São Paulo - SP, 04021-050</p>
       <a href="mailto:contato@kloutseguros.com.br" class="contact-line contact-link">contato&#64;kloutseguros.com.br</a>
       <div class="social-icons">
         <a href="https://www.instagram.com/klout_seguros/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
