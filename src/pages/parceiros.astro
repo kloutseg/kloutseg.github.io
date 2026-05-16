@@ -11,8 +11,10 @@ const partners = [
     logoMaskPath: '/images/logos_svgs/logo_alice_cropped.svg',
     logoWidth: 'min(100%, 16rem)',
     logoMaxHeight: 'min(100%, 36rem)',
-    logoWidthMobile: 'min(100%, 18rem)',
+    logoWidthMobile: 'min(100%, 10rem)',
     logoMaxHeightMobile: 'min(68%, 13rem)',
+    logoMobileX: '0rem',
+    logoMobileY: '-2rem',
     panelGlowA: 'hsla(206, 52%, 58%, 0.22)',
     panelGlowB: 'hsla(220, 58%, 11%, 0.28)',
     panelFrom: 'hsl(210, 34%, 34%)',
@@ -34,6 +36,8 @@ const partners = [
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 24rem)',
     logoMaxHeightMobile: 'min(70%, 14rem)',
+    logoMobileX: '0rem',
+    logoMobileY: '-2rem',
     panelGlowA: 'hsla(208, 34%, 48%, 0.12)',
     panelGlowB: 'hsla(220, 62%, 8%, 0.34)',
     panelFrom: 'hsl(212, 28%, 24%)',
@@ -56,6 +60,8 @@ const partners = [
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 21rem)',
     logoMaxHeightMobile: 'min(68%, 13rem)',
+    logoMobileX: '0rem',
+    logoMobileY: '-2rem',
     panelGlowA: 'hsla(206, 38%, 56%, 0.16)',
     panelGlowB: 'hsla(220, 52%, 10%, 0.28)',
     panelFrom: 'hsl(210, 30%, 30%)',
@@ -78,6 +84,8 @@ const partners = [
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 22rem)',
     logoMaxHeightMobile: 'min(68%, 13rem)',
+    logoMobileX: '0rem',
+    logoMobileY: '-2rem',
     panelGlowA: 'hsla(198, 44%, 58%, 0.18)',
     panelGlowB: 'hsla(221, 56%, 11%, 0.26)',
     panelFrom: 'hsl(206, 34%, 34%)',
@@ -101,6 +109,8 @@ const partners = [
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 19rem)',
     logoMaxHeightMobile: 'min(68%, 13rem)',
+    logoMobileX: '0rem',
+    logoMobileY: '-2rem',
     panelGlowA: 'hsla(212, 32%, 50%, 0.12)',
     panelGlowB: 'hsla(222, 62%, 7%, 0.34)',
     panelFrom: 'hsl(216, 28%, 22%)',
@@ -123,6 +133,8 @@ const partners = [
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 20rem)',
     logoMaxHeightMobile: 'min(68%, 13rem)',
+    logoMobileX: '0rem',
+    logoMobileY: '-2rem',
     panelGlowA: 'hsla(204, 40%, 60%, 0.16)',
     panelGlowB: 'hsla(220, 58%, 9%, 0.3)',
     panelFrom: 'hsl(208, 33%, 31%)',
@@ -242,7 +254,7 @@ const partnerSections = partners.map((partner, index) => {
             <div class="partner-hero-shell">
               <div
                 class={`partner-hero-logo-shell partner-hero-logo-shell-standalone ${partner.slug === 'alice' ? 'partner-hero-logo-shell-alice' : ''}`}
-                style={`--partner-logo-width: ${partner.logoWidth}; --partner-logo-max-height: ${partner.logoMaxHeight}; --partner-logo-width-mobile: ${partner.logoWidthMobile}; --partner-logo-max-height-mobile: ${partner.logoMaxHeightMobile};`}
+                style={`--partner-logo-width: ${partner.logoWidth}; --partner-logo-max-height: ${partner.logoMaxHeight}; --partner-logo-width-mobile: ${partner.logoWidthMobile}; --partner-logo-max-height-mobile: ${partner.logoMaxHeightMobile}; --partner-logo-mobile-x: ${partner.logoMobileX}; --partner-logo-mobile-y: ${partner.logoMobileY};`}
               >
                 <img
                   src={partner.logoMaskPath}
@@ -1655,6 +1667,8 @@ const partnerSections = partners.map((partner, index) => {
       min-height: 100vh;
       padding: 4.35rem 1.25rem 4.85rem;
       grid-template-columns: 1fr;
+      grid-template-rows: clamp(21rem, 50vh, 27rem) minmax(12.5rem, auto);
+      align-content: start;
       row-gap: 1.15rem;
     }
 
@@ -1683,9 +1697,13 @@ const partnerSections = partners.map((partner, index) => {
 
     .partner-hero-logo-shell-standalone {
       width: min(100%, 26rem);
-      min-height: clamp(21rem, 50vh, 27rem);
+      height: clamp(21rem, 50vh, 27rem);
+      min-height: 0;
       padding: 1.5rem;
-      transform: translateY(1.5rem);
+      transform: translate(
+        var(--partner-logo-mobile-x, 0rem),
+        var(--partner-logo-mobile-y, 1.5rem)
+      );
     }
 
     .partner-hero-logo-shell {
@@ -1695,8 +1713,8 @@ const partnerSections = partners.map((partner, index) => {
     }
 
     .partner-hero-logo {
-      width: min(var(--partner-logo-width-mobile, min(100%, 18rem)), 20rem);
-      max-height: min(var(--partner-logo-max-height-mobile, min(68%, 13rem)), 12rem);
+      width: var(--partner-logo-width-mobile, min(100%, 18rem));
+      max-height: var(--partner-logo-max-height-mobile, min(68%, 13rem));
     }
 
     .partner-hero-logo-shell-alice .partner-hero-logo {
@@ -1711,6 +1729,7 @@ const partnerSections = partners.map((partner, index) => {
 
     .partner-hero-meta-block {
       width: min(100%, 22rem);
+      min-height: 12.5rem;
       gap: 1rem;
     }
 

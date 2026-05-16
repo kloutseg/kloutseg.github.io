@@ -60,6 +60,26 @@ const typeValue = async (valueEl, cursorEl, text) => {
   cursorEl.classList.remove('is-active');
 };
 
+const reserveMetaTextLayout = (rows) => {
+  rows.forEach((row) => {
+    const valueEl = row.querySelector('.partner-hero-meta-value');
+    const text = valueEl?.getAttribute('data-value') ?? '';
+
+    if (!valueEl || !text) return;
+
+    const previousText = valueEl.textContent;
+    valueEl.textContent = text;
+
+    const rowHeight = Math.ceil(row.getBoundingClientRect().height);
+    const valueHeight = Math.ceil(valueEl.getBoundingClientRect().height);
+
+    if (rowHeight > 0) row.style.minHeight = `${rowHeight}px`;
+    if (valueHeight > 0) valueEl.style.minHeight = `${valueHeight}px`;
+
+    valueEl.textContent = previousText;
+  });
+};
+
 const initPartnersPage = () => {
     const hero = document.querySelector('.partners-page-hero');
     const heroNotes = Array.from(document.querySelectorAll('.partners-page-hero-note'));
@@ -473,6 +493,8 @@ const initPartnersPage = () => {
       }, { passive: false });
 
       if (metaBlock && rows.length) {
+        reserveMetaTextLayout(rows);
+
         if (prefersReducedMotion) {
           rows.forEach((row) => {
             const valueEl = row.querySelector('.partner-hero-meta-value');
