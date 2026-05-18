@@ -392,46 +392,48 @@
       width="48"
       height="48"
     />
-    <ul class="overlay-nav" role="navigation" aria-label="Menu de navegação">
-      <li>
-        <a
-          aria-label="Para você"
-          href="/para-voce"
-          onclick={() => closeMenu()}
-        >
-          Você
-          <span>Planos sob medida</span>
-        </a>
-      </li>
-      <li>
-        <a
-          aria-label="Para sua empresa"
-          href="/para-empresas"
-        >
-          Empresas
-          <span>Gestão estratégica</span>
-        </a>
-      </li>
-      <li>
-        <a
-          aria-label="Parceiros"
-          href="/parceiros"
-        >
-          Parceiros
-          <span>Rede de parceiros</span>
-        </a>
-      </li>
-      <li>
-        <a
-          aria-label="Escritório"
-          href="/a-klout"
-          onclick={() => closeMenu()}
-        >
-          Escritório
-          <span>Onde nos encontrar</span>
-        </a>
-      </li>
-    </ul>
+    <nav aria-label="Menu de navegação">
+      <ul class="overlay-nav">
+        <li>
+          <a
+            aria-label="Para você"
+            href="/para-voce"
+            onclick={() => closeMenu()}
+          >
+            Você
+            <span>Planos sob medida</span>
+          </a>
+        </li>
+        <li>
+          <a
+            aria-label="Para sua empresa"
+            href="/para-empresas"
+          >
+            Empresas
+            <span>Gestão estratégica</span>
+          </a>
+        </li>
+        <li>
+          <a
+            aria-label="Parceiros"
+            href="/parceiros"
+          >
+            Parceiros
+            <span>Rede de parceiros</span>
+          </a>
+        </li>
+        <li>
+          <a
+            aria-label="Escritório"
+            href="/a-klout"
+            onclick={() => closeMenu()}
+          >
+            Escritório
+            <span>Onde nos encontrar</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <div class="overlay-social">
       <a href="https://www.instagram.com/klout_seguros/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="currentColor">
