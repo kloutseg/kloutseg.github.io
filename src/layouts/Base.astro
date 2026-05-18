@@ -1027,7 +1027,7 @@ const structuredData =
       revealPage();
     });
   </script>
-  <script>
+  <script is:inline>
     const canUseSmoothScroll = () =>
       window.matchMedia('(min-width: 769px)').matches &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1042,7 +1042,7 @@ const structuredData =
       window.setTimeout(() => {
         if (window.lenisInstance || !canUseSmoothScroll()) return;
 
-        void import('../scripts/smooth-scroll.js');
+        void import('/scripts/smooth-scroll.js');
       }, smoothScrollStartDelay);
     }
 

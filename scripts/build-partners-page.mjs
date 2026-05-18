@@ -1,13 +1,24 @@
 import { build } from 'esbuild';
 
-await build({
+const sharedOptions = {
   bundle: true,
-  entryPoints: ['src/scripts/partners-page.js'],
   format: 'esm',
   logLevel: 'info',
   minify: true,
-  outfile: 'public/scripts/partners-page.js',
   sourcemap: false,
   splitting: false,
   target: ['es2020'],
-});
+};
+
+await Promise.all([
+  build({
+    ...sharedOptions,
+    entryPoints: ['src/scripts/partners-page.js'],
+    outfile: 'public/scripts/partners-page.js',
+  }),
+  build({
+    ...sharedOptions,
+    entryPoints: ['src/scripts/smooth-scroll.js'],
+    outfile: 'public/scripts/smooth-scroll.js',
+  }),
+]);
