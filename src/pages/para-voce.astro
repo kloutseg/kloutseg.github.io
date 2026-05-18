@@ -42,10 +42,16 @@ const qaCases = [
 <BaseLayout
   title="Para Você | Klout"
   description="Encontre um plano de saúde alinhado à sua rotina, rede de atendimento, cobertura e orçamento com a curadoria técnica da Klout."
-  criticalImage="/images/einstein_01-1280.avif"
-  criticalImageSrcset="/images/einstein_01-768.avif 768w, /images/einstein_01-1280.avif 1280w, /images/einstein_01-1920.avif 1920w"
+  criticalImage="/images/einstein_01-768.avif"
+  criticalImageSrcset="/images/einstein_01-768.avif 768w, /images/einstein_01-1280.avif 1280w"
   criticalImageSizes="100vw"
   criticalImageType="image/avif"
+  criticalFonts={[
+    {
+      href: '/fonts/ibm_plex_serif/ibm-plex-serif.woff2',
+      type: 'font/woff2',
+    },
+  ]}
   structuredData={kloutForYouSchema}
 >
   <FloatingNavbar client:media="(min-width: 769px)" />

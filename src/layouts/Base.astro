@@ -10,12 +10,28 @@ const {
   criticalImageSizes,
   criticalImageType = 'image/webp',
   preloadFonts = true,
+  criticalFonts,
   loadCustomFonts = true,
   smoothScrollDelay = 2600,
   structuredData: providedStructuredData,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const pageTitle = title || 'Guia de Estilo';
+const defaultCriticalFonts = [
+  {
+    href: '/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff',
+    type: 'font/woff',
+  },
+  {
+    href: '/fonts/ibm_plex_serif/ibm-plex-serif.woff2',
+    type: 'font/woff2',
+  },
+];
+const fontsToPreload = Array.isArray(criticalFonts)
+  ? criticalFonts
+  : preloadFonts
+    ? defaultCriticalFonts
+    : [];
 const structuredData =
   providedStructuredData ??
   buildKloutPageSchema({
@@ -162,12 +178,9 @@ const structuredData =
     />
   )}
 
-  {preloadFonts && (
-    <>
-      <link rel="preload" as="font" href="/fonts/proxima_nova/Mark%20Simonson%20-%20Proxima%20Nova%20Alt%20Regular-webfont.woff" type="font/woff" crossorigin>
-      <link rel="preload" as="font" href="/fonts/ibm_plex_serif/ibm-plex-serif.woff2" type="font/woff2" crossorigin>
-    </>
-  )}
+  {fontsToPreload.map((font) => (
+    <link rel="preload" as="font" href={font.href} type={font.type} crossorigin>
+  ))}
 
   {structuredData && (
     <script type="application/ld+json" set:html={JSON.stringify(structuredData, null, 2)} />
@@ -206,7 +219,7 @@ const structuredData =
         font-family: 'IBM Plex Serif';
         font-style: normal;
         font-weight: 400;
-        font-display: optional;
+        font-display: swap;
         src: url('/fonts/ibm_plex_serif/ibm-plex-serif.woff2') format('woff2');
       }
     </style>
