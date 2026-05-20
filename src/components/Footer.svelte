@@ -66,12 +66,18 @@
       <span class="copyright">&copy; <span class="copyright-year">{new Date().getFullYear()}</span> Klout. Todos os direitos reservados.</span>
     </div>
     <div class="footer-bottom-right">
-      <div class="footer-credit">
+      <a
+        href="https://paulomoura.pro/m-high-standards-klout/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-credit"
+        aria-label="MOURA High Standards"
+      >
         <div class="credit-badge">
           <HSBadge size="compact" />
         </div>
-        <a href="https://moura.dev" target="_blank" rel="noopener noreferrer" class="credit-text">MOURA</a>
-      </div>
+        <span class="credit-text">MOURA</span>
+      </a>
     </div>
   </div>
 </footer>
@@ -170,6 +176,9 @@
     flex-direction: column;
     align-items: center;
     gap: 0.45rem;
+    color: hsl(214, 40%, 60%);
+    text-decoration: none;
+    transition: color 0.3s ease;
   }
 
   .credit-badge {
@@ -199,17 +208,11 @@
       0 0 28px hsla(214, 18%, 82%, 0.08);
   }
 
-  .footer-credit a {
-    color: hsl(214, 40%, 60%);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
   .footer-credit .credit-text {
     color: hsl(0, 0%, 88%);
   }
 
-  .footer-credit a:hover {
+  .footer-credit:hover {
     color: hsl(42, 34%, 62%);
   }
 
