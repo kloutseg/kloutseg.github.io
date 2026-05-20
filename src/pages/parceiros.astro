@@ -197,7 +197,7 @@ const partnerSections = partners.map((partner, index) => {
   <main id="main-content">
     <section
       id="parceiros"
-      class="partners-page-hero"
+      class="partners-page-hero is-ready"
       data-stack-section
       data-stack-end="185%"
     >
@@ -419,20 +419,36 @@ const partnerSections = partners.map((partner, index) => {
 
 <script is:inline>
   const loadPartnersScript = () => {
-    window.requestAnimationFrame(() => {
-      const script = document.createElement('script');
-      script.type = 'module';
-      script.fetchPriority = 'low';
+    if (document.querySelector("script[src=\"/scripts/partners-page.js\"]")) return;
+
+    const appendScript = () => {
+      const script = document.createElement("script");
+      script.type = "module";
+      script.fetchPriority = "low";
       script.async = true;
-      script.src = '/scripts/partners-page.js';
+      script.src = "/scripts/partners-page.js";
       document.head.appendChild(script);
-    });
+    };
+
+    const scheduleIdle = window.requestIdleCallback ?? ((callback) => window.setTimeout(callback, 900));
+    scheduleIdle(() => window.requestAnimationFrame(appendScript), { timeout: 1800 });
   };
 
-  if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', loadPartnersScript, { once: true });
-  } else {
+  const schedulePartnersScript = () => {
+    window.removeEventListener("pointerdown", schedulePartnersScript, true);
+    window.removeEventListener("keydown", schedulePartnersScript, true);
+    window.removeEventListener("wheel", schedulePartnersScript, true);
     loadPartnersScript();
+  };
+
+  window.addEventListener("pointerdown", schedulePartnersScript, { capture: true, passive: true, once: true });
+  window.addEventListener("keydown", schedulePartnersScript, { capture: true, once: true });
+  window.addEventListener("wheel", schedulePartnersScript, { capture: true, passive: true, once: true });
+
+  if (document.readyState === "complete") {
+    loadPartnersScript();
+  } else {
+    window.addEventListener("load", loadPartnersScript, { once: true });
   }
 </script>
 
