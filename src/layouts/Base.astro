@@ -1048,6 +1048,8 @@ const structuredData =
     function scheduleSmoothScroll() {
       if (!canUseSmoothScroll()) return;
       const configuredDelay = Number(document.documentElement.dataset.smoothScrollDelay);
+      if (Number.isFinite(configuredDelay) && configuredDelay < 0) return;
+
       const smoothScrollStartDelay = Number.isFinite(configuredDelay)
         ? Math.max(0, configuredDelay)
         : 2600;

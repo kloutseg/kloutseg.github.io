@@ -203,7 +203,7 @@ const partnerSections = partners.map((partner, index) => {
 <BaseLayout
   title="Parceiros | Klout"
   description="Conheça a rede de parceiros da Klout e como a curadoria especializada conecta seguradoras, empresas e clientes com mais eficiência."
-  smoothScrollDelay={900}
+  smoothScrollDelay={-1}
   structuredData={kloutPartnersSchema}
 >
   <main id="main-content">
@@ -250,7 +250,7 @@ const partnerSections = partners.map((partner, index) => {
 
         <div class="partners-page-hero-rail">
           <div class="partners-page-hero-notes" aria-label="Diferenciais da rede de parcerias Klout">
-            <p class="partners-page-hero-note">
+            <p class="partners-page-hero-note is-visible">
               Operadoras rigorosamente selecionadas pela curadoria Klout
             </p>
             <p class="partners-page-hero-note">
@@ -432,37 +432,57 @@ const partnerSections = partners.map((partner, index) => {
 </BaseLayout>
 
 <script is:inline>
-  const loadPartnersScript = () => {
-    if (document.querySelector("script[src=\"/scripts/partners-page.js\"]")) return;
+  const loadModuleScript = (src) => {
+    if (document.querySelector(`script[src="${src}"]`)) return;
 
-    const appendScript = () => {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.fetchPriority = "low";
-      script.async = true;
-      script.src = "/scripts/partners-page.js";
-      document.head.appendChild(script);
-    };
+    const script = document.createElement("script");
+    script.type = "module";
+    script.fetchPriority = "low";
+    script.async = true;
+    script.src = src;
+    document.head.appendChild(script);
+  };
 
-    const scheduleIdle = window.requestIdleCallback ?? ((callback) => window.setTimeout(callback, 900));
-    scheduleIdle(() => window.requestAnimationFrame(appendScript), { timeout: 1800 });
+  const loadPartnersScript = () => loadModuleScript("/scripts/partners-page.js");
+  const loadStackingRuntime = () => {
+    loadPartnersScript();
+    loadModuleScript("/scripts/smooth-scroll.js");
   };
 
   const schedulePartnersScript = () => {
     window.removeEventListener("pointerdown", schedulePartnersScript, true);
     window.removeEventListener("keydown", schedulePartnersScript, true);
-    window.removeEventListener("wheel", schedulePartnersScript, true);
     loadPartnersScript();
   };
 
   window.addEventListener("pointerdown", schedulePartnersScript, { capture: true, passive: true, once: true });
   window.addEventListener("keydown", schedulePartnersScript, { capture: true, once: true });
-  window.addEventListener("wheel", schedulePartnersScript, { capture: true, passive: true, once: true });
 
-  if (document.readyState === "complete") {
-    loadPartnersScript();
-  } else {
-    window.addEventListener("load", loadPartnersScript, { once: true });
+  if (window.location.hash.startsWith("#parceiro-")) {
+    loadStackingRuntime();
+  } else if ("IntersectionObserver" in window) {
+    const firstPartnerStage = document.querySelector("#parceiro-alice");
+    const stackingStartStage = document.querySelector("#parceiro-porto");
+
+    if (firstPartnerStage) {
+      const partnersObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        partnersObserver.disconnect();
+        loadPartnersScript();
+      }, { rootMargin: "25% 0px", threshold: 0 });
+
+      partnersObserver.observe(firstPartnerStage);
+    }
+
+    if (stackingStartStage) {
+      const stackingObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        stackingObserver.disconnect();
+        loadStackingRuntime();
+      }, { rootMargin: "50% 0px", threshold: 0 });
+
+      stackingObserver.observe(stackingStartStage);
+    }
   }
 </script>
 

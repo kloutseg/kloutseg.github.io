@@ -107,6 +107,7 @@ const initPartnersPage = () => {
       const triggers = [];
       const pinnedSections = new Set();
       const interactionEvents = ['wheel', 'touchstart', 'pointerdown', 'scroll'];
+      let stackingObserver;
 
       const hasFollowingSection = (section) => {
         const sections = Array.from(document.querySelectorAll('section'));
@@ -124,6 +125,14 @@ const initPartnersPage = () => {
           window.removeEventListener(eventName, handleInteraction, true);
         });
         window.removeEventListener('keydown', handleKeyInteraction, true);
+        stackingObserver?.disconnect();
+      };
+
+      const isStackingStartReached = () => {
+        const stackingStartStage = document.querySelector('#parceiro-porto');
+        if (!(stackingStartStage instanceof HTMLElement)) return true;
+
+        return stackingStartStage.getBoundingClientRect().top <= window.innerHeight * 1.5;
       };
 
       const rebuildTriggers = (ScrollTrigger) => {
@@ -171,6 +180,8 @@ const initPartnersPage = () => {
       };
 
       function handleInteraction() {
+        if (!isStackingStartReached()) return;
+
         window.clearTimeout(interactionTimer);
         interactionTimer = window.setTimeout(() => void startStacking(), 120);
       }
@@ -187,7 +198,18 @@ const initPartnersPage = () => {
         });
       });
       window.addEventListener('keydown', handleKeyInteraction, true);
-      fallbackTimer = window.setTimeout(() => void startStacking(), 2200);
+
+      const stackingStartStage = document.querySelector('#parceiro-porto');
+      if ('IntersectionObserver' in window && stackingStartStage instanceof HTMLElement) {
+        stackingObserver = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          void startStacking();
+        }, { rootMargin: '50% 0px', threshold: 0 });
+
+        stackingObserver.observe(stackingStartStage);
+      } else {
+        fallbackTimer = window.setTimeout(() => void startStacking(), 8000);
+      }
     };
 
     scheduleStacking();
