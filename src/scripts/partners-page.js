@@ -82,6 +82,7 @@ const reserveMetaTextLayout = (rows) => {
 
 const initPartnersPage = () => {
     const hero = document.querySelector('.partners-page-hero');
+    const heroNotesTrack = document.querySelector('.partners-page-hero-notes');
     const heroNotes = Array.from(document.querySelectorAll('.partners-page-hero-note'));
     const arrivedViaPageTransition =
       document.documentElement.classList.contains('page-transition-enter');
@@ -233,17 +234,34 @@ const initPartnersPage = () => {
     if (heroNotes.length) {
       heroNotes.forEach((note, index) => {
         note.classList.toggle('is-visible', index === 0);
+        note.classList.remove('is-leaving');
       });
 
       if (!prefersReducedMotion && heroNotes.length > 1) {
+        if (heroNotesTrack instanceof HTMLElement) {
+          heroNotesTrack.classList.add('is-running');
+        }
+
         let activeNoteIndex = 0;
         window.setInterval(() => {
           const currentNote = heroNotes[activeNoteIndex];
           activeNoteIndex = (activeNoteIndex + 1) % heroNotes.length;
           const nextNote = heroNotes[activeNoteIndex];
 
+          currentNote.classList.add('is-leaving');
           currentNote.classList.remove('is-visible');
+          nextNote.classList.remove('is-leaving');
           nextNote.classList.add('is-visible');
+
+          window.setTimeout(() => {
+            currentNote.classList.remove('is-leaving');
+          }, 420);
+
+          if (heroNotesTrack instanceof HTMLElement) {
+            heroNotesTrack.classList.remove('is-running');
+            void heroNotesTrack.offsetWidth;
+            heroNotesTrack.classList.add('is-running');
+          }
         }, 4160);
       }
     }
