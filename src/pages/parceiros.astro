@@ -9,6 +9,8 @@ const partners = [
     slug: 'alice',
     name: 'Alice',
     logoMaskPath: '/images/logos_svgs/logo_alice_cropped.svg',
+    logoIntrinsicWidth: 180,
+    logoIntrinsicHeight: 92,
     logoWidth: 'min(100%, 16rem)',
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 10rem)',
@@ -36,6 +38,8 @@ const partners = [
     slug: 'porto',
     name: 'Porto',
     logoMaskPath: '/images/logos_svgs/logo_porto.svg',
+    logoIntrinsicWidth: 700,
+    logoIntrinsicHeight: 700,
     logoWidth: 'min(100%, 42rem)',
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 24rem)',
@@ -64,6 +68,8 @@ const partners = [
     slug: 'bradesco',
     name: 'Bradesco',
     logoMaskPath: '/images/logos_svgs/logo_bradesco.svg',
+    logoIntrinsicWidth: 700,
+    logoIntrinsicHeight: 700,
     logoWidth: 'min(100%, 42rem)',
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 21rem)',
@@ -92,6 +98,8 @@ const partners = [
     slug: 'sulamerica',
     name: 'SulAmerica',
     logoMaskPath: '/images/logos_svgs/logo_sulamerica.svg',
+    logoIntrinsicWidth: 700,
+    logoIntrinsicHeight: 700,
     logoWidth: 'min(100%, 42rem)',
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 22rem)',
@@ -121,6 +129,8 @@ const partners = [
     slug: 'omint',
     name: 'Omint',
     logoMaskPath: '/images/logos_svgs/logo_omint.svg',
+    logoIntrinsicWidth: 700,
+    logoIntrinsicHeight: 700,
     logoWidth: 'min(100%, 42rem)',
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 19rem)',
@@ -149,6 +159,8 @@ const partners = [
     slug: 'amil',
     name: 'Amil',
     logoMaskPath: '/images/logos_svgs/logo_amil.svg',
+    logoIntrinsicWidth: 4096,
+    logoIntrinsicHeight: 4096,
     logoWidth: 'min(100%, 42rem)',
     logoMaxHeight: 'min(100%, 36rem)',
     logoWidthMobile: 'min(100%, 20rem)',
@@ -282,6 +294,8 @@ const partnerSections = partners.map((partner, index) => {
                   src={partner.logoMaskPath}
                   alt={`Logo da operadora ${partner.name}`}
                   class="partner-hero-logo"
+                  width={partner.logoIntrinsicWidth}
+                  height={partner.logoIntrinsicHeight}
                   loading="lazy"
                   decoding="async"
                 />
