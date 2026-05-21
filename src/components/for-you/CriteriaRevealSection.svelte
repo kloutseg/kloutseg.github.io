@@ -80,7 +80,7 @@
             <div class="criteria-item">
               <span class="criteria-item-index">03</span>
               <h3>Custo com perspectiva</h3>
-              <p>Quanto você paga hoje, como esse valor pode subir e o que recebe em troca.</p>
+              <p>Quanto você paga hoje, como esse valor pode mudar e o que recebe em troca.</p>
             </div>
           </div>
 
