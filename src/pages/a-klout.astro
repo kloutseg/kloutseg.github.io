@@ -27,7 +27,7 @@ const addressItems = [
   title="A Klout"
   description="Conheça a Klout, consultoria especializada em planos de saúde que une análise técnica, curadoria e orientação estratégica."
   criticalImage="/images/about_klout_hero_consultive.webp"
-  criticalImageSrcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w, /images/about_klout_hero_consultive-2160.webp 2160w"
+  criticalImageSrcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w"
   criticalImageSizes="100vw"
   structuredData={kloutAboutSchema}
 >
@@ -39,7 +39,7 @@ const addressItems = [
       <div class="about-klout-hero-media">
         <img
           src="/images/about_klout_hero_consultive.webp"
-          srcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w, /images/about_klout_hero_consultive-2160.webp 2160w"
+          srcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w"
           sizes="100vw"
           alt="Conversa consultiva em ambiente acolhedor para orientação em saúde"
           class="about-klout-hero-image"
@@ -101,8 +101,20 @@ const addressItems = [
           <figure class="about-klout-units-photo-frame">
             <picture>
               <source
+                media="(min-width: 1024px)"
+                srcset="/images/office_units-desktop.webp 1774w"
+                sizes="50vw"
+                type="image/webp"
+              />
+              <source
+                media="(min-width: 1024px)"
+                srcset="/images/office_units.png 1774w"
+                sizes="50vw"
+                type="image/png"
+              />
+              <source
                 srcset="/images/office_units-700.webp 700w, /images/office_units-960.webp 960w, /images/office_units.webp 1774w"
-                sizes="(max-width: 1023px) 100vw, 50vw"
+                sizes="100vw"
                 type="image/webp"
               />
               <img
