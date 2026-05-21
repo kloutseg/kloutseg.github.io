@@ -1,5 +1,6 @@
 ---
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
+const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
 ---
 
 <script is:inline>
@@ -120,6 +121,32 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     })();
   </script>
 )}
+
+<script is:inline define:vars={{ cloudflareWebAnalyticsToken }}>
+  (() => {
+    let loaded = false;
+
+    function loadCloudflareWebAnalytics() {
+      if (loaded) return;
+      const consent = window.KloutConsent?.read?.();
+      if (!consent?.analytics) return;
+      if (document.querySelector('script[data-cf-beacon]')) {
+        loaded = true;
+        return;
+      }
+
+      loaded = true;
+      const script = document.createElement('script');
+      script.defer = true;
+      script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      script.dataset.cfBeacon = JSON.stringify({ token: cloudflareWebAnalyticsToken });
+      document.head.appendChild(script);
+    }
+
+    loadCloudflareWebAnalytics();
+    window.addEventListener('klout:consent-updated', loadCloudflareWebAnalytics);
+  })();
+</script>
 
 <div class="cookie-consent" data-cookie-consent hidden>
   <div class="cookie-consent__panel" role="region" aria-labelledby="cookie-consent-title" aria-describedby="cookie-consent-description">
