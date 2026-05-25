@@ -5,7 +5,7 @@
       <img src="/images/badges/customers_emblem-76.webp" alt="Clientes" class="badge-image" width="76" height="76" />
     </div>
     <div class="badge-content">
-      <span class="badge-number">+250</span>
+      <span class="badge-number">+600</span>
       <span class="badge-label">Clientes ativos</span>
     </div>
   </div>
