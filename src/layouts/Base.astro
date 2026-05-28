@@ -94,75 +94,7 @@ const structuredData =
   </script>
 
   <!-- Favicons -->
-  <link rel="icon" type="image/png" href="/favicon-blue.png" media="(prefers-color-scheme: light)">
-  <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
-  <script is:inline>
-    (() => {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const icons = {
-        light: '/favicon-blue.png',
-        dark: '/favicon-light.png',
-      };
-      const getIcon = () => (prefersDark.matches ? icons.dark : icons.light);
-      const runtimeIcon = document.createElement('link');
-      runtimeIcon.id = 'klout-favicon-runtime';
-      runtimeIcon.rel = 'icon';
-      runtimeIcon.type = 'image/png';
-      runtimeIcon.href = getIcon();
-      document.head.appendChild(runtimeIcon);
-
-      const settleIcon = () => {
-        runtimeIcon.href = getIcon();
-      };
-
-      prefersDark.addEventListener?.('change', settleIcon);
-
-      if (prefersReducedMotion.matches || document.readyState === 'complete') {
-        settleIcon();
-        return;
-      }
-
-      const faviconImage = new Image();
-      faviconImage.src = getIcon();
-      let frame = 0;
-      let timer = 0;
-
-      const drawFrame = () => {
-        if (document.readyState === 'complete') {
-          window.clearTimeout(timer);
-          settleIcon();
-          return;
-        }
-
-        const canvas = document.createElement('canvas');
-        const size = 96;
-        canvas.width = size;
-        canvas.height = size;
-        const context = canvas.getContext('2d');
-
-        if (!context) {
-          settleIcon();
-          return;
-        }
-
-        const angle = Math.sin(frame * 0.85) * 0.12;
-        const scale = 0.94 + Math.cos(frame * 0.85) * 0.035;
-        context.clearRect(0, 0, size, size);
-        context.translate(size / 2, size / 2);
-        context.rotate(angle);
-        context.scale(scale, scale);
-        context.drawImage(faviconImage, -size / 2, -size / 2, size, size);
-        runtimeIcon.href = canvas.toDataURL('image/png');
-        frame += 1;
-        timer = window.setTimeout(drawFrame, 120);
-      };
-
-      faviconImage.onload = drawFrame;
-      faviconImage.onerror = settleIcon;
-      window.addEventListener('load', settleIcon, { once: true });
-    })();
-  </script>
+  <link rel="icon" type="image/png" href="https://kloutseguros.com.br/favicon-blue.png" sizes="any">
 
   <!-- Preload de imagens críticas -->
   <link rel="preload" as="image" href="/images/logo_v3_blue-126.webp" type="image/webp" />
