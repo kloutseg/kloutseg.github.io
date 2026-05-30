@@ -1,5 +1,5 @@
 <script lang="ts">
-  import HSBadge from './HSBadge.svelte';
+  import FooterCreditBadge from './FooterCreditBadge.svelte';
 </script>
 
 <footer data-dark-section>
@@ -66,18 +66,7 @@
       <span class="copyright">&copy; <span class="copyright-year">{new Date().getFullYear()}</span> Klout. Todos os direitos reservados.</span>
     </div>
     <div class="footer-bottom-right">
-      <a
-        href="https://paulomoura.pro/m-high-standards-klout/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="footer-credit"
-        aria-label="MOURA High Standards"
-      >
-        <div class="credit-badge">
-          <HSBadge size="compact" />
-        </div>
-        <span class="credit-text">MOURA</span>
-      </a>
+      <FooterCreditBadge badgeSize="compact" scale={1} />
     </div>
   </div>
 </footer>
@@ -169,51 +158,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .footer-credit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.45rem;
-    color: hsl(214, 40%, 60%);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .credit-badge {
-    margin-bottom: 0;
-  }
-
-  .credit-text {
-    font-family: 'Proxima Nova', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: hsl(0, 0%, 88%);
-    background: linear-gradient(
-      180deg,
-      hsl(0, 0%, 96%) 0%,
-      hsl(0, 0%, 82%) 48%,
-      hsl(214, 10%, 68%) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 0.28em;
-    line-height: 1;
-    text-transform: uppercase;
-    text-decoration: none;
-    text-shadow:
-      0 0 14px hsla(0, 0%, 100%, 0.08),
-      0 0 28px hsla(214, 18%, 82%, 0.08);
-  }
-
-  .footer-credit .credit-text {
-    color: hsl(0, 0%, 88%);
-  }
-
-  .footer-credit:hover {
-    color: hsl(42, 34%, 62%);
   }
 
   .footer-logo {
