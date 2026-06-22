@@ -1,6 +1,7 @@
 export const ATTRIBUTION_STORAGE_KEY = 'klout:attribution:first-touch';
 
 const MAX_VALUE_LENGTH = 500;
+const ATTRIBUTION_RETENTION_MS = 180 * 24 * 60 * 60 * 1000;
 const ATTRIBUTION_PARAMETERS = [
   'utm_source',
   'utm_medium',
@@ -66,6 +67,11 @@ export function getStoredAttribution(): AttributionData | null {
 
     const parsed = JSON.parse(raw) as Partial<AttributionData>;
     if (parsed.version !== 1 || typeof parsed.visitorId !== 'string') return null;
+    const capturedAt = Date.parse(parsed.capturedAt || '');
+    if (!Number.isFinite(capturedAt) || Date.now() - capturedAt > ATTRIBUTION_RETENTION_MS) {
+      localStorage.removeItem(ATTRIBUTION_STORAGE_KEY);
+      return null;
+    }
     return parsed as AttributionData;
   } catch {
     return null;

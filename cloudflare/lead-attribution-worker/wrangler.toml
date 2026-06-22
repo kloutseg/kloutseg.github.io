@@ -1,0 +1,11 @@
+name = "klout-lead-attribution"
+main = "worker.mjs"
+compatibility_date = "2026-06-22"
+
+[triggers]
+crons = ["17 4 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "klout_lead_attribution"
+database_id = "9520e8b6-2233-4b4d-aff7-f9fd2b9a0e9d"

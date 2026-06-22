@@ -8,6 +8,8 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
   eyebrow="Cookies"
   heading="Política de Cookies"
 >
+  <p class="legal-updated">Última atualização: 22 de junho de 2026.</p>
+
   <article class="legal-section">
     <h2>1. O que são cookies</h2>
     <p>
@@ -48,7 +50,7 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
             <td>Analíticos</td>
             <td>Dependem de consentimento</td>
             <td>Medição de audiência, páginas visitadas, eventos, origem de tráfego e desempenho do conteúdo.</td>
-            <td>Google Analytics 4, Matomo, dados reportados em Looker Studio.</td>
+            <td>Identificador próprio <code>visitorId</code>, parâmetros UTM, Google Analytics 4, Matomo e dados reportados em Looker Studio.</td>
           </tr>
           <tr>
             <td>Experiência e comportamento</td>
@@ -60,7 +62,7 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
             <td>Marketing</td>
             <td>Dependem de consentimento</td>
             <td>Medição de campanhas, remarketing, personalização de anúncios e atribuição comercial.</td>
-            <td>Google Ads, Meta Pixel, LinkedIn Insight Tag ou tags futuras.</td>
+            <td>Identificador de clique <code>gclid</code>, Google Ads, Meta Pixel, LinkedIn Insight Tag ou tags futuras.</td>
           </tr>
         </tbody>
       </table>
@@ -70,6 +72,7 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
   <article class="legal-section">
     <h2>4. Ferramentas previstas</h2>
     <ul>
+      <li><strong>Atribuição própria:</strong> após consentimento analítico, armazena no navegador um <code>visitorId</code> aleatório, primeira landing page, referenciador sem query string e parâmetros UTM permitidos. O <code>gclid</code> depende também de consentimento de marketing. Os registros são eliminados após, no máximo, 180 dias.</li>
       <li><strong>Google Tag Manager:</strong> gerencia tags e respeita as escolhas recebidas pelo banner.</li>
       <li><strong>Google Analytics 4:</strong> mede audiência e eventos quando cookies analíticos forem aceitos.</li>
       <li><strong>Google Search Console:</strong> ajuda a analisar presença orgânica e não depende de banner no navegador.</li>
@@ -106,7 +109,7 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
   <article class="legal-section">
     <h2>8. Alterações nesta Política</h2>
     <p>
-      Esta Política será atualizada quando novas ferramentas, cookies ou finalidades forem adicionados. A tabela final de cookies deve ser revisada após a definição entre GA4, Matomo, Clarity e Hotjar.
+      Esta Política será atualizada quando novas ferramentas, tecnologias locais ou finalidades forem adicionadas. Ferramentas previstas que ainda não estejam ativas permanecem sujeitas ao consentimento correspondente antes de qualquer coleta.
     </p>
   </article>
 </LegalDocument>
