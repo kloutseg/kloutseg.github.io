@@ -1,5 +1,6 @@
 ---
 import CookieConsent from '../components/CookieConsent.astro';
+import AttributionCapture from '../components/AttributionCapture.astro';
 import { buildKloutPageSchema } from '../lib/schema';
 
 const {
@@ -677,6 +678,7 @@ const structuredData =
   <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
   <slot />
   <CookieConsent />
+  <AttributionCapture />
   <script is:inline>
     (() => {
       const mobileQuery = window.matchMedia('(max-width: 768px)');

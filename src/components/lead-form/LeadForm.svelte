@@ -12,6 +12,7 @@
     formatTelefone
   } from '../../lib/form-validation';
   import type { FieldValidation } from '../../lib/form-store';
+  import { getStoredAttribution } from '../../lib/attribution';
   import ProgressBar from './ProgressBar.svelte';
   import StepTypeSelector from './StepTypeSelector.svelte';
   import StepName from './StepName.svelte';
@@ -454,6 +455,34 @@
     form.appendChild(input);
   }
 
+  function addAttributionFields(form: HTMLFormElement, type: 'b2c' | 'b2b') {
+    const attribution = getStoredAttribution();
+    if (!attribution) return;
+
+    if (type === 'b2c') {
+      addJotformField(form, 'q19_visitor_id', attribution.visitorId);
+      addJotformField(form, 'q20_insiraUma20', attribution.firstLanding);
+      addJotformField(form, 'q21_insiraUma21', attribution.firstReferrer);
+      addJotformField(form, 'q22_insiraUma22', attribution.utm_source);
+      addJotformField(form, 'q23_insiraUma23', attribution.utm_medium);
+      addJotformField(form, 'q24_insiraUma24', attribution.utm_campaign);
+      addJotformField(form, 'q25_insiraUma25', attribution.utm_content);
+      addJotformField(form, 'q26_insiraUma26', attribution.utm_term);
+      addJotformField(form, 'q27_insiraUma27', attribution.gclid);
+      return;
+    }
+
+    addJotformField(form, 'q17_visitor_id', attribution.visitorId);
+    addJotformField(form, 'q18_first_landing', attribution.firstLanding);
+    addJotformField(form, 'q19_first_referrer', attribution.firstReferrer);
+    addJotformField(form, 'q20_utm_source', attribution.utm_source);
+    addJotformField(form, 'q21_utm_medium', attribution.utm_medium);
+    addJotformField(form, 'q22_utm_campaign', attribution.utm_campaign);
+    addJotformField(form, 'q23_utm_content', attribution.utm_content);
+    addJotformField(form, 'q24_utm_term', attribution.utm_term);
+    addJotformField(form, 'q25_gclid', attribution.gclid);
+  }
+
   function submitToJotform(data: any) {
     if (typeof document === 'undefined') return Promise.resolve();
 
@@ -486,6 +515,7 @@
       addJotformField(form, 'simple_spc', `${formId}-${formId}`);
       addJotformField(form, 'website', '');
       addJotformField(form, 'submitSource', 'site-klout');
+      addAttributionFields(form, data.type);
 
       if (data.type === 'b2c') {
         const name = splitFullName(data.nome);

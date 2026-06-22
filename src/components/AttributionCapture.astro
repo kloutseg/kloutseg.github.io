@@ -1,0 +1,15 @@
+<script>
+  import { syncAttributionWithConsent } from '../lib/attribution';
+
+  const sync = () => {
+    try {
+      syncAttributionWithConsent();
+    } catch {
+      // Storage may be unavailable in restricted browsing contexts.
+    }
+  };
+
+  sync();
+  window.addEventListener('klout:consent-updated', sync);
+</script>
+
