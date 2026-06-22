@@ -2,6 +2,7 @@ export const ATTRIBUTION_STORAGE_KEY = 'klout:attribution:first-touch';
 
 const MAX_VALUE_LENGTH = 500;
 const ATTRIBUTION_RETENTION_MS = 180 * 24 * 60 * 60 * 1000;
+const GCLID_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 const ATTRIBUTION_PARAMETERS = [
   'utm_source',
   'utm_medium',
@@ -71,6 +72,11 @@ export function getStoredAttribution(): AttributionData | null {
     if (!Number.isFinite(capturedAt) || Date.now() - capturedAt > ATTRIBUTION_RETENTION_MS) {
       localStorage.removeItem(ATTRIBUTION_STORAGE_KEY);
       return null;
+    }
+    if (parsed.gclid && Date.now() - capturedAt > GCLID_RETENTION_MS) {
+      const withoutExpiredGclid = { ...parsed, gclid: '' } as AttributionData;
+      localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(withoutExpiredGclid));
+      return withoutExpiredGclid;
     }
     return parsed as AttributionData;
   } catch {

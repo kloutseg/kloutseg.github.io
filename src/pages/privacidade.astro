@@ -66,24 +66,30 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
     <p>
       Quando o formulário solicitar informações de beneficiários ou dependentes, quem envia os dados declara ter legitimidade para fornecê-los e deve evitar incluir informações desnecessárias, como diagnósticos, laudos, exames ou histórico médico detalhado.
     </p>
+    <p>
+      A Klout não direciona este formulário a crianças ou adolescentes e não solicita seus dados de contato. Idades de dependentes são informadas pelo responsável exclusivamente para análise de elegibilidade e composição do plano, observados a necessidade e o melhor interesse do menor.
+    </p>
   </article>
 
   <article class="legal-section">
     <h2>4. Bases legais</h2>
-    <p>O tratamento poderá ocorrer com base em uma ou mais hipóteses da LGPD, conforme o caso:</p>
+    <p>As bases legais são aplicadas conforme a finalidade e a natureza dos dados:</p>
     <ul>
-      <li>execução de procedimentos preliminares ou contrato, para analisar a solicitação e conduzir atendimento;</li>
-      <li>consentimento, especialmente para cookies não necessários, rastreamento comportamental e dados mais sensíveis informados no formulário;</li>
-      <li>legítimo interesse, para relacionamento comercial, segurança, prevenção a fraudes e melhoria de processos, respeitados os direitos do titular;</li>
+      <li>procedimentos preliminares solicitados pelo titular e execução de contrato, para analisar a solicitação, elaborar proposta e conduzir atendimento;</li>
+      <li>consentimento, para armazenamento analítico no navegador, atribuição de campanhas e identificadores de publicidade;</li>
+      <li>legítimo interesse, quando aplicável a segurança, prevenção a fraudes e organização do relacionamento comercial, mediante avaliação de necessidade e impacto;</li>
       <li>cumprimento de obrigação legal ou regulatória, quando aplicável;</li>
       <li>exercício regular de direitos, em processos administrativos, judiciais ou arbitrais.</li>
     </ul>
+    <p>
+      Eventual tratamento de dado pessoal sensível referente à saúde deve observar uma das hipóteses específicas do artigo 11 da LGPD. Quando baseado em consentimento, ele deve ser específico, destacado e vinculado a finalidade determinada.
+    </p>
   </article>
 
   <article class="legal-section">
     <h2>5. Formulário, planilha e CRM</h2>
     <p>
-      O formulário de análise poderá ser operado via Jotform. Após o envio, os dados poderão ser organizados em planilhas internas e no CRM ClickUp, para triagem, distribuição de atendimento, acompanhamento de oportunidades, registro do histórico e retorno comercial.
+      O formulário de análise é enviado ao Jotform. Após o envio, os dados são organizados em planilhas internas e no CRM ClickUp para triagem, distribuição de atendimento, acompanhamento de oportunidades, registro do histórico e retorno comercial.
     </p>
     <p>
       Essas ferramentas atuam como fornecedoras ou operadoras, de acordo com suas funções, e podem envolver processamento fora do Brasil. A Klout deve manter contratos, configurações de segurança e permissões compatíveis com a sensibilidade dos dados tratados.
@@ -93,7 +99,7 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
   <article class="legal-section">
     <h2>6. Cookies, analytics e rastreamento</h2>
     <p>
-      O site poderá usar Google Tag Manager, Google Analytics 4, Google Search Console, Looker Studio, Microsoft Clarity, Hotjar e/ou Matomo. Cookies e tecnologias não essenciais somente devem ser ativados após consentimento, conforme preferências escolhidas no banner.
+      O site usa Cloudflare Web Analytics para métricas agregadas de audiência e uma solução própria de atribuição de origem. Essas tecnologias não essenciais somente são ativadas após consentimento, conforme as preferências escolhidas no banner.
     </p>
     <p>
       Quando a categoria analítica for aceita, a Klout cria no navegador um identificador aleatório de primeira parte (<code>visitorId</code>) e registra a primeira landing page, o referenciador sem query string e parâmetros UTM permitidos. O <code>gclid</code> somente é armazenado quando a categoria de marketing também estiver autorizada. Esses dados acompanham o formulário enviado e são vinculados ao identificador da submissão pelo Jotform, sem inclusão de nome, e-mail, telefone, IP ou conteúdo integral da URL no banco de atribuição da Cloudflare.
@@ -112,12 +118,18 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
       <li>parceiros, corretoras, seguradoras ou operadoras, quando necessário para cotação, análise ou continuidade da solicitação;</li>
       <li>autoridades públicas, reguladores ou terceiros, quando houver obrigação legal ou necessidade de defesa de direitos.</li>
     </ul>
+    <p>
+      Jotform e Cloudflare podem processar dados fora do Brasil. Nesses casos, a Klout adota fornecedores com compromissos contratuais e medidas de segurança compatíveis e observa os requisitos aplicáveis à transferência internacional de dados.
+    </p>
+    <p>
+      A triagem e a atribuição descritas nesta Política não produzem decisão exclusivamente automatizada com efeitos jurídicos ou comerciais sobre o titular.
+    </p>
   </article>
 
   <article class="legal-section">
     <h2>8. Retenção</h2>
     <p>
-      Registros de atribuição no navegador e no banco Cloudflare D1 são mantidos por até 180 dias. Leads que não resultem em contratação ou continuidade comercial são mantidos por até 24 meses após a última interação, salvo solicitação válida de eliminação ou necessidade de conservação por obrigação legal, regulatória ou exercício regular de direitos. Dados de clientes e contratos seguem os prazos legais e regulatórios aplicáveis. Encerrado o prazo pertinente, os dados são eliminados ou anonimizados de forma segura.
+      Registros de atribuição no navegador e no banco Cloudflare D1 são mantidos por até 180 dias; o <code>gclid</code> é mantido por até 90 dias. Leads que não resultem em contratação ou continuidade comercial são mantidos por até 24 meses após a última interação, salvo solicitação válida de eliminação ou necessidade de conservação por obrigação legal, regulatória ou exercício regular de direitos. Dados de clientes e contratos seguem os prazos legais e regulatórios aplicáveis. Encerrado o prazo pertinente, os dados são eliminados ou anonimizados de forma segura.
     </p>
   </article>
 

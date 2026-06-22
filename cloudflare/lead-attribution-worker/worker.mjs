@@ -31,6 +31,7 @@ const FORM_CONFIG = {
 
 const MAX_FIELD_LENGTH = 500;
 const ATTRIBUTION_RETENTION_DAYS = 180;
+const GCLID_RETENTION_DAYS = 90;
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -185,11 +186,22 @@ async function listAttributions(request, env) {
 async function purgeExpiredAttributions(env) {
   if (!env.DB) throw new Error('Binding D1 DB ausente.');
 
-  const cutoff = new Date(Date.now() - ATTRIBUTION_RETENTION_DAYS * 24 * 60 * 60 * 1000).toISOString();
-  return env.DB.prepare(`
-    delete from lead_attributions
-    where received_at < ?
-  `).bind(cutoff).run();
+  const attributionCutoff = new Date(
+    Date.now() - ATTRIBUTION_RETENTION_DAYS * 24 * 60 * 60 * 1000,
+  ).toISOString();
+  const gclidCutoff = new Date(Date.now() - GCLID_RETENTION_DAYS * 24 * 60 * 60 * 1000).toISOString();
+
+  return env.DB.batch([
+    env.DB.prepare(`
+      update lead_attributions
+      set gclid = null
+      where gclid is not null and received_at < ?
+    `).bind(gclidCutoff),
+    env.DB.prepare(`
+      delete from lead_attributions
+      where received_at < ?
+    `).bind(attributionCutoff),
+  ]);
 }
 
 export default {

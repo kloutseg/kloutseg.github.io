@@ -50,19 +50,13 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
             <td>Analíticos</td>
             <td>Dependem de consentimento</td>
             <td>Medição de audiência, páginas visitadas, eventos, origem de tráfego e desempenho do conteúdo.</td>
-            <td>Identificador próprio <code>visitorId</code>, parâmetros UTM, Google Analytics 4, Matomo e dados reportados em Looker Studio.</td>
-          </tr>
-          <tr>
-            <td>Experiência e comportamento</td>
-            <td>Dependem de consentimento</td>
-            <td>Mapas de calor, gravações de sessão, cliques, rolagem e melhoria de usabilidade.</td>
-            <td>Microsoft Clarity ou Hotjar, se adotados.</td>
+            <td>Identificador próprio <code>visitorId</code>, parâmetros UTM e Cloudflare Web Analytics.</td>
           </tr>
           <tr>
             <td>Marketing</td>
             <td>Dependem de consentimento</td>
-            <td>Medição de campanhas, remarketing, personalização de anúncios e atribuição comercial.</td>
-            <td>Identificador de clique <code>gclid</code>, Google Ads, Meta Pixel, LinkedIn Insight Tag ou tags futuras.</td>
+            <td>Atribuição de campanhas originadas no Google Ads.</td>
+            <td>Identificador de clique <code>gclid</code> do Google Ads.</td>
           </tr>
         </tbody>
       </table>
@@ -70,29 +64,25 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
   </article>
 
   <article class="legal-section">
-    <h2>4. Ferramentas previstas</h2>
+    <h2>4. Ferramentas utilizadas</h2>
     <ul>
-      <li><strong>Atribuição própria:</strong> após consentimento analítico, armazena no navegador um <code>visitorId</code> aleatório, primeira landing page, referenciador sem query string e parâmetros UTM permitidos. O <code>gclid</code> depende também de consentimento de marketing. Os registros são eliminados após, no máximo, 180 dias.</li>
-      <li><strong>Google Tag Manager:</strong> gerencia tags e respeita as escolhas recebidas pelo banner.</li>
-      <li><strong>Google Analytics 4:</strong> mede audiência e eventos quando cookies analíticos forem aceitos.</li>
-      <li><strong>Google Search Console:</strong> ajuda a analisar presença orgânica e não depende de banner no navegador.</li>
-      <li><strong>Looker Studio:</strong> consolida relatórios e não coleta dados diretamente do visitante.</li>
-      <li><strong>Microsoft Clarity ou Hotjar:</strong> podem registrar interações comportamentais quando a categoria de experiência for aceita.</li>
-      <li><strong>Matomo:</strong> poderá substituir ou complementar GA4, preferencialmente com configuração de privacidade e consentimento.</li>
+      <li><strong>Atribuição própria:</strong> após consentimento analítico, armazena no navegador um <code>visitorId</code> aleatório, primeira landing page, referenciador sem query string e parâmetros UTM permitidos. Os registros são eliminados após, no máximo, 180 dias. O <code>gclid</code> depende também de consentimento de marketing e é eliminado após, no máximo, 90 dias.</li>
+      <li><strong>Cloudflare Web Analytics:</strong> mede audiência, páginas, origem aproximada, dispositivos e desempenho após consentimento analítico.</li>
+      <li><strong>Jotform:</strong> recebe o formulário e encaminha ao banco de atribuição apenas os campos técnicos descritos nesta Política.</li>
     </ul>
   </article>
 
   <article class="legal-section">
     <h2>5. Consentimento e bloqueio prévio</h2>
     <p>
-      Cookies não necessários devem permanecer bloqueados até que o usuário faça uma escolha. Quando Google Tag Manager ou Google Analytics forem usados, o site deve iniciar o Consent Mode com armazenamento analítico e publicitário negado, atualizando o estado apenas após o consentimento.
+      Tecnologias não necessárias permanecem bloqueadas até que o usuário faça uma escolha. As categorias opcionais começam desativadas e somente são atualizadas após uma manifestação positiva. O usuário pode rejeitar todas ou escolher cada finalidade separadamente.
     </p>
   </article>
 
   <article class="legal-section">
     <h2>6. Jotform</h2>
     <p>
-      O formulário de análise poderá ser incorporado via Jotform. Essa ferramenta pode usar tecnologias próprias para segurança, prevenção de abuso, envio do formulário e funcionamento da integração. Quando houver cookies não essenciais da ferramenta, eles deverão respeitar as preferências aplicáveis.
+      O formulário de análise envia os dados ao Jotform. A ferramenta pode usar recursos técnicos necessários para segurança, prevenção de abuso e entrega da submissão. A atribuição opcional enviada junto ao formulário depende das preferências registradas no site da Klout.
     </p>
   </article>
 
@@ -109,7 +99,7 @@ import LegalDocument from '../components/legal/LegalDocument.astro';
   <article class="legal-section">
     <h2>8. Alterações nesta Política</h2>
     <p>
-      Esta Política será atualizada quando novas ferramentas, tecnologias locais ou finalidades forem adicionadas. Ferramentas previstas que ainda não estejam ativas permanecem sujeitas ao consentimento correspondente antes de qualquer coleta.
+      Esta Política será atualizada quando novas ferramentas, tecnologias locais ou finalidades forem adicionadas. Nenhuma nova ferramenta opcional deve ser ativada antes da atualização das informações e do mecanismo de consentimento aplicável.
     </p>
   </article>
 </LegalDocument>

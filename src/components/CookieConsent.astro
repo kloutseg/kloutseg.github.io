@@ -6,11 +6,10 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
 <script is:inline>
   (() => {
     const STORAGE_KEY = 'klout:cookie-consent';
-    const CONSENT_VERSION = '2026-05-14';
+    const CONSENT_VERSION = '2026-06-22';
     const DEFAULT_STATE = {
       necessary: true,
       analytics: false,
-      experience: false,
       marketing: false,
     };
 
@@ -104,7 +103,7 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
       function loadGtm() {
         if (loaded) return;
         const consent = window.KloutConsent?.read?.();
-        if (!consent || (!consent.analytics && !consent.experience && !consent.marketing)) return;
+        if (!consent || (!consent.analytics && !consent.marketing)) return;
 
         loaded = true;
         window.dataLayer = window.dataLayer || [];
@@ -153,7 +152,7 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
     <div class="cookie-consent__copy">
       <h2 id="cookie-consent-title">Cookies e privacidade</h2>
       <p id="cookie-consent-description">
-        Usamos cookies essenciais e, com sua permissão, dados de navegação para melhorar sua experiência.
+        Usamos recursos essenciais e, com sua permissão, dados para medir audiência e atribuir a origem de campanhas.
       </p>
     </div>
 
@@ -164,7 +163,7 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
       <button type="button" class="cookie-consent__button cookie-consent__button--ghost" data-consent-configure>
         Configurar
       </button>
-      <button type="button" class="cookie-consent__button cookie-consent__button--text" data-consent-reject>
+      <button type="button" class="cookie-consent__button cookie-consent__button--primary" data-consent-reject>
         Rejeitar
       </button>
     </div>
@@ -205,17 +204,8 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
 
       <label class="cookie-option">
         <span>
-          <strong>Experiência e comportamento</strong>
-          <small>Mapas de calor, gravações de sessão e melhoria de usabilidade, como Clarity ou Hotjar.</small>
-        </span>
-        <span class="cookie-switch" aria-hidden="true"></span>
-        <input type="checkbox" data-consent-category="experience" />
-      </label>
-
-      <label class="cookie-option">
-        <span>
           <strong>Marketing</strong>
-          <small>Mensuração de campanhas, remarketing e personalização de anúncios.</small>
+          <small>Registra o identificador de clique do Google Ads para atribuição de campanhas.</small>
         </span>
         <span class="cookie-switch" aria-hidden="true"></span>
         <input type="checkbox" data-consent-category="marketing" />
@@ -248,7 +238,6 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
       return window.KloutConsent?.read?.() || {
         necessary: true,
         analytics: false,
-        experience: false,
         marketing: false,
       };
     }
@@ -296,7 +285,6 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
       save({
         necessary: true,
         analytics: true,
-        experience: true,
         marketing: true,
       });
     }
@@ -305,7 +293,6 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
       save({
         necessary: true,
         analytics: false,
-        experience: false,
         marketing: false,
       });
     }
