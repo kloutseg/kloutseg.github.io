@@ -253,8 +253,9 @@ const qaCases = [
         }
       };
 
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
+      const IntersectionObserverConstructor = window.IntersectionObserver;
+      if (typeof IntersectionObserverConstructor === 'function') {
+        const observer = new IntersectionObserverConstructor((entries) => {
           if (!entries.some((entry) => entry.isIntersecting)) return;
           observer.disconnect();
           void startStepsAnimation();

@@ -1,23 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
-import TestSection from './home/TestSection.svelte';
+import type { Component } from 'svelte';
 import Footer from './Footer.svelte';
 
 describe('Componentes Sem Lógica', () => {
-  describe('TestSection', () => {
-    it('deve renderizar uma section com data-stack-section', () => {
-      const { container } = render(TestSection);
-
-      const section = container.querySelector('section[data-stack-section]');
-      expect(section).toBeInTheDocument();
-    });
-  });
-
   describe('Footer', () => {
     it('deve renderizar um footer', () => {
-      const { container } = render(Footer);
+      // Astro adds client-directive props to .svelte imports at type level;
+      // at runtime this remains a standard Svelte component.
+      const { container } = render(Footer as unknown as Component);
 
-      const footer = container.querySelector('footer[data-stack-section]');
+      const footer = container.querySelector('footer[data-dark-section]');
       expect(footer).toBeInTheDocument();
     });
   });

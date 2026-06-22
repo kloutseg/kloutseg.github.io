@@ -48,8 +48,8 @@ export function validateBeneficiarios(value: number | string): string {
 
 export function validateIdades(idades: number[]): string {
   if (idades.length === 0) return 'Informe a idade de cada beneficiário';
-  for (let i = 0; i < idades.length; i++) {
-    if (!idades[i] || idades[i] < 0 || !Number.isInteger(idades[i])) {
+  for (const [i, idade] of idades.entries()) {
+    if (idade < 0 || !Number.isInteger(idade)) {
       return `Idade inválida na posição ${i + 1}`;
     }
   }
