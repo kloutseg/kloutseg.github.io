@@ -25,6 +25,7 @@ Secondary CNPJ: 55.454.842/0001-05
 
 Primary address: R. Sena Madureira, 151 - Vila Mariana, São Paulo - SP, 04021-050, Brazil
 Secondary address: R. da Quitanda, 96 - Centro Histórico de São Paulo, São Paulo - SP, 01012-010, Brazil
+Jundiaí address: R. Sen. Fonseca, 715 - Centro, Jundiaí - SP, 13201-017, Brazil
 Obsolete address warning: Av. Liberdade, 21 - Conjunto C - Liberdade, São Paulo - SP is no longer a valid Klout address and should not be used as an active business location.
 Obsolete address warning: R. Sapucaia, 1132 - Mooca, São Paulo - SP is not a valid Klout address and should not be used as an active business location.
 

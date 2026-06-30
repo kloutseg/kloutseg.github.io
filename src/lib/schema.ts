@@ -38,6 +38,15 @@ const secondaryAddress = {
   addressCountry: 'BR',
 };
 
+const jundiaiAddress = {
+  '@type': 'PostalAddress',
+  streetAddress: 'R. Sen. Fonseca, 715',
+  addressLocality: 'Jundiaí',
+  addressRegion: 'SP',
+  postalCode: '13201-017',
+  addressCountry: 'BR',
+};
+
 const serviceArea = {
   '@type': 'Country',
   name: 'Brasil',
@@ -47,6 +56,7 @@ export const kloutOrganizationId = `${siteUrl}/#organization`;
 export const kloutWebsiteId = `${siteUrl}/#website`;
 export const kloutPrimaryLocationId = `${siteUrl}/#localbusiness-sena-madureira`;
 export const kloutSecondaryLocationId = `${siteUrl}/#localbusiness-quitanda`;
+export const kloutJundiaiLocationId = `${siteUrl}/#localbusiness-jundiai`;
 
 const contactPoint = {
   '@type': 'ContactPoint',
@@ -319,6 +329,20 @@ export const kloutAboutSchema = buildKloutPageSchema({
       email: 'contato@kloutseguros.com.br',
       telephone: '+55-11-92550-6721',
       address: secondaryAddress,
+      priceRange: '$$',
+      areaServed: serviceArea,
+    },
+    {
+      '@type': ['LocalBusiness', 'InsuranceAgency'],
+      '@id': kloutJundiaiLocationId,
+      name: 'Klout Consultoria - Unidade Jundiaí',
+      branchOf: {
+        '@id': kloutOrganizationId,
+      },
+      url: `${siteUrl}/a-klout`,
+      email: 'contato@kloutseguros.com.br',
+      telephone: '+55-11-92550-6721',
+      address: jundiaiAddress,
       priceRange: '$$',
       areaServed: serviceArea,
     },
