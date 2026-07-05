@@ -21,7 +21,6 @@ const addressItems = [
     secondary: true,
   },
   {
-    label: 'Jundiaí',
     value: 'R. Sen. Fonseca, 715 - Centro, Jundiaí - SP, 13201-017',
     secondary: true,
   },
@@ -139,7 +138,7 @@ const addressItems = [
             <div class="about-klout-address-list" aria-label="Pontos de atendimento da Klout">
               {addressItems.map((item) => (
                 <article class="about-klout-address-item">
-                  <p class="about-klout-address-label">{item.label}</p>
+                  {item.label && <p class="about-klout-address-label">{item.label}</p>}
                   <p class:list={['about-klout-address-value', item.secondary && 'about-klout-address-value-secondary']}>{item.value}</p>
                 </article>
               ))}
