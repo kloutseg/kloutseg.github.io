@@ -4,7 +4,180 @@ import FloatingNavbar from '../components/navbar/FloatingNavbar.svelte';
 import SectionStacking from '../components/SectionStacking.svelte';
 import Footer from '../components/Footer.svelte';
 import BackToTop from '../components/BackToTop.astro';
-import { kloutAboutSchema } from '../lib/schema';
+import { kloutAboutSchema, kloutOrganizationId } from '../lib/schema';
+
+const siteUrl = 'https://www.kloutseguros.com.br';
+const kloutLinkedinUrl = 'https://www.linkedin.com/company/klout-seguros';
+
+type LeadershipMember = {
+  name: string;
+  jobTitle: string;
+  email: string;
+  telephone: string;
+  phoneLabel?: string;
+  linkedin?: string;
+  summary?: string;
+  image: string;
+  imageAlt: string;
+  slug: string;
+  group: 'direction' | 'management';
+  placeholder?: boolean;
+};
+
+const leadershipTeam: LeadershipMember[] = [
+  {
+    name: 'Kennedy Souza',
+    jobTitle: 'CEO',
+    email: 'kenny@kloutseguros.com.br',
+    telephone: '+55-11-93244-4327',
+    phoneLabel: 'WhatsApp',
+    linkedin: 'https://www.linkedin.com/in/kennedy-souza-25aa6b212/',
+    summary: '',
+    image: '/images/team/c-levels/ceo_kennedy-souza/kennedy-souza_ceo_klout-seguros.webp',
+    imageAlt: 'Retrato de Kennedy Souza, CEO da Klout',
+    slug: 'kennedy-souza',
+    group: 'direction',
+  },
+  {
+    name: 'Vitor Ribeiro',
+    jobTitle: 'COO',
+    email: 'vitor@kloutseguros.com.br',
+    telephone: '+55-11-99833-1320',
+    phoneLabel: 'WhatsApp',
+    linkedin: 'https://www.linkedin.com/in/vitor-santos-9a054b16b',
+    summary: '',
+    image: '/images/team/c-levels/coo_vitor-ribeiro/vitor-ribeiro_coo.webp',
+    imageAlt: 'Retrato de Vitor Ribeiro, COO da Klout',
+    slug: 'vitor-ribeiro',
+    group: 'direction',
+  },
+  {
+    name: 'Carlos Cantilha',
+    jobTitle: 'CLO',
+    email: 'carlos.cantilha@kloutseguros.com.br',
+    telephone: '+55-11-93065-5559',
+    phoneLabel: 'WhatsApp',
+    linkedin: 'https://www.linkedin.com/in/carlos-cantilha-56a028421',
+    summary: '',
+    image: '/images/team/c-levels/clo_carlos-cantilha/carlos-cantilha_clo.webp',
+    imageAlt: 'Retrato de Carlos Cantilha, CLO da Klout',
+    slug: 'carlos-cantilha',
+    group: 'direction',
+  },
+  {
+    name: 'Guilherme Lucas',
+    jobTitle: 'Gerente de Relacionamento',
+    email: 'guilherme.lucas@kloutseguros.com.br',
+    telephone: '+55-11-93712-1994',
+    phoneLabel: 'Telefone',
+    linkedin: '',
+    summary: '',
+    image: '/images/team/managers/gerente-de-relacionamento_guilherme-lucas/guilherme-lucas_gerente-de-relacionamento.webp',
+    imageAlt: 'Retrato de Guilherme Lucas, Gerente de Relacionamento da Klout',
+    slug: 'guilherme-lucas',
+    group: 'management',
+  },
+  {
+    name: 'Felipe Bandechi',
+    jobTitle: 'Gerente Comercial',
+    email: 'felipe.bandechi@kloutseguros.com.br',
+    telephone: '+55-11-97142-1515',
+    phoneLabel: 'WhatsApp',
+    linkedin: '',
+    summary: '',
+    image: '/images/team/managers/gerente-comercial_felipe-bandechi/felipe-bandechi_gerente-comercial.webp',
+    imageAlt: 'Retrato de Felipe Bandechi, Gerente Comercial da Klout',
+    slug: 'felipe-bandechi',
+    group: 'management',
+  },
+  {
+    name: 'Augusto Cavalheiro',
+    jobTitle: 'Gerente Comercial',
+    email: 'augusto.cavalheiro@kloutseguros.com.br',
+    telephone: '+55-11-93277-9317',
+    phoneLabel: 'WhatsApp',
+    linkedin: '',
+    summary: '',
+    image: '/images/team/managers/gerente-comercial_augusto-cavalheiro/augusto-cavalheiro_gerente-comercial.webp',
+    imageAlt: 'Retrato de Augusto Cavalheiro, Gerente Comercial da Klout',
+    slug: 'augusto-cavalheiro',
+    group: 'management',
+  },
+  {
+    name: 'Mariana Trajano',
+    jobTitle: 'Gerente Comercial',
+    email: 'mariana@kloutseguros.com.br',
+    telephone: '+55-11-91328-6299',
+    phoneLabel: 'WhatsApp',
+    linkedin: '',
+    summary: '',
+    image: '/images/team/managers/gerente-comercial_mariana-trajano/mariana-trajano_gerente-comercial.webp',
+    imageAlt: 'Retrato de Mariana Trajano, Gerente Comercial da Klout',
+    slug: 'mariana-trajano',
+    group: 'management',
+  },
+  {
+    name: 'Julia Camargo',
+    jobTitle: 'Gerente de Implantação',
+    email: 'julia.camargo@kloutseguros.com.br',
+    telephone: '+55-11-97861-5526',
+    phoneLabel: 'WhatsApp',
+    linkedin: '',
+    summary: '',
+    image: '/images/team/managers/gerente-de-implantação_julia-camargo/julia-camargo_gerente-de-implantação.webp',
+    imageAlt: 'Retrato de Julia Camargo, Gerente de Implantação da Klout',
+    slug: 'julia-camargo',
+    group: 'management',
+  },
+];
+
+const directionTeam = leadershipTeam.filter((member) => member.group === 'direction');
+const managementTeamOrder = [
+  'augusto-cavalheiro',
+  'mariana-trajano',
+  'felipe-bandechi',
+  'julia-camargo',
+  'guilherme-lucas',
+];
+const managementTeam = leadershipTeam
+  .filter((member) => member.group === 'management')
+  .sort((first, second) => managementTeamOrder.indexOf(first.slug) - managementTeamOrder.indexOf(second.slug));
+const publishedLeadershipTeam = leadershipTeam.filter((member) => !member.placeholder);
+
+const leadershipPersonNodes = publishedLeadershipTeam.map((member) => ({
+  '@type': 'Person',
+  '@id': `${siteUrl}/a-klout#${member.slug}`,
+  name: member.name,
+  jobTitle: member.jobTitle,
+  email: `mailto:${member.email}`,
+  telephone: member.telephone,
+  url: `${siteUrl}/a-klout#${member.slug}`,
+  ...(member.image && {
+    image: member.image.startsWith('http') ? member.image : `${siteUrl}${member.image}`,
+  }),
+  ...(member.linkedin && { sameAs: [member.linkedin] }),
+  ...(member.summary && { description: member.summary }),
+  worksFor: {
+    '@id': kloutOrganizationId,
+  },
+}));
+
+const aboutStructuredData = leadershipPersonNodes.length
+  ? {
+      ...kloutAboutSchema,
+      '@graph': [
+        ...(kloutAboutSchema['@graph'] ?? []).map((node) => {
+          if (node['@id'] !== kloutOrganizationId) return node;
+
+          return {
+            ...node,
+            employee: leadershipPersonNodes.map((member) => ({ '@id': member['@id'] })),
+          };
+        }),
+        ...leadershipPersonNodes,
+      ],
+    }
+  : kloutAboutSchema;
 
 const addressItems = [
   {
@@ -33,7 +206,7 @@ const addressItems = [
   criticalImage="/images/about_klout_hero_consultive.webp"
   criticalImageSrcset="/images/about_klout_hero_consultive-768.webp 768w, /images/about_klout_hero_consultive-1024.webp 1024w, /images/about_klout_hero_consultive.webp 1536w"
   criticalImageSizes="100vw"
-  structuredData={kloutAboutSchema}
+  structuredData={aboutStructuredData}
 >
   <FloatingNavbar client:media="(min-width: 769px)" />
   <SectionStacking client:load />
@@ -93,6 +266,134 @@ const addressItems = [
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-klout-section about-klout-team" aria-labelledby="about-klout-team-title">
+      <div class="about-klout-shell about-klout-team-shell">
+        <div class="about-klout-team-heading">
+          <p class="about-klout-side-kicker section-side-kicker">Liderança</p>
+          <div class="about-klout-team-heading-copy">
+            <h2 id="about-klout-team-title" class="about-klout-team-title">Atendimento técnico e acessível.</h2>
+            <p class="about-klout-team-description">
+              A liderança da Klout mantém canais diretos para orientar decisões, acompanhar casos individualmente e fornecer um atendimento próximo.
+            </p>
+          </div>
+        </div>
+
+        <div class="about-klout-team-groups">
+          <div class="about-klout-team-group">
+            <p class="about-klout-team-group-label">Direção</p>
+            <div class="about-klout-team-grid about-klout-team-grid-direction" aria-label="Direção da Klout">
+              {directionTeam.map((member, index) => (
+                <article id={member.slug} class:list={['about-klout-team-card', 'about-klout-team-card-direction', member.placeholder && 'about-klout-team-card-placeholder']}>
+                  <figure class="about-klout-team-photo-frame">
+                    {member.image ? (
+                      <img
+                        src={member.image}
+                        alt={member.imageAlt || `Retrato de ${member.name}`}
+                        class="about-klout-team-photo"
+                        loading="lazy"
+                        width="720"
+                        height="900"
+                      />
+                    ) : (
+                      <div class="about-klout-team-photo-placeholder" aria-hidden="true">
+                        <span>{String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                    )}
+                  </figure>
+
+                  <div class="about-klout-team-card-copy">
+                    <div class="about-klout-team-identity">
+                      <h3 class="about-klout-team-name">{member.name}</h3>
+                      <p class="about-klout-team-role">{member.jobTitle}</p>
+                    </div>
+
+                    {member.summary && <p class="about-klout-team-summary">{member.summary}</p>}
+
+                    <div class="about-klout-team-links" aria-label={`Canais de contato de ${member.name}`}>
+                      {member.email && (
+                        <a href={`mailto:${member.email}`} class="about-klout-team-contact-link">Email</a>
+                      )}
+                      {member.telephone && (
+                        <a href={`tel:${member.telephone.replace(/[^\d+]/g, '')}`} class="about-klout-team-contact-link">{member.phoneLabel || 'Telefone'}</a>
+                      )}
+                      <a
+                        href={member.linkedin || kloutLinkedinUrl}
+                        class="about-klout-team-linkedin-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={member.linkedin ? `LinkedIn de ${member.name}` : 'LinkedIn da Klout'}
+                        title={member.linkedin ? `LinkedIn de ${member.name}` : 'LinkedIn da Klout'}
+                      >
+                        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+                          <path d="M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z" fill-rule="evenodd"></path>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div class="about-klout-team-group">
+            <p class="about-klout-team-group-label">Gestão</p>
+            <div class="about-klout-team-grid about-klout-team-grid-management" aria-label="Gestão da Klout">
+              {managementTeam.map((member, index) => (
+                <article id={member.slug} class:list={['about-klout-team-card', 'about-klout-team-card-management', member.placeholder && 'about-klout-team-card-placeholder']}>
+                  <figure class="about-klout-team-photo-frame">
+                    {member.image ? (
+                      <img
+                        src={member.image}
+                        alt={member.imageAlt || `Retrato de ${member.name}`}
+                        class="about-klout-team-photo"
+                        loading="lazy"
+                        width="420"
+                        height="525"
+                      />
+                    ) : (
+                      <div class="about-klout-team-photo-placeholder" aria-hidden="true">
+                        <span>{String(index + directionTeam.length + 1).padStart(2, '0')}</span>
+                      </div>
+                    )}
+                  </figure>
+
+                  <div class="about-klout-team-card-copy">
+                    <div class="about-klout-team-identity">
+                      <h3 class="about-klout-team-name">{member.name}</h3>
+                      <p class="about-klout-team-role">{member.jobTitle}</p>
+                    </div>
+
+                    {member.summary && <p class="about-klout-team-summary">{member.summary}</p>}
+
+                    <div class="about-klout-team-links" aria-label={`Canais de contato de ${member.name}`}>
+                      {member.email && (
+                        <a href={`mailto:${member.email}`} class="about-klout-team-contact-link">Email</a>
+                      )}
+                      {member.telephone && (
+                        <a href={`tel:${member.telephone.replace(/[^\d+]/g, '')}`} class="about-klout-team-contact-link">{member.phoneLabel || 'Telefone'}</a>
+                      )}
+                      <a
+                        href={member.linkedin || kloutLinkedinUrl}
+                        class="about-klout-team-linkedin-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={member.linkedin ? `LinkedIn de ${member.name}` : 'LinkedIn da Klout'}
+                        title={member.linkedin ? `LinkedIn de ${member.name}` : 'LinkedIn da Klout'}
+                      >
+                        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+                          <path d="M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z" fill-rule="evenodd"></path>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </div>
@@ -533,6 +834,321 @@ const addressItems = [
     transform: translateX(5px);
   }
 
+  .about-klout-team {
+    background: linear-gradient(180deg, hsl(206, 34%, 95.8%) 0%, hsl(210, 18%, 95%) 100%);
+  }
+
+  .about-klout-team-shell {
+    display: grid;
+    gap: clamp(2.4rem, 5vw, 4rem);
+    padding-bottom: clamp(7rem, 14vh, 11rem);
+  }
+
+  .about-klout-team-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 2vw, 1.75rem);
+    align-items: start;
+  }
+
+  .about-klout-team-heading-copy {
+    display: grid;
+    gap: clamp(1.35rem, 2vw, 1.8rem);
+    max-width: 43rem;
+  }
+
+  .about-klout-team-title {
+    margin: 0;
+    max-width: 11ch;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: clamp(2.6rem, 4.7vw, 4.8rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+    color: hsl(214, 34%, 12%);
+    text-wrap: balance;
+  }
+
+  .about-klout-team-description {
+    margin: 0;
+    max-width: 35rem;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.74;
+    letter-spacing: 0.01em;
+    color: hsla(214, 30%, 15%, 0.78);
+    text-wrap: pretty;
+  }
+
+  .about-klout-team-groups {
+    display: grid;
+    gap: clamp(2.2rem, 4.5vw, 3.8rem);
+  }
+
+  .about-klout-team-group {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .about-klout-team-group-label {
+    margin: 0;
+    width: fit-content;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsla(214, 26%, 22%, 0.7);
+  }
+
+  .about-klout-team-grid {
+    display: grid;
+    gap: clamp(0.85rem, 1.6vw, 1.15rem);
+  }
+
+  .about-klout-team-grid-direction {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-klout-team-grid-management {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.72rem;
+  }
+
+  .about-klout-team-card {
+    display: grid;
+    align-content: start;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid hsla(214, 18%, 18%, 0.09);
+    border-radius: 6px;
+    background: hsla(0, 0%, 100%, 0.52);
+  }
+
+  .about-klout-team-card-management {
+    align-items: stretch;
+  }
+
+  .about-klout-team-photo-frame {
+    margin: 0;
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: linear-gradient(145deg, hsl(214, 18%, 86%) 0%, hsl(42, 24%, 88%) 100%);
+  }
+
+  .about-klout-team-card-management .about-klout-team-photo-frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .about-klout-team-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(0.18) saturate(0.62) contrast(1.01) brightness(0.96);
+    transform: scale(1.001);
+    transition: filter 0.45s ease, transform 0.45s ease;
+  }
+
+  .about-klout-team-photo-frame::before,
+  .about-klout-team-photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .about-klout-team-photo-frame::before {
+    z-index: 1;
+    background: linear-gradient(145deg, hsl(211, 72%, 32%) 0%, hsl(216, 68%, 20%) 100%);
+    mix-blend-mode: color;
+    opacity: 0.58;
+    transition: opacity 0.45s ease;
+  }
+
+  .about-klout-team-photo-frame::after {
+    z-index: 2;
+    background: linear-gradient(180deg, transparent 48%, hsla(214, 38%, 8%, 0.08) 100%);
+    mix-blend-mode: multiply;
+  }
+
+  .about-klout-team-card:hover .about-klout-team-photo,
+  .about-klout-team-card:focus-within .about-klout-team-photo {
+    filter: grayscale(0.06) saturate(0.88) contrast(1.01) brightness(0.99);
+    transform: scale(1.018);
+  }
+
+  .about-klout-team-card:hover .about-klout-team-photo-frame::before,
+  .about-klout-team-card:focus-within .about-klout-team-photo-frame::before {
+    opacity: 0.2;
+  }
+
+  .about-klout-team-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(135deg, hsla(214, 24%, 20%, 0.12) 0%, transparent 42%),
+      linear-gradient(180deg, hsl(210, 16%, 88%) 0%, hsl(42, 22%, 90%) 100%);
+  }
+
+  .about-klout-team-photo-placeholder span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    color: hsla(214, 26%, 20%, 0.46);
+  }
+
+  .about-klout-team-card-copy {
+    display: grid;
+    gap: 0;
+    padding: 1.1rem 1rem 1rem;
+  }
+
+  .about-klout-team-card-direction .about-klout-team-card-copy {
+    padding: 1.25rem 1.1rem 1.1rem;
+  }
+
+  .about-klout-team-card-management .about-klout-team-card-copy {
+    gap: 0.6rem;
+    padding: 0.85rem 0.78rem 0.82rem;
+    align-content: start;
+  }
+
+  .about-klout-team-identity {
+    display: grid;
+    gap: 0.28rem;
+    margin-bottom: 1.05rem;
+  }
+
+  .about-klout-team-name {
+    margin: 0;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: clamp(1.22rem, 1.8vw, 1.72rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    color: hsl(214, 32%, 12%);
+  }
+
+  .about-klout-team-card-direction .about-klout-team-name {
+    font-size: clamp(1.42rem, 2.2vw, 2rem);
+  }
+
+  .about-klout-team-card-management .about-klout-team-name {
+    font-size: clamp(1rem, 1.18vw, 1.18rem);
+  }
+
+  .about-klout-team-role {
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 300;
+    line-height: 1.42;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: hsla(214, 26%, 22%, 0.66);
+  }
+
+  .about-klout-team-card-management .about-klout-team-role {
+    font-size: 0.56rem;
+    letter-spacing: 0.13em;
+  }
+
+  .about-klout-team-summary {
+    margin: 0;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 400;
+    line-height: 1.58;
+    letter-spacing: 0.01em;
+    color: hsla(214, 26%, 16%, 0.72);
+    text-wrap: pretty;
+  }
+
+  .about-klout-team-card-management .about-klout-team-summary {
+    display: none;
+  }
+
+  .about-klout-team-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    padding-top: 0.72rem;
+    border-top: 1px solid hsla(214, 24%, 18%, 0.12);
+  }
+
+  .about-klout-team-contact-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.65rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: hsla(214, 38%, 17%, 0.68);
+    transition: color 0.2s ease;
+  }
+
+  .about-klout-team-contact-link:hover {
+    color: hsl(214, 61%, 24%);
+  }
+
+  .about-klout-team-linkedin-link {
+    width: 1.65rem;
+    height: 1.65rem;
+    display: grid;
+    place-items: center;
+    margin-left: auto;
+    color: hsl(214, 61%, 24%);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .about-klout-team-linkedin-link svg {
+    width: 0.94rem;
+    height: 0.94rem;
+  }
+
+  .about-klout-team-linkedin-link:hover {
+    color: hsl(214, 61%, 18%);
+    transform: translateY(-1px);
+  }
+
+  .about-klout-team-card-management .about-klout-team-links {
+    gap: 0.6rem;
+    padding-top: 0.58rem;
+  }
+
+  .about-klout-team-card-management .about-klout-team-contact-link {
+    min-height: 1.65rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+  }
+
+  .about-klout-team-card-management .about-klout-team-linkedin-link {
+    width: 1.55rem;
+    height: 1.55rem;
+  }
+
+  .about-klout-team-card-management .about-klout-team-linkedin-link svg {
+    width: 0.84rem;
+    height: 0.84rem;
+  }
+
+  .about-klout-team-card-placeholder {
+    opacity: 0.72;
+  }
+
   .about-klout-units-grid {
     display: grid;
     grid-template-columns: 50vw minmax(0, 1fr);
@@ -684,6 +1300,27 @@ const addressItems = [
     height: 1rem;
   }
 
+  @media (max-width: 1180px) {
+    .about-klout-team-grid-management {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .about-klout-team-card-management {
+      grid-template-columns: minmax(8.75rem, 34%) minmax(0, 1fr);
+    }
+
+    .about-klout-team-card-management .about-klout-team-photo-frame {
+      min-height: 100%;
+    }
+
+    .about-klout-team-card-management .about-klout-team-summary {
+      display: block;
+      font-size: 0.84rem;
+      line-height: 1.44;
+    }
+  }
+
   @media (max-width: 900px) {
     .about-klout-hero-shell,
     .about-klout-shell {
@@ -708,6 +1345,20 @@ const addressItems = [
 
     .about-klout-proof-actions {
       padding-left: 2rem;
+    }
+
+    .about-klout-team-heading {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .about-klout-team-title {
+      max-width: 12ch;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+    }
+
+    .about-klout-team-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .about-klout-units-grid {
@@ -773,6 +1424,64 @@ const addressItems = [
 
     .about-klout-proof-actions {
       padding-left: 1.2rem;
+    }
+
+    .about-klout-team-shell {
+      gap: 2rem;
+      padding-top: 3.25rem;
+      padding-bottom: 5rem;
+    }
+
+    .about-klout-team-heading {
+      gap: 1rem;
+    }
+
+    .about-klout-team-title {
+      max-width: 10ch;
+      font-size: clamp(2.2rem, 10vw, 3.5rem);
+    }
+
+    .about-klout-team-description {
+      font-size: 0.96rem;
+      line-height: 1.68;
+    }
+
+    .about-klout-team-grid {
+      grid-template-columns: 1fr;
+      gap: 0.95rem;
+    }
+
+    .about-klout-team-card {
+      grid-template-columns: minmax(7.5rem, 38%) minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .about-klout-team-photo-frame {
+      min-height: 100%;
+    }
+
+    .about-klout-team-card-copy {
+      padding: 0.95rem 0.9rem;
+      gap: 0.72rem;
+    }
+
+    .about-klout-team-name {
+      font-size: clamp(1.22rem, 7vw, 1.58rem);
+    }
+
+    .about-klout-team-role {
+      font-size: 0.56rem;
+      letter-spacing: 0.13em;
+    }
+
+    .about-klout-team-summary {
+      font-size: 0.86rem;
+      line-height: 1.48;
+    }
+
+    .about-klout-team-contact-link {
+      min-height: 1.75rem;
+      font-size: 0.56rem;
     }
 
     .about-klout-side-kicker {
