@@ -15,6 +15,7 @@ const {
   loadCustomFonts = true,
   smoothScrollDelay = 2600,
   structuredData: providedStructuredData,
+  noindex = false,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const pageTitle = title || 'Guia de Estilo';
@@ -53,6 +54,7 @@ const structuredData =
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{pageTitle}</title>
   <meta name="description" content={description}>
+  {noindex && <meta name="robots" content="noindex, nofollow">}
   <link rel="canonical" href={canonicalUrl}>
   <script is:inline>
     try {

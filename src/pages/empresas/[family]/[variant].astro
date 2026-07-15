@@ -1,0 +1,16 @@
+---
+import CampaignLanding from '../../../components/campaign/CampaignLanding.astro';
+import { campaignLandings, type CampaignLanding as CampaignLandingData } from '../../../lib/campaign-landings';
+
+export function getStaticPaths() {
+  return campaignLandings.map((landing) => ({
+    params: { family: landing.family, variant: landing.variant },
+    props: { landing },
+  }));
+}
+
+interface Props { landing: CampaignLandingData }
+const { landing } = Astro.props;
+---
+
+<CampaignLanding landing={landing} />

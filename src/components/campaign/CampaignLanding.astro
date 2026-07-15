@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../../layouts/Base.astro';
+import CampaignLeadForm from './CampaignLeadForm.svelte';
+import type { CampaignLanding as CampaignLandingData } from '../../lib/campaign-landings';
+
+interface Props { landing: CampaignLandingData }
+const { landing } = Astro.props;
+---
+
+<BaseLayout
+  title={landing.metaTitle}
+  description={landing.description}
+  criticalImage={landing.heroImage}
+  criticalImageSizes="100vw"
+  noindex={true}
+  smoothScrollDelay={-1}
+>
+  <div class:list={['campaign-page', `campaign-theme-${landing.theme}`]}>
+    <header class="campaign-header" aria-label="Cabeçalho da campanha">
+      <div class="campaign-header-inner">
+        <img src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" />
+        <a href="/privacidade">Privacidade</a>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="campaign-hero" aria-labelledby="campaign-title">
+        <img
+          src={landing.heroImage}
+          alt={landing.heroAlt}
+          class="campaign-hero-image"
+          width="1600"
+          height="900"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="campaign-hero-shade" aria-hidden="true"></div>
+        <div class="campaign-hero-content">
+          <div class="campaign-hero-copy">
+            {landing.brandLogo && (
+              <div class="campaign-brand-lockup">
+                <span>Uma leitura Klout para</span>
+                <img src={landing.brandLogo} alt={landing.brandName || ''} loading="eager" />
+              </div>
+            )}
+            <p class="campaign-eyebrow">{landing.eyebrow}</p>
+            <h1 id="campaign-title">{landing.title}</h1>
+            <p class="campaign-description">{landing.description}</p>
+            <a href="#diagnostico" class="campaign-primary-cta">
+              {landing.ctaLabel}
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14 0m-6-6 6 6-6 6" /></svg>
+            </a>
+            <p class="campaign-response-time">Retorno em até um dia útil</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="campaign-form-section" aria-label="Solicitação de diagnóstico">
+        <CampaignLeadForm
+          client:load
+          landingId={landing.landingId}
+          variantId={landing.variant}
+          thesis={landing.thesis}
+          title={landing.formTitle}
+          description={landing.formDescription}
+          ctaLabel={landing.ctaLabel}
+        />
+      </section>
+
+      <section class="campaign-reading">
+        <div class="campaign-shell reading-layout">
+          <p class="campaign-section-kicker">{landing.sectionKicker}</p>
+          <div class="campaign-reading-copy">
+            <h2>{landing.sectionTitle}</h2>
+            <p>{landing.sectionDescription}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="campaign-criteria" aria-labelledby="criteria-title">
+        <div class="campaign-shell">
+          <div class="criteria-heading">
+            <p class="campaign-section-kicker">O que entra na leitura</p>
+            <h2 id="criteria-title">Critérios antes de opções.</h2>
+          </div>
+          <div class="criteria-grid">
+            {landing.criteria.map((criterion, index) => (
+              <article class="criterion-item">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h3>{criterion.title}</h3>
+                <p>{criterion.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="campaign-method" aria-labelledby="method-title">
+        <div class="campaign-shell method-grid">
+          <div class="method-intro">
+            <p class="campaign-section-kicker">Como funciona</p>
+            <h2 id="method-title">Uma conversa curta. Uma leitura objetiva.</h2>
+          </div>
+          <ol class="method-steps">
+            <li><span>01</span><div><strong>Contexto</strong><p>Entendemos porte, momento e prioridade da empresa.</p></div></li>
+            <li><span>02</span><div><strong>Leitura</strong><p>Organizamos rede, regras, custo e aderência ao perfil das vidas.</p></div></li>
+            <li><span>03</span><div><strong>Direção</strong><p>Indicamos o que precisa ser aprofundado antes da decisão.</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="campaign-final">
+        <div class="campaign-shell final-layout">
+          <h2>{landing.finalTitle}</h2>
+          <div>
+            <p>Sem compromisso de troca ou contratação. Primeiro, a Klout entende o cenário.</p>
+            <a href="#diagnostico">Solicitar diagnóstico</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="campaign-footer">
+      <div class="campaign-shell campaign-footer-inner">
+        <div>
+          <img src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" loading="lazy" />
+          <p>Klout Corretora de Seguros LTDA · CNPJ 60.772.160/0001-80</p>
+        </div>
+        <nav aria-label="Links legais">
+          <a href="/privacidade">Privacidade</a>
+          <a href="/cookies">Cookies</a>
+          <a href="/termos">Termos</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  :global(html) { scroll-behavior: smooth; }
+  .campaign-page { --accent: hsl(42, 38%, 58%); --ink: hsl(214, 43%, 10%); --paper: hsl(207, 24%, 96%); background: var(--paper); color: var(--ink); }
+  .campaign-theme-paper { --accent: hsl(201, 42%, 40%); --paper: hsl(44, 22%, 97%); }
+  .campaign-theme-graphite { --accent: hsl(41, 36%, 61%); --paper: hsl(204, 13%, 95%); }
+  .campaign-theme-people { --accent: hsl(42, 38%, 59%); --paper: hsl(40, 18%, 97%); }
+  .campaign-theme-balance { --accent: hsl(207, 38%, 46%); --paper: hsl(210, 16%, 96%); }
+  .campaign-theme-bradesco { --accent: hsl(351, 64%, 43%); --paper: hsl(210, 20%, 97%); }
+  .campaign-theme-alice { --accent: hsl(163, 42%, 36%); --paper: hsl(154, 15%, 97%); }
+  .campaign-shell { width: min(100%, 1180px); margin: 0 auto; padding-left: clamp(1.25rem, 5vw, 4.5rem); padding-right: clamp(1.25rem, 5vw, 4.5rem); box-sizing: border-box; }
+  .campaign-header { position: absolute; inset: 0 0 auto; z-index: 5; color: white; }
+  .campaign-header-inner { width: min(100%, 1320px); min-height: 5rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3.5rem); display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; }
+  .campaign-header img, .campaign-footer img { width: 5.2rem; height: auto; object-fit: contain; }
+  .campaign-header a { color: hsla(0, 0%, 100%, .74); font: 500 .72rem/1 'Proxima Nova', sans-serif; letter-spacing: 0; text-decoration: none; }
+  .campaign-hero { position: relative; min-height: 78svh; max-height: 880px; display: grid; align-items: center; overflow: hidden; color: white; }
+  .campaign-hero-image, .campaign-hero-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .campaign-hero-image { object-fit: cover; object-position: center; }
+  .campaign-hero-shade { background: linear-gradient(90deg, hsla(214, 53%, 4%, .93) 0%, hsla(214, 46%, 5%, .72) 39%, hsla(214, 38%, 5%, .12) 70%, hsla(214, 38%, 5%, .08) 100%); }
+  .campaign-hero-content { position: relative; z-index: 1; width: min(100%, 1320px); margin: 0 auto; padding: clamp(7rem, 15vh, 10rem) clamp(1.25rem, 5vw, 4.5rem) 5rem; box-sizing: border-box; }
+  .campaign-hero-copy { width: min(100%, 42rem); display: grid; justify-items: start; gap: 1.15rem; }
+  .campaign-eyebrow, .campaign-section-kicker, .campaign-brand-lockup span { margin: 0; font: 500 .63rem/1.25 'IBM Plex Mono', monospace; letter-spacing: .14em; text-transform: uppercase; }
+  .campaign-eyebrow { color: hsl(42, 42%, 68%); }
+  .campaign-hero h1 { margin: 0; max-width: 13ch; font: 400 clamp(3rem, 6.2vw, 6.3rem)/.92 'IBM Plex Serif', serif; letter-spacing: 0; text-wrap: balance; }
+  .campaign-description { margin: .25rem 0 0; max-width: 38rem; color: hsla(0, 0%, 100%, .78); font: 400 clamp(1rem, 1.3vw, 1.16rem)/1.65 'Proxima Nova', sans-serif; letter-spacing: 0; }
+  .campaign-primary-cta { min-height: 3.25rem; margin-top: .5rem; padding: 0 1.1rem; display: inline-flex; align-items: center; gap: .85rem; border: 1px solid hsla(0, 0%, 100%, .32); border-radius: 4px; color: white; font: 600 .76rem/1 'Proxima Nova', sans-serif; letter-spacing: 0; text-decoration: none; transition: background .2s ease, color .2s ease; }
+  .campaign-primary-cta:hover { background: white; color: var(--ink); }
+  .campaign-primary-cta svg { width: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .campaign-response-time { margin: -.25rem 0 0; color: hsla(0, 0%, 100%, .56); font: 400 .72rem/1.4 'Proxima Nova', sans-serif; }
+  .campaign-brand-lockup { display: flex; align-items: center; gap: 1rem; min-height: 2.3rem; }
+  .campaign-brand-lockup span { color: hsla(0, 0%, 100%, .62); }
+  .campaign-brand-lockup img { display: block; width: auto; max-width: 8rem; max-height: 2.2rem; padding: .38rem .55rem; box-sizing: border-box; border-radius: 3px; background: white; }
+  .campaign-form-section { position: relative; z-index: 2; padding: clamp(1rem, 3vw, 2rem) clamp(0rem, 2vw, 1.5rem) clamp(5rem, 9vw, 8rem); background: var(--paper); }
+  .campaign-form-section :global(.campaign-form-shell) { margin-top: clamp(-3.2rem, -5vw, -1.5rem); box-shadow: 0 18px 56px hsla(214, 32%, 12%, .08); }
+  .campaign-reading { padding: clamp(5rem, 10vw, 9rem) 0; background: hsl(0, 0%, 100%); }
+  .reading-layout { display: grid; grid-template-columns: minmax(8rem, .55fr) minmax(0, 1.45fr); gap: clamp(2rem, 7vw, 7rem); align-items: start; }
+  .campaign-section-kicker { color: color-mix(in srgb, var(--accent) 80%, hsl(214, 34%, 15%)); }
+  .campaign-reading-copy { display: grid; gap: 1.6rem; }
+  .campaign-reading h2, .criteria-heading h2, .method-intro h2, .campaign-final h2 { margin: 0; font: 400 clamp(2.4rem, 4.8vw, 5rem)/.96 'IBM Plex Serif', serif; letter-spacing: 0; text-wrap: balance; }
+  .campaign-reading h2 { max-width: 14ch; }
+  .campaign-reading-copy > p, .final-layout p { margin: 0; max-width: 40rem; color: hsl(214, 17%, 38%); font: 400 1rem/1.75 'Proxima Nova', sans-serif; }
+  .campaign-criteria { padding: clamp(5rem, 10vw, 9rem) 0; background: var(--paper); }
+  .criteria-heading { display: grid; grid-template-columns: .8fr 1.2fr; gap: 2rem; align-items: end; margin-bottom: clamp(3rem, 6vw, 5rem); }
+  .criteria-heading h2 { max-width: 10ch; font-size: clamp(2.5rem, 4vw, 4.2rem); }
+  .criteria-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid hsla(214, 20%, 20%, .16); }
+  .criterion-item { min-width: 0; padding: 1.5rem clamp(1rem, 2.5vw, 2.4rem) 0 0; }
+  .criterion-item + .criterion-item { padding-left: clamp(1rem, 2.5vw, 2.4rem); border-left: 1px solid hsla(214, 20%, 20%, .12); }
+  .criterion-item span { color: var(--accent); font: 500 .62rem/1 'IBM Plex Mono', monospace; }
+  .criterion-item h3 { margin: 2.4rem 0 .8rem; font: 400 clamp(1.5rem, 2.2vw, 2rem)/1.1 'IBM Plex Serif', serif; letter-spacing: 0; }
+  .criterion-item p { margin: 0; max-width: 25rem; color: hsl(214, 16%, 40%); font: 400 .95rem/1.65 'Proxima Nova', sans-serif; }
+  .campaign-method { padding: clamp(5rem, 10vw, 9rem) 0; background: var(--ink); color: white; }
+  .method-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(20rem, 1.1fr); gap: clamp(3rem, 8vw, 8rem); }
+  .method-intro { display: grid; align-content: start; gap: 1.5rem; }
+  .method-intro h2 { max-width: 10ch; }
+  .method-intro .campaign-section-kicker { color: color-mix(in srgb, var(--accent) 85%, white); }
+  .method-steps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .method-steps li { display: grid; grid-template-columns: 2.8rem 1fr; gap: 1.2rem; padding: 1.45rem 0; border-top: 1px solid hsla(0, 0%, 100%, .16); }
+  .method-steps span { color: var(--accent); font: 500 .62rem/1.5 'IBM Plex Mono', monospace; }
+  .method-steps strong { font: 400 1.35rem/1.2 'IBM Plex Serif', serif; }
+  .method-steps p { margin: .45rem 0 0; color: hsla(0, 0%, 100%, .62); font: 400 .92rem/1.6 'Proxima Nova', sans-serif; }
+  .campaign-final { padding: clamp(5rem, 10vw, 9rem) 0; background: hsl(0, 0%, 100%); }
+  .final-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; }
+  .final-layout h2 { max-width: 15ch; }
+  .final-layout > div { display: grid; justify-items: start; gap: 1.4rem; }
+  .final-layout a { min-height: 3.1rem; display: inline-flex; align-items: center; padding: 0 1.1rem; border-radius: 4px; background: var(--ink); color: white; text-decoration: none; font: 600 .76rem/1 'Proxima Nova', sans-serif; }
+  .campaign-footer { background: hsl(214, 48%, 6%); color: white; }
+  .campaign-footer-inner { min-height: 9rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+  .campaign-footer-inner > div { display: flex; align-items: center; gap: 1.5rem; }
+  .campaign-footer p { margin: 0; color: hsla(0, 0%, 100%, .48); font: 400 .68rem/1.5 'Proxima Nova', sans-serif; }
+  .campaign-footer nav { display: flex; gap: 1.2rem; }
+  .campaign-footer a { color: hsla(0, 0%, 100%, .64); text-decoration: none; font: 400 .7rem/1 'Proxima Nova', sans-serif; }
+  @media (max-width: 900px) {
+    .campaign-hero { min-height: 82svh; }
+    .campaign-hero-image { object-position: 62% center; }
+    .campaign-hero-shade { background: linear-gradient(90deg, hsla(214, 53%, 4%, .92) 0%, hsla(214, 46%, 5%, .7) 55%, hsla(214, 38%, 5%, .2) 100%); }
+    .reading-layout, .criteria-heading, .method-grid, .final-layout { grid-template-columns: 1fr; }
+    .criteria-grid { grid-template-columns: 1fr; }
+    .criterion-item, .criterion-item + .criterion-item { padding: 1.5rem 0; border-left: 0; border-top: 1px solid hsla(214, 20%, 20%, .12); }
+    .criterion-item:first-child { border-top: 0; }
+  }
+  @media (max-width: 620px) {
+    .campaign-header-inner { min-height: 4.2rem; }
+    .campaign-hero { min-height: 88svh; align-items: end; }
+    .campaign-hero-image { object-position: 68% center; }
+    .campaign-hero-shade { background: linear-gradient(180deg, hsla(214, 53%, 4%, .12) 0%, hsla(214, 46%, 5%, .52) 36%, hsla(214, 53%, 4%, .96) 100%); }
+    .campaign-hero-content { padding-top: 8rem; padding-bottom: 4rem; }
+    .campaign-hero-copy { gap: .9rem; }
+    .campaign-hero h1 { max-width: 12ch; font-size: clamp(2.55rem, 12vw, 4rem); }
+    .campaign-description { font-size: .95rem; line-height: 1.6; }
+    .campaign-brand-lockup { align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .campaign-form-section { padding-bottom: 4.5rem; }
+    .campaign-reading, .campaign-criteria, .campaign-method, .campaign-final { padding: 4.5rem 0; }
+    .campaign-reading h2, .criteria-heading h2, .method-intro h2, .campaign-final h2 { font-size: clamp(2.2rem, 10vw, 3.4rem); }
+    .campaign-footer-inner, .campaign-footer-inner > div { align-items: flex-start; flex-direction: column; }
+    .campaign-footer-inner { padding-top: 2.4rem; padding-bottom: 2.4rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { :global(html) { scroll-behavior: auto; } }
+</style>
