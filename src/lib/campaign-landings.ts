@@ -12,14 +12,20 @@ export type CampaignLanding = {
   heroAlt: string;
   brandLogo?: string;
   brandName?: string;
+  brandLeadIn?: string;
   formTitle: string;
   formDescription: string;
+  rolePlaceholder?: string;
   ctaLabel: string;
   sectionKicker: string;
   sectionTitle: string;
   sectionDescription: string;
+  sectionImage?: string;
+  sectionImageAlt?: string;
+  criteriaKicker?: string;
   criteria: Array<{ title: string; text: string }>;
   finalTitle: string;
+  finalContentCentered?: boolean;
 };
 
 export const campaignLandings: CampaignLanding[] = [
@@ -110,20 +116,26 @@ export const campaignLandings: CampaignLanding[] = [
   },
   {
     family: 'beneficios', variant: 'bradesco-saude', landingId: 'b2b-beneficios-bradesco-saude', thesis: 'bradesco', theme: 'bradesco',
-    metaTitle: 'Bradesco Saúde Empresarial | Klout', title: 'Bradesco Saúde empresarial, com uma leitura antes da escolha.',
-    description: 'A Klout ajuda sua empresa a entender linhas, rede, abrangência e regras para avaliar a aderência da Bradesco Saúde ao cenário corporativo.',
-    eyebrow: 'Opções corporativas', heroImage: '/images/campaign/bradesco-saude.webp',
+    metaTitle: 'Bradesco Saúde Empresarial | Klout', title: 'Bradesco Saúde empresarial com consultoria estratégica.',
+    description: 'Ajudamos sua empresa a entender rede, abrangência e regras para avaliar a aderência do Bradesco Saúde ao contexto do seu negócio.',
+    eyebrow: '', heroImage: '/images/campaign/bradesco-saude.webp',
     heroAlt: 'Consultoria avaliando opções de plano de saúde para uma empresa',
     brandLogo: '/images/logos_svgs/logo_bradesco.svg', brandName: 'Bradesco Saúde',
+    brandLeadIn: '',
     formTitle: 'Avalie a aderência para sua empresa', formDescription: 'Informe o porte. A Klout retorna em até um dia útil para iniciar a análise.',
-    ctaLabel: 'Conhecer opções', sectionKicker: 'Bradesco Saúde para empresas',
-    sectionTitle: 'A marca é o ponto de partida. O contrato ainda precisa fazer sentido.',
-    sectionDescription: 'A Klout conduz a leitura da opção considerando perfil das vidas, rede necessária e estrutura que a empresa pode sustentar.',
+    rolePlaceholder: 'Selecionar',
+    ctaLabel: 'Conhecer opções', sectionKicker: '',
+    sectionTitle: 'Escolher a Bradesco Saúde é um bom ponto de partida, mas o contrato precisa fazer sentido.',
+    sectionDescription: 'A Klout considera os perfis das vidas, rede necessária e estrutura que proporcione ao time um melhor benefício e à empresa, uma solução que compreenda seus objetivos e orçamento.',
+    sectionImage: '/images/campaign/bradesco-saude-experiencia-digital.webp',
+    sectionImageAlt: 'Mulher negra sorrindo enquanto utiliza um serviço de saúde pelo celular',
+    criteriaKicker: '',
     criteria: [
       { title: 'Linha adequada', text: 'Avaliação das opções compatíveis com porte e expectativa da empresa.' },
       { title: 'Rede aplicável', text: 'Hospitais e laboratórios observados conforme localização e uso provável.' },
       { title: 'Regras claras', text: 'Condições apresentadas antes da decisão e da eventual proposta.' },
     ], finalTitle: 'Entenda se Bradesco Saúde é aderente ao contexto da empresa.',
+    finalContentCentered: true,
   },
   {
     family: 'beneficios', variant: 'alice', landingId: 'b2b-beneficios-alice', thesis: 'alice', theme: 'alice',

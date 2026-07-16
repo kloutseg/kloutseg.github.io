@@ -8,6 +8,7 @@
     title,
     description,
     ctaLabel,
+    rolePlaceholder = 'Selecione seu contexto',
   }: {
     landingId: string;
     variantId: string;
@@ -15,6 +16,7 @@
     title: string;
     description: string;
     ctaLabel: string;
+    rolePlaceholder?: string;
   } = $props();
 
   const FORM_ID = import.meta.env.PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID
@@ -184,7 +186,7 @@
         <label>
           <span>Cargo / função</span>
           <select bind:value={cargo} name="cargo" required>
-            <option value="" disabled>Selecione seu contexto</option>
+            <option value="" disabled>{rolePlaceholder}</option>
             {#each cargoOptions as option}<option value={option}>{option}</option>{/each}
           </select>
         </label>

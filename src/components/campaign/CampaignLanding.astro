@@ -5,6 +5,8 @@ import type { CampaignLanding as CampaignLandingData } from '../../lib/campaign-
 
 interface Props { landing: CampaignLandingData }
 const { landing } = Astro.props;
+const brandLeadIn = landing.brandLeadIn ?? 'Uma leitura Klout para';
+const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
 ---
 
 <BaseLayout
@@ -37,13 +39,13 @@ const { landing } = Astro.props;
         <div class="campaign-hero-shade" aria-hidden="true"></div>
         <div class="campaign-hero-content">
           <div class="campaign-hero-copy">
-            {landing.brandLogo && (
+            {landing.brandLogo && brandLeadIn && (
               <div class="campaign-brand-lockup">
-                <span>Uma leitura Klout para</span>
+                <span>{brandLeadIn}</span>
                 <img src={landing.brandLogo} alt={landing.brandName || ''} loading="eager" />
               </div>
             )}
-            <p class="campaign-eyebrow">{landing.eyebrow}</p>
+            {landing.eyebrow && <p class="campaign-eyebrow">{landing.eyebrow}</p>}
             <h1 id="campaign-title">{landing.title}</h1>
             <p class="campaign-description">{landing.description}</p>
             <a href="#diagnostico" class="campaign-primary-cta">
@@ -64,12 +66,25 @@ const { landing } = Astro.props;
           title={landing.formTitle}
           description={landing.formDescription}
           ctaLabel={landing.ctaLabel}
+          rolePlaceholder={landing.rolePlaceholder ?? 'Selecione seu contexto'}
         />
       </section>
 
       <section class="campaign-reading">
-        <div class="campaign-shell reading-layout">
-          <p class="campaign-section-kicker">{landing.sectionKicker}</p>
+        <div class:list={['campaign-shell', 'reading-layout', landing.sectionImage && 'reading-layout-has-image']}>
+          {landing.sectionImage ? (
+            <figure class="campaign-reading-media">
+              <img
+                src={landing.sectionImage}
+                alt={landing.sectionImageAlt || ''}
+                width="1000"
+                height="1250"
+                loading="lazy"
+              />
+            </figure>
+          ) : landing.sectionKicker && (
+            <p class="campaign-section-kicker">{landing.sectionKicker}</p>
+          )}
           <div class="campaign-reading-copy">
             <h2>{landing.sectionTitle}</h2>
             <p>{landing.sectionDescription}</p>
@@ -79,8 +94,8 @@ const { landing } = Astro.props;
 
       <section class="campaign-criteria" aria-labelledby="criteria-title">
         <div class="campaign-shell">
-          <div class="criteria-heading">
-            <p class="campaign-section-kicker">O que entra na leitura</p>
+          <div class:list={['criteria-heading', !criteriaKicker && 'criteria-heading-title-only']}>
+            {criteriaKicker && <p class="campaign-section-kicker">{criteriaKicker}</p>}
             <h2 id="criteria-title">Critérios antes de opções.</h2>
           </div>
           <div class="criteria-grid">
@@ -110,7 +125,7 @@ const { landing } = Astro.props;
       </section>
 
       <section class="campaign-final">
-        <div class="campaign-shell final-layout">
+        <div class:list={['campaign-shell', 'final-layout', landing.finalContentCentered && 'final-layout-centered']}>
           <h2>{landing.finalTitle}</h2>
           <div>
             <p>Sem compromisso de troca ou contratação. Primeiro, a Klout entende o cenário.</p>
@@ -143,7 +158,7 @@ const { landing } = Astro.props;
   .campaign-theme-graphite { --accent: hsl(41, 36%, 61%); --paper: hsl(204, 13%, 95%); }
   .campaign-theme-people { --accent: hsl(42, 38%, 59%); --paper: hsl(40, 18%, 97%); }
   .campaign-theme-balance { --accent: hsl(207, 38%, 46%); --paper: hsl(210, 16%, 96%); }
-  .campaign-theme-bradesco { --accent: hsl(351, 64%, 43%); --paper: hsl(210, 20%, 97%); }
+  .campaign-theme-bradesco { --accent: hsl(42, 38%, 58%); --paper: hsl(210, 20%, 97%); }
   .campaign-theme-alice { --accent: hsl(163, 42%, 36%); --paper: hsl(154, 15%, 97%); }
   .campaign-shell { width: min(100%, 1180px); margin: 0 auto; padding-left: clamp(1.25rem, 5vw, 4.5rem); padding-right: clamp(1.25rem, 5vw, 4.5rem); box-sizing: border-box; }
   .campaign-header { position: absolute; inset: 0 0 auto; z-index: 5; color: white; }
@@ -171,14 +186,21 @@ const { landing } = Astro.props;
   .campaign-form-section :global(.campaign-form-shell) { margin-top: clamp(-3.2rem, -5vw, -1.5rem); box-shadow: 0 18px 56px hsla(214, 32%, 12%, .08); }
   .campaign-reading { padding: clamp(5rem, 10vw, 9rem) 0; background: hsl(0, 0%, 100%); }
   .reading-layout { display: grid; grid-template-columns: minmax(8rem, .55fr) minmax(0, 1.45fr); gap: clamp(2rem, 7vw, 7rem); align-items: start; }
+  .reading-layout-has-image { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; }
+  .campaign-reading-media { margin: 0; min-width: 0; aspect-ratio: 4 / 5; overflow: hidden; }
+  .campaign-reading-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .campaign-section-kicker { color: color-mix(in srgb, var(--accent) 80%, hsl(214, 34%, 15%)); }
   .campaign-reading-copy { display: grid; gap: 1.6rem; }
   .campaign-reading h2, .criteria-heading h2, .method-intro h2, .campaign-final h2 { margin: 0; font: 400 clamp(2.4rem, 4.8vw, 5rem)/.96 'IBM Plex Serif', serif; letter-spacing: 0; text-wrap: balance; }
   .campaign-reading h2 { max-width: 14ch; }
+  .reading-layout-has-image .campaign-reading-copy { justify-self: end; }
+  .reading-layout-has-image .campaign-reading-copy h2 { max-width: 18ch; }
   .campaign-reading-copy > p, .final-layout p { margin: 0; max-width: 40rem; color: hsl(214, 17%, 38%); font: 400 1rem/1.75 'Proxima Nova', sans-serif; }
   .campaign-criteria { padding: clamp(5rem, 10vw, 9rem) 0; background: var(--paper); }
   .criteria-heading { display: grid; grid-template-columns: .8fr 1.2fr; gap: 2rem; align-items: end; margin-bottom: clamp(3rem, 6vw, 5rem); }
   .criteria-heading h2 { max-width: 10ch; font-size: clamp(2.5rem, 4vw, 4.2rem); }
+  .criteria-heading-title-only { grid-template-columns: minmax(0, 1fr); }
+  .criteria-heading-title-only h2 { max-width: 18ch; }
   .criteria-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid hsla(214, 20%, 20%, .16); }
   .criterion-item { min-width: 0; padding: 1.5rem clamp(1rem, 2.5vw, 2.4rem) 0 0; }
   .criterion-item + .criterion-item { padding-left: clamp(1rem, 2.5vw, 2.4rem); border-left: 1px solid hsla(214, 20%, 20%, .12); }
@@ -197,6 +219,7 @@ const { landing } = Astro.props;
   .method-steps p { margin: .45rem 0 0; color: hsla(0, 0%, 100%, .62); font: 400 .92rem/1.6 'Proxima Nova', sans-serif; }
   .campaign-final { padding: clamp(5rem, 10vw, 9rem) 0; background: hsl(0, 0%, 100%); }
   .final-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; }
+  .final-layout-centered { align-items: center; }
   .final-layout h2 { max-width: 15ch; }
   .final-layout > div { display: grid; justify-items: start; gap: 1.4rem; }
   .final-layout a { min-height: 3.1rem; display: inline-flex; align-items: center; padding: 0 1.1rem; border-radius: 4px; background: var(--ink); color: white; text-decoration: none; font: 600 .76rem/1 'Proxima Nova', sans-serif; }
