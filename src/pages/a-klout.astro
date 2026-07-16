@@ -18,6 +18,8 @@ type LeadershipMember = {
   linkedin?: string;
   summary?: string;
   image: string;
+  imageWidth: number;
+  imageHeight: number;
   imageAlt: string;
   slug: string;
   group: 'direction' | 'management';
@@ -32,8 +34,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-93244-4327',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/kennedy-souza-25aa6b212/',
-    summary: '',
+    summary:
+      'CEO da Klout, lidera a estratégia da empresa e o desenvolvimento de soluções consultivas em saúde, benefícios, seguros e consórcios.',
     image: '/images/team/c-levels/ceo_kennedy-souza/kennedy-souza_ceo_klout-seguros.webp',
+    imageWidth: 960,
+    imageHeight: 1280,
     imageAlt: 'Retrato de Kennedy Souza, CEO da Klout',
     slug: 'kennedy-souza',
     group: 'direction',
@@ -45,8 +50,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-99833-1320',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/vitor-santos-9a054b16b',
-    summary: '',
+    summary:
+      'COO da Klout, coordena a operação desde a análise e a contratação até a implantação e o acompanhamento dos clientes.',
     image: '/images/team/c-levels/coo_vitor-ribeiro/vitor-ribeiro_coo.webp',
+    imageWidth: 960,
+    imageHeight: 1707,
     imageAlt: 'Retrato de Vitor Ribeiro, COO da Klout',
     slug: 'vitor-ribeiro',
     group: 'direction',
@@ -58,8 +66,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-93065-5559',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/carlos-cantilha-56a028421',
-    summary: '',
+    summary:
+      'CLO da Klout, responde pela frente jurídica, pela governança contratual e pela segurança das decisões em um mercado regulado.',
     image: '/images/team/c-levels/clo_carlos-cantilha/carlos-cantilha_clo.webp',
+    imageWidth: 960,
+    imageHeight: 1311,
     imageAlt: 'Retrato de Carlos Cantilha, CLO da Klout',
     slug: 'carlos-cantilha',
     group: 'direction',
@@ -71,8 +82,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-93712-1994',
     phoneLabel: 'Telefone',
     linkedin: 'https://www.linkedin.com/in/guilherme-lucas-12b910191',
-    summary: '',
+    summary:
+      'Gerente de Relacionamento da Klout, acompanha clientes, articula demandas e preserva a proximidade do atendimento após a contratação.',
     image: '/images/team/managers/gerente-de-relacionamento_guilherme-lucas/guilherme-lucas_gerente-de-relacionamento.webp',
+    imageWidth: 940,
+    imageHeight: 1672,
     imageAlt: 'Retrato de Guilherme Lucas, Gerente de Relacionamento da Klout',
     slug: 'guilherme-lucas',
     group: 'management',
@@ -84,8 +98,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-97142-1515',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/felipe-bandechi-676b01196/',
-    summary: '',
+    summary:
+      'Gerente Comercial da Klout, conecta demandas empresariais a soluções que equilibram cobertura, acesso, custo e continuidade.',
     image: '/images/team/managers/gerente-comercial_felipe-bandechi/felipe-bandechi_gerente-comercial.webp',
+    imageWidth: 940,
+    imageHeight: 1672,
     imageAlt: 'Retrato de Felipe Bandechi, Gerente Comercial da Klout',
     slug: 'felipe-bandechi',
     group: 'management',
@@ -97,8 +114,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-93277-9317',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/augusto-cavalheiro-9b26a8b6/',
-    summary: '',
+    summary:
+      'Gerente Comercial da Klout, identifica necessidades e estrutura propostas consultivas adequadas ao perfil e às prioridades de cada cliente.',
     image: '/images/team/managers/gerente-comercial_augusto-cavalheiro/augusto-cavalheiro_gerente-comercial.webp',
+    imageWidth: 897,
+    imageHeight: 1600,
     imageAlt: 'Retrato de Augusto Cavalheiro, Gerente Comercial da Klout',
     slug: 'augusto-cavalheiro',
     group: 'management',
@@ -110,8 +130,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-91328-6299',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/marianatrajano84/',
-    summary: '',
+    summary:
+      'Gerente Comercial da Klout, conduz diagnósticos e comparações para orientar escolhas em planos de saúde, benefícios e seguros.',
     image: '/images/team/managers/gerente-comercial_mariana-trajano/mariana-trajano_gerente-comercial.webp',
+    imageWidth: 960,
+    imageHeight: 1280,
     imageAlt: 'Retrato de Mariana Trajano, Gerente Comercial da Klout',
     slug: 'mariana-trajano',
     group: 'management',
@@ -123,8 +146,11 @@ const leadershipTeam: LeadershipMember[] = [
     telephone: '+55-11-97861-5526',
     phoneLabel: 'WhatsApp',
     linkedin: 'https://www.linkedin.com/in/julia-camargo-015aa2361/',
-    summary: '',
+    summary:
+      'Gerente de Implantação da Klout, coordena contratos, documentação e transições para assegurar uma entrada organizada no atendimento.',
     image: '/images/team/managers/gerente-de-implantação_julia-camargo/julia-camargo_gerente-de-implantação.webp',
+    imageWidth: 900,
+    imageHeight: 1600,
     imageAlt: 'Retrato de Julia Camargo, Gerente de Implantação da Klout',
     slug: 'julia-camargo',
     group: 'management',
@@ -149,11 +175,19 @@ const leadershipPersonNodes = publishedLeadershipTeam.map((member) => ({
   '@id': `${siteUrl}/a-klout#${member.slug}`,
   name: member.name,
   jobTitle: member.jobTitle,
-  email: `mailto:${member.email}`,
+  email: member.email,
   telephone: member.telephone,
   url: `${siteUrl}/a-klout#${member.slug}`,
   ...(member.image && {
-    image: member.image.startsWith('http') ? member.image : `${siteUrl}${member.image}`,
+    image: {
+      '@type': 'ImageObject',
+      '@id': `${siteUrl}/a-klout#${member.slug}-image`,
+      url: member.image.startsWith('http') ? member.image : `${siteUrl}${member.image}`,
+      contentUrl: member.image.startsWith('http') ? member.image : `${siteUrl}${member.image}`,
+      width: member.imageWidth,
+      height: member.imageHeight,
+      caption: member.imageAlt,
+    },
   }),
   ...(member.linkedin && { sameAs: [member.linkedin] }),
   ...(member.summary && { description: member.summary }),
