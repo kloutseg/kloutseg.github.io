@@ -263,16 +263,15 @@ const addressItems = [
       </div>
 
       <div class="about-klout-hero-shell">
-        <p class="about-klout-kicker section-side-kicker section-side-kicker-light">A Klout</p>
-
         <div class="about-klout-hero-copy">
           <h1 class="about-klout-hero-title">
             A Klout existe para influenciar decisões mais inteligentes em saúde.
           </h1>
-          <p class="about-klout-hero-description">
-            Estamos presentes em São Paulo, com operação real, atendimento próximo e assistência personalizada para famílias e empresas.
-          </p>
         </div>
+
+        <p class="about-klout-hero-description">
+          Estamos presentes em São Paulo, com operação real, atendimento próximo e assistência personalizada para famílias e empresas.
+        </p>
       </div>
     </section>
 
@@ -519,16 +518,20 @@ const addressItems = [
 
       const heroImage = hero.querySelector('.about-klout-hero-image');
       const heroOverlay = hero.querySelector('.about-klout-hero-overlay');
-      const heroKicker = hero.querySelector('.about-klout-kicker');
       const heroTitle = hero.querySelector('.about-klout-hero-title');
       const heroDescription = hero.querySelector('.about-klout-hero-description');
       const arrivedViaPageTransition =
         document.documentElement.classList.contains('page-transition-enter');
 
       if (arrivedViaPageTransition) {
-        gsap.set([heroKicker, heroTitle, heroDescription], {
+        gsap.set(heroTitle, {
           autoAlpha: 1,
           y: 0
+        });
+
+        gsap.set(heroDescription, {
+          autoAlpha: 1,
+          x: 0
         });
 
         gsap.set(heroImage, {
@@ -543,9 +546,14 @@ const addressItems = [
         return;
       }
 
-      gsap.set([heroKicker, heroTitle, heroDescription], {
+      gsap.set(heroTitle, {
         autoAlpha: 0,
         y: 42
+      });
+
+      gsap.set(heroDescription, {
+        autoAlpha: 0,
+        x: 36
       });
 
       gsap.set(heroImage, {
@@ -572,24 +580,18 @@ const addressItems = [
           duration: 2.2,
           ease: 'power2.out'
         }, 0.18)
-        .to(heroKicker, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1.15,
-          ease: 'power3.out'
-        }, 0.92)
         .to(heroTitle, {
           autoAlpha: 1,
           y: 0,
           duration: 1.45,
           ease: 'power3.out'
-        }, 1.02)
+        }, 0.92)
         .to(heroDescription, {
           autoAlpha: 1,
-          y: 0,
+          x: 0,
           duration: 1.2,
           ease: 'power3.out'
-        }, 1.42);
+        }, 1.5);
     }, { once: true });
   }
 </script>
@@ -634,35 +636,16 @@ const addressItems = [
     box-sizing: border-box;
     padding: clamp(4.75rem, 8vh, 6.2rem) clamp(1.5rem, 5vw, 4.5rem) clamp(3rem, 6vh, 4rem);
     display: grid;
-    align-content: center;
-    gap: 2rem;
-  }
-
-  .about-klout-kicker {
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: fit-content;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.62rem;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: hsla(42, 30%, 88%, 0.82);
-  }
-
-  .about-klout-kicker::before {
-    content: '';
-    width: 1.9rem;
-    height: 1px;
-    background: linear-gradient(90deg, hsla(43, 52%, 56%, 0.78) 0%, hsla(43, 52%, 56%, 0.24) 100%);
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+    grid-template-rows: 1fr auto;
+    column-gap: clamp(2rem, 6vw, 6rem);
   }
 
   .about-klout-hero-copy {
     display: grid;
-    gap: 1.4rem;
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: center;
     max-width: 55rem;
   }
 
@@ -680,6 +663,10 @@ const addressItems = [
 
   .about-klout-hero-description {
     margin: 0;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    justify-self: end;
     max-width: 34ch;
     font-family: 'Proxima Nova', sans-serif;
     font-size: 1.02rem;
@@ -1362,6 +1349,24 @@ const addressItems = [
       padding-right: 2rem;
     }
 
+    .about-klout-hero-shell {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      row-gap: 2.25rem;
+    }
+
+    .about-klout-hero-copy {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .about-klout-hero-description {
+      grid-column: 1;
+      grid-row: 2;
+      width: min(100%, 34ch);
+      justify-self: end;
+    }
+
     .about-klout-proof-grid {
       grid-template-columns: 1fr;
       gap: 1.6rem;
@@ -1383,7 +1388,6 @@ const addressItems = [
 
     .about-klout-team-heading {
       grid-template-columns: 1fr;
-      gap: 1.25rem;
     }
 
     .about-klout-team-title {
@@ -1428,12 +1432,16 @@ const addressItems = [
     .about-klout-hero-shell {
       padding-top: 4.8rem;
       padding-bottom: 4rem;
-      align-content: center;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      row-gap: 2.25rem;
     }
 
     .about-klout-hero-copy {
+      grid-column: 1;
+      grid-row: 1;
       max-width: 100%;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .about-klout-hero-title {
@@ -1447,6 +1455,13 @@ const addressItems = [
       max-width: 100%;
       font-size: 0.96rem;
       line-height: 1.72;
+    }
+
+    .about-klout-hero-description {
+      grid-column: 1;
+      grid-row: 2;
+      width: min(100%, 30ch);
+      justify-self: end;
     }
 
     .about-klout-proof-lines {
