@@ -15,13 +15,13 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
   criticalImage={landing.heroImage}
   criticalImageSizes="100vw"
   noindex={true}
-  smoothScrollDelay={-1}
+  smoothScrollDelay={landing.smoothScrollDelay ?? -1}
 >
   <div class:list={['campaign-page', `campaign-theme-${landing.theme}`]}>
     <header class="campaign-header" aria-label="Cabeçalho da campanha">
       <div class="campaign-header-inner">
         <img src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" />
-        <a href="/privacidade">Privacidade</a>
+        {!landing.hideHeaderPrivacy && <a href="/privacidade">Privacidade</a>}
       </div>
     </header>
 
@@ -137,10 +137,8 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
 
     <footer class="campaign-footer">
       <div class="campaign-shell campaign-footer-inner">
-        <div>
-          <img src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" loading="lazy" />
-          <p>Klout Corretora de Seguros LTDA · CNPJ 60.772.160/0001-80</p>
-        </div>
+        <img src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" loading="lazy" />
+        <p>Klout Corretora de Seguros LTDA · CNPJ 60.772.160/0001-80</p>
         <nav aria-label="Links legais">
           <a href="/privacidade">Privacidade</a>
           <a href="/cookies">Cookies</a>
@@ -224,10 +222,10 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
   .final-layout > div { display: grid; justify-items: start; gap: 1.4rem; }
   .final-layout a { min-height: 3.1rem; display: inline-flex; align-items: center; padding: 0 1.1rem; border-radius: 4px; background: var(--ink); color: white; text-decoration: none; font: 600 .76rem/1 'Proxima Nova', sans-serif; }
   .campaign-footer { background: hsl(214, 48%, 6%); color: white; }
-  .campaign-footer-inner { min-height: 9rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-  .campaign-footer-inner > div { display: flex; align-items: center; gap: 1.5rem; }
-  .campaign-footer p { margin: 0; color: hsla(0, 0%, 100%, .48); font: 400 .68rem/1.5 'Proxima Nova', sans-serif; }
-  .campaign-footer nav { display: flex; gap: 1.2rem; }
+  .campaign-footer-inner { min-height: 9rem; display: grid; grid-template-columns: minmax(8rem, 1fr) auto minmax(12rem, 1fr); align-items: center; gap: 2rem; }
+  .campaign-footer-inner > img { justify-self: start; }
+  .campaign-footer p { justify-self: center; margin: 0; color: hsla(0, 0%, 100%, .48); font: 400 .68rem/1.5 'Proxima Nova', sans-serif; text-align: center; }
+  .campaign-footer nav { justify-self: end; display: flex; gap: 1.2rem; }
   .campaign-footer a { color: hsla(0, 0%, 100%, .64); text-decoration: none; font: 400 .7rem/1 'Proxima Nova', sans-serif; }
   @media (max-width: 900px) {
     .campaign-hero { min-height: 82svh; }
@@ -251,8 +249,8 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
     .campaign-form-section { padding-bottom: 4.5rem; }
     .campaign-reading, .campaign-criteria, .campaign-method, .campaign-final { padding: 4.5rem 0; }
     .campaign-reading h2, .criteria-heading h2, .method-intro h2, .campaign-final h2 { font-size: clamp(2.2rem, 10vw, 3.4rem); }
-    .campaign-footer-inner, .campaign-footer-inner > div { align-items: flex-start; flex-direction: column; }
-    .campaign-footer-inner { padding-top: 2.4rem; padding-bottom: 2.4rem; }
+    .campaign-footer-inner { grid-template-columns: 1fr; justify-items: start; padding-top: 2.4rem; padding-bottom: 2.4rem; }
+    .campaign-footer p, .campaign-footer nav { justify-self: start; text-align: left; }
   }
   @media (prefers-reduced-motion: reduce) { :global(html) { scroll-behavior: auto; } }
 </style>

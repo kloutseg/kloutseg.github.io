@@ -346,8 +346,6 @@ const addressItems = [
                       <p class="about-klout-team-role">{member.jobTitle}</p>
                     </div>
 
-                    {member.summary && <p class="about-klout-team-summary">{member.summary}</p>}
-
                     <div class="about-klout-team-links" aria-label={`Canais de contato de ${member.name}`}>
                       {member.email && (
                         <a href={`mailto:${member.email}`} class="about-klout-team-contact-link">Email</a>
@@ -401,8 +399,6 @@ const addressItems = [
                       <h3 class="about-klout-team-name">{member.name}</h3>
                       <p class="about-klout-team-role">{member.jobTitle}</p>
                     </div>
-
-                    {member.summary && <p class="about-klout-team-summary">{member.summary}</p>}
 
                     <div class="about-klout-team-links" aria-label={`Canais de contato de ${member.name}`}>
                       {member.email && (
@@ -1082,21 +1078,6 @@ const addressItems = [
     letter-spacing: 0.13em;
   }
 
-  .about-klout-team-summary {
-    margin: 0;
-    font-family: 'Proxima Nova', sans-serif;
-    font-size: 0.92rem;
-    font-weight: 400;
-    line-height: 1.58;
-    letter-spacing: 0.01em;
-    color: hsla(214, 26%, 16%, 0.72);
-    text-wrap: pretty;
-  }
-
-  .about-klout-team-card-management .about-klout-team-summary {
-    display: none;
-  }
-
   .about-klout-team-links {
     display: flex;
     flex-wrap: wrap;
@@ -1335,11 +1316,6 @@ const addressItems = [
       min-height: 100%;
     }
 
-    .about-klout-team-card-management .about-klout-team-summary {
-      display: block;
-      font-size: 0.84rem;
-      line-height: 1.44;
-    }
   }
 
   @media (max-width: 900px) {
@@ -1501,17 +1477,36 @@ const addressItems = [
     }
 
     .about-klout-team-card {
-      grid-template-columns: minmax(7.5rem, 38%) minmax(0, 1fr);
+      box-sizing: border-box;
+      grid-template-columns: minmax(7.5rem, 42%) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
       align-items: stretch;
+      align-content: stretch;
+      height: 12.5rem;
+      min-height: 0;
     }
 
-    .about-klout-team-photo-frame {
-      min-height: 100%;
+    .about-klout-team-card .about-klout-team-photo-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      aspect-ratio: auto;
     }
 
-    .about-klout-team-card-copy {
+    .about-klout-team-card .about-klout-team-card-copy {
+      min-width: 0;
       padding: 0.95rem 0.9rem;
-      gap: 0.72rem;
+      gap: 1rem;
+      align-content: center;
+    }
+
+    .about-klout-team-card .about-klout-team-identity {
+      margin-bottom: 0;
+    }
+
+    .about-klout-team-card .about-klout-team-photo {
+      position: absolute;
+      inset: 0;
     }
 
     .about-klout-team-name {
@@ -1521,11 +1516,6 @@ const addressItems = [
     .about-klout-team-role {
       font-size: 0.56rem;
       letter-spacing: 0.13em;
-    }
-
-    .about-klout-team-summary {
-      font-size: 0.86rem;
-      line-height: 1.48;
     }
 
     .about-klout-team-contact-link {

@@ -26,6 +26,8 @@ export type CampaignLanding = {
   criteria: Array<{ title: string; text: string }>;
   finalTitle: string;
   finalContentCentered?: boolean;
+  hideHeaderPrivacy?: boolean;
+  smoothScrollDelay?: number;
 };
 
 export const campaignLandings: CampaignLanding[] = [
@@ -136,6 +138,8 @@ export const campaignLandings: CampaignLanding[] = [
       { title: 'Regras claras', text: 'Condições apresentadas antes da decisão e da eventual proposta.' },
     ], finalTitle: 'Entenda se Bradesco Saúde é aderente ao contexto da empresa.',
     finalContentCentered: true,
+    hideHeaderPrivacy: true,
+    smoothScrollDelay: 0,
   },
   {
     family: 'beneficios', variant: 'alice', landingId: 'b2b-beneficios-alice', thesis: 'alice', theme: 'alice',
