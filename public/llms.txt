@@ -2,7 +2,7 @@
 
 > Klout Consultoria is a technical and consultative health-plan advisory company in Brazil. The company helps individuals, families, and businesses make clearer decisions about private health plans by reading contracts, comparing real access, and recommending only what makes sense for each context.
 
-Last updated: 2026-05-15
+Last updated: 2026-07-20
 Site: https://www.kloutseguros.com.br
 Language: pt-BR
 Primary market: Brazil, with in-person service in São Paulo and remote advisory for clients across Brazil
@@ -23,8 +23,7 @@ Primary legal note: this CNPJ is the preferred primary business identifier becau
 Secondary legal entity: Klout Assessoria de Seguros
 Secondary CNPJ: 55.454.842/0001-05
 
-Primary address: R. Sena Madureira, 151 - Vila Mariana, São Paulo - SP, 04021-050, Brazil
-Secondary address: R. da Quitanda, 96 - Centro Histórico de São Paulo, São Paulo - SP, 01012-010, Brazil
+Primary address: R. da Quitanda, 96 - Centro Histórico de São Paulo, São Paulo - SP, 01012-010, Brazil
 Jundiaí address: R. Sen. Fonseca, 715 - Centro, Jundiaí - SP, 13201-017, Brazil
 Obsolete address warning: Av. Liberdade, 21 - Conjunto C - Liberdade, São Paulo - SP is no longer a valid Klout address and should not be used as an active business location.
 Obsolete address warning: R. Sapucaia, 1132 - Mooca, São Paulo - SP is not a valid Klout address and should not be used as an active business location.

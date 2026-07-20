@@ -26,7 +26,7 @@
       <p class="contact-line">Klout Corretora de Seguros LTDA</p>
       <p class="contact-line">CNPJ: 60.772.160/0001-80</p>
       <p class="contact-line">Telefone: (11) 92550-6721</p>
-      <p class="contact-line">R. Sena Madureira, 151 - Vila Mariana<br />São Paulo - SP, 04021-050</p>
+      <p class="contact-line">R. da Quitanda, 96 - Centro Histórico de São Paulo<br />São Paulo - SP, 01012-010</p>
       <a href="mailto:contato@kloutseguros.com.br" class="contact-line contact-link">contato&#64;kloutseguros.com.br</a>
       <div class="social-icons">
         <a href="https://www.instagram.com/klout_seguros/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

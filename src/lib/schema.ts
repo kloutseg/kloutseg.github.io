@@ -22,15 +22,6 @@ const sameAs = [
 
 const primaryAddress = {
   '@type': 'PostalAddress',
-  streetAddress: 'R. Sena Madureira, 151',
-  addressLocality: 'São Paulo',
-  addressRegion: 'SP',
-  postalCode: '04021-050',
-  addressCountry: 'BR',
-};
-
-const secondaryAddress = {
-  '@type': 'PostalAddress',
   streetAddress: 'R. da Quitanda, 96',
   addressLocality: 'São Paulo',
   addressRegion: 'SP',
@@ -54,8 +45,7 @@ const serviceArea = {
 
 export const kloutOrganizationId = `${siteUrl}/#organization`;
 export const kloutWebsiteId = `${siteUrl}/#website`;
-export const kloutPrimaryLocationId = `${siteUrl}/#localbusiness-sena-madureira`;
-export const kloutSecondaryLocationId = `${siteUrl}/#localbusiness-quitanda`;
+export const kloutPrimaryLocationId = `${siteUrl}/#localbusiness-quitanda`;
 export const kloutJundiaiLocationId = `${siteUrl}/#localbusiness-jundiai`;
 
 const contactPoint = {
@@ -315,20 +305,6 @@ export const kloutAboutSchema = buildKloutPageSchema({
       telephone: '+55-11-92550-6721',
       taxID: '60.772.160/0001-80',
       address: primaryAddress,
-      priceRange: '$$',
-      areaServed: serviceArea,
-    },
-    {
-      '@type': ['LocalBusiness', 'InsuranceAgency'],
-      '@id': kloutSecondaryLocationId,
-      name: 'Klout Consultoria - Centro Histórico de São Paulo',
-      branchOf: {
-        '@id': kloutOrganizationId,
-      },
-      url: `${siteUrl}/a-klout`,
-      email: 'contato@kloutseguros.com.br',
-      telephone: '+55-11-92550-6721',
-      address: secondaryAddress,
       priceRange: '$$',
       areaServed: serviceArea,
     },
