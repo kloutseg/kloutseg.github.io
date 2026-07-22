@@ -269,7 +269,10 @@ const thesis = 'renovacao-como-decisao-empresarial';
           </div>
 
           <div class="reading-visual">
-            <p class="reading-mobile-hint" id="reading-mobile-hint">Toque em uma frente para conhecer a análise.</p>
+            <p class="reading-mobile-hint" id="reading-mobile-hint">
+              <span class="reading-mobile-hint-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+              <span>Toque em uma frente para conhecer a análise.</span>
+            </p>
 
             <div class="reading-wheel" aria-label="As quatro frentes da leitura técnica">
               <article class="reading-front">
@@ -3095,12 +3098,16 @@ const thesis = 'renovacao-como-decisao-empresarial';
 
     .success-story-challenge-layer--reading .reading-layout {
       height: 100%;
+      padding-bottom: clamp(2.5rem, 7vh, 3.5rem);
       gap: 1rem;
       align-content: center;
     }
 
     .success-story-challenge-layer--reading .reading-intro {
+      width: 100%;
       gap: .7rem;
+      justify-items: center;
+      text-align: center;
     }
 
     .success-story-challenge-layer--reading .reading-intro h2 {
@@ -3116,11 +3123,13 @@ const thesis = 'renovacao-como-decisao-empresarial';
     }
 
     .success-story-challenge-layer--reading .reading-wheel {
+      order: 1;
       width: min(74vw, 18rem, calc(100vh - 25rem));
       min-width: 13.5rem;
     }
 
     .success-story-challenge-layer--reading .reading-mobile-notes {
+      order: 3;
       width: calc(100% + 1.1rem);
       margin: 1rem -1.1rem 0 0;
       padding: 0 1.1rem 0 0;
@@ -3154,12 +3163,41 @@ const thesis = 'renovacao-como-decisao-empresarial';
     }
 
     .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-mobile-hint {
+      order: 2;
       width: 100%;
-      margin: 0 0 .75rem;
-      display: block;
+      margin: 1rem 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
       color: var(--muted);
       font: 400 .75rem/1.4 'Proxima Nova', sans-serif;
       text-align: center;
+    }
+
+    .success-story-challenge-layer--reading .reading-dialog {
+      order: 4;
+    }
+
+    .reading-mobile-hint-icon {
+      flex: 0 0 auto;
+      width: 1.65rem;
+      height: 1.65rem;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--accent-strong);
+    }
+
+    .reading-mobile-hint-icon svg {
+      width: .78rem;
+      height: .78rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-mobile-notes {
