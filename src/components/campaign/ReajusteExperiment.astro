@@ -1,0 +1,2401 @@
+---
+import BaseLayout from '../../layouts/Base.astro';
+import ReajusteLeadForm from './ReajusteLeadForm.svelte';
+import type { CampaignLanding as CampaignLandingData } from '../../lib/campaign-landings';
+
+interface Props {
+  landing: CampaignLandingData;
+}
+
+const { landing } = Astro.props;
+const landingId = 'b2b-custos-reajuste';
+const thesis = 'renovacao-como-decisao-empresarial';
+---
+
+<BaseLayout
+  title={landing.metaTitle}
+  description="Antes de aceitar o reajuste do plano de saúde empresarial, revise contrato, uso, cobertura e oportunidades com a leitura técnica da Klout."
+  noindex={true}
+  smoothScrollDelay={0}
+>
+  <Fragment slot="head">
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const storageKey = 'klout:experiment:reajuste:v1';
+        const validVariants = ['tecnica', 'sensorial'];
+        const params = new URLSearchParams(window.location.search);
+        const requestedVariant = params.get('variant');
+        const isForced = validVariants.includes(requestedVariant);
+        let selectedVariant = isForced ? requestedVariant : '';
+
+        if (!selectedVariant) {
+          try {
+            const storedVariant = window.localStorage.getItem(storageKey);
+            if (validVariants.includes(storedVariant)) {
+              selectedVariant = storedVariant;
+            }
+          } catch {
+            selectedVariant = '';
+          }
+        }
+
+        if (!selectedVariant) {
+          let bucket = Math.random() < 0.5 ? 0 : 1;
+          try {
+            const randomValue = new Uint32Array(1);
+            window.crypto.getRandomValues(randomValue);
+            bucket = randomValue[0] % 2;
+          } catch {
+            // Math.random remains the non-identifying fallback.
+          }
+
+          selectedVariant = bucket === 0 ? 'tecnica' : 'sensorial';
+
+          try {
+            window.localStorage.setItem(storageKey, selectedVariant);
+          } catch {
+            // The assignment still remains stable for the current page view.
+          }
+        }
+
+        const requiredWidth = Math.max(
+          window.innerWidth || 0,
+          document.documentElement.clientWidth || 0,
+        ) * Math.min(window.devicePixelRatio || 1, 3);
+        const assetWidth = requiredWidth <= 640
+          ? 640
+          : requiredWidth <= 960
+            ? 960
+            : requiredWidth <= 1280
+              ? 1280
+              : 1536;
+        const heroUrl = '/images/campaign/reajuste-' + selectedVariant + '-hero-' + assetWidth + '.webp';
+
+        root.dataset.reajusteVariant = selectedVariant;
+        root.dataset.reajusteForced = isForced ? 'true' : 'false';
+        root.dataset.reajusteHero = heroUrl;
+        root.style.setProperty('--reajuste-hero-image', 'url("' + heroUrl + '")');
+
+        const preload = document.createElement('link');
+        preload.rel = 'preload';
+        preload.as = 'image';
+        preload.type = 'image/webp';
+        preload.href = heroUrl;
+        preload.fetchPriority = 'high';
+        preload.dataset.reajusteHeroPreload = selectedVariant;
+        document.head.appendChild(preload);
+      })();
+    </script>
+    <style is:inline>
+      html:not([data-reajuste-variant]) .reajuste-experiment {
+        visibility: hidden;
+      }
+    </style>
+  </Fragment>
+
+  <div class="reajuste-experiment">
+    <header class="experiment-header" aria-label="Cabeçalho da campanha">
+      <div class="experiment-header-inner">
+        <a href="/" aria-label="Klout — página inicial">
+          <img class="experiment-logo-wordmark" src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" />
+          <img class="experiment-logo-shield" src="/images/logo_shield_light_3d-148.webp" alt="" width="148" height="199" />
+        </a>
+        <p>Saúde corporativa · revisão de contrato</p>
+        <a class="experiment-header-privacy" href="/privacidade">Privacidade</a>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="experiment-hero" aria-labelledby="reajuste-title">
+        <div
+          class="experiment-hero-media"
+          role="img"
+          aria-label="Consultor da Klout reunido com lideranças de Financeiro e RH para revisar o contrato de saúde da empresa"
+        >
+          <div class="experiment-hero-shade" aria-hidden="true"></div>
+        </div>
+
+        <div class="experiment-shell experiment-hero-content">
+          <div class="experiment-hero-copy">
+            <p class="experiment-eyebrow">
+              <span class="copy-tecnica">Antes da renovação</span>
+              <span class="copy-sensorial">Antes do próximo ciclo</span>
+            </p>
+            <h1 id="reajuste-title">
+              <span class="copy-tecnica">Antes do reajuste, convém a leitura do contrato com outros critérios.</span>
+              <span class="copy-sensorial">Antes de aceitar o reajuste, vale conversar sobre o que a empresa precisa agora.</span>
+            </h1>
+            <p class="experiment-hero-description">
+              <span class="copy-tecnica">A Klout revisa necessidades, cobertura, utilização e investimento antes de a empresa decidir o próximo ciclo.</span>
+              <span class="copy-sensorial">A Klout aproxima Financeiro e RH de uma leitura clara do contrato, para avaliar custos, cobertura e oportunidades com mais tranquilidade.</span>
+            </p>
+            <a
+              href="#diagnostico"
+              class="experiment-primary-cta"
+              data-reajuste-cta
+              data-cta-location="hero"
+            >
+              <span class="copy-tecnica">Revisar meu contrato</span>
+              <span class="copy-sensorial">Conversar com a Klout</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14 0m-6-6 6 6-6 6" /></svg>
+            </a>
+            <p class="experiment-hero-note">Diagnóstico inicial gratuito e sem compromisso.</p>
+          </div>
+
+          <aside class="experiment-hero-card" aria-label="Escopo da primeira leitura">
+            <p>
+              <span class="copy-tecnica">Leitura inicial</span>
+              <span class="copy-sensorial">Uma conversa para organizar</span>
+            </p>
+            <ul>
+              <li>Apólice vigente</li>
+              <li>Uso e prioridades</li>
+              <li>Investimento e rede</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="experiment-section problem-section" aria-labelledby="problem-title">
+        <div class="experiment-shell">
+          <div class="section-heading problem-heading">
+            <p class="section-kicker">O ponto de partida</p>
+            <h2 id="problem-title">
+              <span class="copy-tecnica">Quando a renovação vira manutenção, o aumento parece a única decisão disponível.</span>
+              <span class="copy-sensorial">Receber um reajuste sem uma nova leitura pesa no orçamento e deixa a empresa sem voz.</span>
+            </h2>
+            <p>
+              <span>O contrato segue adiante com o preço atualizado, enquanto necessidades, cobertura, utilização e prioridades internas podem ter mudado. Financeiro e RH recebem o impacto sem critérios suficientes para discutir o próximo ciclo.</span>
+            </p>
+          </div>
+
+          <div class="problem-list">
+            <article>
+              <span>01</span>
+              <h3>Preço isolado</h3>
+              <p>O reajuste chega como um percentual, sem relacionar o aumento ao que a empresa e os funcionários utilizam.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Contrato desatualizado</h3>
+              <p>Rede, regras e desenho do benefício permanecem iguais mesmo quando a equipe, o orçamento e as prioridades já mudaram.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Decisão com pouca margem</h3>
+              <p>Quanto mais tarde começa a revisão, menor tende a ser o espaço para comparar condições e planejar uma eventual migração.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="experiment-section mechanism-section" aria-labelledby="mechanism-title">
+        <div class="experiment-shell mechanism-layout">
+          <div class="mechanism-intro">
+            <p class="section-kicker">Por que isso se repete</p>
+            <h2 id="mechanism-title">O reajuste costuma ser o efeito visível de um contrato que passou o ano sem uma nova leitura.</h2>
+            <p class="mechanism-lead">No cotidiano, a relação com o plano é ocupada por inclusões, exclusões, autorizações, boletos e dúvidas dos beneficiários. A operação precisa funcionar. Quando ela se torna o único eixo da corretagem, mudanças na empresa, no uso e no mercado deixam de orientar decisões sobre o contrato.</p>
+            <p class="mechanism-consequence">
+              <span>O efeito acumulado</span>
+              A empresa perde margem antes mesmo de negociar: o orçamento fica menos previsível, o benefício perde aderência e uma eventual mudança exige mais tempo, dados e coordenação.
+            </p>
+          </div>
+
+          <ol class="mechanism-list">
+            <li>
+              <span>01</span>
+              <h3>As informações permanecem fragmentadas</h3>
+              <p>Financeiro acompanha custo. RH recebe reclamações, dúvidas e pedidos. A operadora concentra dados de utilização. Sem uma leitura conjunta, cada área enxerga apenas uma parte do contrato.</p>
+            </li>
+            <li>
+              <span>02</span>
+              <h3>A revisão começa depois do índice</h3>
+              <p>Quando a análise começa com a carta de reajuste, o prazo já trabalha contra a empresa. Rede, regras, cotações, comunicação e uma eventual migração passam a disputar poucas semanas.</p>
+            </li>
+            <li>
+              <span>03</span>
+              <h3>O desenho perde aderência</h3>
+              <p>Admissões, desligamentos, faixas etárias, cidades, coparticipação e padrões de uso alteram o risco e a percepção do benefício. O plano pode permanecer estável na operação enquanto perde aderência.</p>
+            </li>
+            <li>
+              <span>04</span>
+              <h3>A dependência cresce</h3>
+              <p>Histórico, decisões e regras ficam dispersos entre áreas e fornecedores. Mudar de caminho exige reconstruir informação sob pressão, o que favorece a renovação por inércia.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="experiment-section reading-section" aria-labelledby="reading-title">
+        <div class="experiment-shell reading-layout">
+          <div class="reading-intro">
+            <p class="section-kicker">Como a Klout realiza a leitura</p>
+            <h2 id="reading-title">
+              <span class="copy-tecnica">Quatro frentes devolvem critério à decisão.</span>
+              <span class="copy-sensorial">A leitura técnica organiza critérios e reduz a complexidade da decisão.</span>
+            </h2>
+            <p>A Klout combina a realidade da empresa, o contrato vigente e sua rede de parceiros antes de apresentar qualquer direção.</p>
+          </div>
+
+          <ol class="reading-steps">
+            <li>
+              <span>01</span>
+              <div>
+                <h3>Empresa</h3>
+                <p>Escutamos Financeiro e RH para compreender orçamento, composição da equipe, prioridades e o uso real do benefício.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <h3>Apólice</h3>
+                <p>Analisamos regras, custos, rede, utilização, coparticipação e pontos que condicionam a renovação ou uma eventual mudança.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <h3>Parceiros</h3>
+                <p>Consultamos a rede de parceiros da Klout para avaliar condições disponíveis e aderentes ao cenário atual da empresa.</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <h3>Oportunidades</h3>
+                <p>Organizamos caminhos que podem reduzir custos, melhorar a aderência ou aproveitar melhor o investimento, sem prometer um resultado antes da análise.</p>
+              </div>
+            </li>
+          </ol>
+
+          <aside class="decision-card">
+            <p>O que volta para a mesa</p>
+            <h3>Voz, comparação e critérios para decidir.</h3>
+            <span>A recomendação pode ser manter, negociar, ajustar ou avaliar uma migração. A direção depende do diagnóstico.</span>
+          </aside>
+        </div>
+      </section>
+
+      <section class="experiment-section benefits-section" aria-labelledby="benefits-title">
+        <div class="experiment-shell">
+          <div class="section-heading benefits-heading">
+            <p class="section-kicker">Resultado esperado</p>
+            <h2 id="benefits-title">Investimento ligado a benefícios relevantes e bem aproveitados pela equipe.</h2>
+            <p>Com critérios organizados, Financeiro e RH ganham confiança para comparar, alívio para conduzir a renovação sem improviso e controle sobre prazos e alternativas. Essa clareza reduz a exposição à renovação automática, à dependência operacional e a uma migração iniciada tarde.</p>
+          </div>
+
+          <div class="benefit-grid">
+            <article>
+              <span>01</span>
+              <h3>Oportunidades de custo</h3>
+              <p>Identificação de pontos de negociação ou alternativas que podem reduzir o investimento total.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Previsibilidade</h3>
+              <p>Leitura de regras, cenários e impactos para planejar o benefício com antecedência.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Aderência atual</h3>
+              <p>Rede e desenho compatíveis com as necessidades atuais da empresa e das pessoas.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>Melhor aproveitamento</h3>
+              <p>Mais clareza sobre aquilo que o contrato entrega e como o benefício é utilizado.</p>
+            </article>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="experiment-section form-section" aria-label="Formulário e formas de atendimento">
+        <div class="experiment-shell form-moment">
+          <aside class="attendance-strip" aria-label="Formas de atendimento para o diagnóstico inicial">
+            <div class="attendance-strip-intro">
+              <p class="section-kicker">Formas de atendimento</p>
+              <p>A empresa escolhe como iniciar a leitura. O formato acompanha a agenda de Financeiro e RH.</p>
+            </div>
+
+            <ul>
+              <li>
+                <span>01</span>
+                <div>
+                  <strong>Enviar documentos</strong>
+                  <p>Apólice e informações essenciais.</p>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <strong>Receber um consultor</strong>
+                  <p>Na sede da empresa, com horário combinado.</p>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <strong>Visitar a Klout</strong>
+                  <p>R. da Quitanda, 96 · Centro Histórico de São Paulo · São Paulo - SP · 01012-010.</p>
+                </div>
+              </li>
+            </ul>
+          </aside>
+
+          <ReajusteLeadForm client:load landingId={landingId} thesis={thesis} />
+        </div>
+      </section>
+    </main>
+
+    <footer class="experiment-footer">
+      <div class="experiment-shell experiment-footer-inner">
+        <img src="/images/logo_simple_light-126.webp" alt="Klout" width="126" height="39" loading="lazy" />
+        <p>Klout Corretora de Seguros LTDA · CNPJ 60.772.160/0001-80</p>
+        <nav aria-label="Links legais">
+          <a href="/privacidade">Privacidade</a>
+          <a href="/cookies">Cookies</a>
+          <a href="/termos">Termos</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+
+  <script is:inline define:vars={{ landingId, thesis }}>
+    (() => {
+      const root = document.documentElement;
+      const variantSlug = root.dataset.reajusteVariant === 'sensorial' ? 'sensorial' : 'tecnica';
+      const variantId = variantSlug === 'sensorial' ? 'reajuste-sensorial' : 'reajuste-tecnica';
+      const forced = root.dataset.reajusteForced === 'true';
+
+      window.dataLayer = window.dataLayer || [];
+
+      function track(eventName, details) {
+        window.dataLayer.push({
+          event: eventName,
+          landing_id: landingId,
+          variant_id: variantId,
+          thesis,
+          experiment_forced: forced,
+          experiment_override: forced ? variantSlug : '',
+          ...(details || {}),
+        });
+      }
+
+      window.__kloutReajusteTrack = track;
+
+      track('landing_variant_view', {
+        hero_asset: root.dataset.reajusteHero || '',
+      });
+
+      document.addEventListener('click', (event) => {
+        const target = event.target instanceof Element
+          ? event.target.closest('[data-reajuste-cta]')
+          : null;
+        if (!(target instanceof HTMLElement)) return;
+
+        const selectedCopy = target.querySelector('.copy-' + variantSlug);
+        track('cta_click', {
+          cta_location: target.dataset.ctaLocation || 'unknown',
+          cta_label: ((selectedCopy && selectedCopy.textContent) || target.textContent || '').replace(/\s+/g, ' ').trim(),
+        });
+      }, { capture: true });
+
+      function setupTechnicalHeroMotion() {
+        if (variantSlug !== 'tecnica') return;
+
+        const hero = document.querySelector('.experiment-hero');
+        if (!(hero instanceof HTMLElement)) return;
+
+        const desktopQuery = window.matchMedia('(min-width: 701px)');
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let frame = 0;
+        let listening = false;
+
+        function render() {
+          frame = 0;
+          const rect = hero.getBoundingClientRect();
+          const progress = Math.min(1, Math.max(0, -rect.top / Math.max(1, rect.height)));
+          hero.style.setProperty('--technical-hero-parallax', (progress * 18).toFixed(2) + 'px');
+        }
+
+        function requestRender() {
+          if (frame) return;
+          frame = window.requestAnimationFrame(render);
+        }
+
+        function configure() {
+          if (listening) {
+            window.removeEventListener('scroll', requestRender);
+            listening = false;
+          }
+          if (frame) window.cancelAnimationFrame(frame);
+          frame = 0;
+          hero.style.removeProperty('--technical-hero-parallax');
+
+          if (!desktopQuery.matches || reducedMotionQuery.matches) return;
+
+          window.addEventListener('scroll', requestRender, { passive: true });
+          listening = true;
+          render();
+        }
+
+        desktopQuery.addEventListener?.('change', configure);
+        reducedMotionQuery.addEventListener?.('change', configure);
+        configure();
+      }
+
+      setupTechnicalHeroMotion();
+
+      function setupTechnicalProblemCard() {
+        if (variantSlug !== 'tecnica') return;
+
+        const heading = document.querySelector('.problem-heading');
+        const card = heading?.querySelector(':scope > p:last-child');
+        const cardCopy = card?.querySelector('span');
+        if (!(heading instanceof HTMLElement) || !(card instanceof HTMLElement) || !(cardCopy instanceof HTMLElement)) return;
+
+        const desktopQuery = window.matchMedia('(min-width: 981px)');
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let observer;
+
+        function configure() {
+          observer?.disconnect();
+          card.classList.remove('is-expanded');
+          card.style.removeProperty('--problem-card-start-y');
+
+          if (!desktopQuery.matches) return;
+
+          window.requestAnimationFrame(() => {
+            const cardStyle = window.getComputedStyle(card);
+            const verticalPadding =
+              Number.parseFloat(cardStyle.paddingTop) + Number.parseFloat(cardStyle.paddingBottom);
+            const copyRange = document.createRange();
+            copyRange.selectNodeContents(cardCopy);
+            const copyHeight = copyRange.getBoundingClientRect().height;
+            const compactHeight = Math.max(176, copyHeight + verticalPadding);
+            const headingHeight = Math.max(1, window.innerHeight, heading.getBoundingClientRect().height);
+            const startScale = Math.min(.4, Math.max(.16, compactHeight / headingHeight));
+
+            card.style.setProperty('--problem-card-start-y', startScale.toFixed(4));
+
+            if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) {
+              card.classList.add('is-expanded');
+              return;
+            }
+
+            observer = new IntersectionObserver((entries) => {
+              if (!entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= .52)) return;
+              card.classList.add('is-expanded');
+              observer?.disconnect();
+            }, { threshold: [.35, .52, .7] });
+
+            observer.observe(heading);
+          });
+        }
+
+        desktopQuery.addEventListener?.('change', configure);
+        reducedMotionQuery.addEventListener?.('change', configure);
+        configure();
+      }
+
+      setupTechnicalProblemCard();
+
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+
+  :global(body) {
+    background: hsl(207, 24%, 96%);
+  }
+
+  .reajuste-experiment {
+    --page: hsl(207, 24%, 96%);
+    --surface: hsl(0, 0%, 100%);
+    --surface-soft: hsl(207, 22%, 92%);
+    --ink: hsl(212, 43%, 12%);
+    --muted: hsl(212, 16%, 38%);
+    --line: hsla(212, 26%, 24%, .16);
+    --accent: hsl(40, 34%, 48%);
+    --accent-strong: hsl(40, 36%, 36%);
+    --dark: hsl(213, 48%, 8%);
+    --technical-paper: hsl(38, 30%, 95%);
+    --technical-blue-origin: hsl(215, 55%, 6%);
+    --technical-blue-join: hsl(211, 47%, 10.5%);
+    --technical-blue-destination: hsl(206, 39%, 15%);
+    overflow: clip;
+    background: var(--page);
+    color: var(--ink);
+  }
+
+  .reajuste-experiment,
+  .reajuste-experiment *,
+  .reajuste-experiment *::before,
+  .reajuste-experiment *::after {
+    box-sizing: border-box;
+  }
+
+  .copy-sensorial {
+    display: none;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .copy-tecnica {
+    display: none;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .copy-sensorial {
+    display: inline;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .reajuste-experiment {
+    --page: hsl(38, 31%, 94%);
+    --surface: hsl(42, 38%, 98%);
+    --surface-soft: hsl(34, 29%, 89%);
+    --ink: hsl(170, 14%, 16%);
+    --muted: hsl(167, 8%, 37%);
+    --line: hsla(29, 22%, 32%, .15);
+    --accent: hsl(27, 36%, 47%);
+    --accent-strong: hsl(27, 39%, 35%);
+    --dark: hsl(170, 18%, 12%);
+  }
+
+  .experiment-shell {
+    width: min(100%, 1240px);
+    margin: 0 auto;
+    padding-inline: clamp(1.25rem, 5vw, 4.5rem);
+    box-sizing: border-box;
+  }
+
+  .experiment-header {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    color: white;
+  }
+
+  .experiment-header-inner {
+    width: min(100%, 1380px);
+    min-height: 5.2rem;
+    margin: 0 auto;
+    padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .experiment-header img,
+  .experiment-footer img {
+    width: 5.2rem;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .experiment-logo-shield {
+    display: none;
+  }
+
+  .experiment-header p {
+    margin: 0;
+    font: 500 .68rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .66;
+  }
+
+  .experiment-header a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    font: 500 .74rem/1 'Proxima Nova', sans-serif;
+    text-decoration: none;
+  }
+
+  .experiment-header > .experiment-header-inner > a:last-child {
+    justify-self: end;
+    opacity: .72;
+  }
+
+  .experiment-hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    background: var(--dark);
+    color: white;
+  }
+
+  .experiment-hero-media,
+  .experiment-hero-shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .experiment-hero-media {
+    background-image: var(--reajuste-hero-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .experiment-hero-shade {
+    background:
+      linear-gradient(90deg, hsla(213, 54%, 5%, .96) 0%, hsla(213, 49%, 6%, .82) 40%, hsla(213, 42%, 7%, .2) 76%, hsla(213, 42%, 7%, .08) 100%),
+      linear-gradient(180deg, hsla(213, 42%, 5%, .2), hsla(213, 42%, 5%, .34));
+  }
+
+  .experiment-hero-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100svh;
+    padding-top: 8rem;
+    padding-bottom: 3.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, .92fr);
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .experiment-hero-copy {
+    max-width: 42rem;
+    display: grid;
+    justify-items: start;
+    gap: 1.1rem;
+  }
+
+  .experiment-eyebrow,
+  .section-kicker {
+    margin: 0;
+    color: var(--accent);
+    font: 600 .67rem/1.3 'IBM Plex Mono', monospace;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .experiment-hero h1 {
+    margin: 0;
+    max-width: 13ch;
+    font: 400 clamp(3.15rem, 4.8vw, 4.65rem)/.96 'IBM Plex Serif', serif;
+    letter-spacing: -.055em;
+    text-wrap: balance;
+  }
+
+  .experiment-hero-description {
+    max-width: 36rem;
+    margin: .2rem 0 0;
+    color: hsla(0, 0%, 100%, .82);
+    font: 400 clamp(1rem, 1.4vw, 1.16rem)/1.62 'Proxima Nova', sans-serif;
+  }
+
+  .experiment-primary-cta {
+    min-height: 3.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .9rem;
+    border: 1px solid hsla(0, 0%, 100%, .34);
+    border-radius: 4px;
+    padding: .9rem 1.25rem;
+    color: white;
+    background: hsla(0, 0%, 100%, .08);
+    font: 600 .78rem/1 'Proxima Nova', sans-serif;
+    letter-spacing: .035em;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+
+  .experiment-primary-cta:hover {
+    border-color: hsla(0, 0%, 100%, .7);
+    background: hsla(0, 0%, 100%, .15);
+    transform: translateY(-2px);
+  }
+
+  .experiment-primary-cta:focus-visible,
+  .experiment-header a:focus-visible,
+  .experiment-footer a:focus-visible {
+    outline: 3px solid hsl(42, 64%, 65%);
+    outline-offset: 4px;
+  }
+
+  .experiment-primary-cta svg {
+    width: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .experiment-hero-note {
+    margin: -.25rem 0 0;
+    color: hsla(0, 0%, 100%, .6);
+    font: 400 .76rem/1.5 'Proxima Nova', sans-serif;
+  }
+
+  .experiment-hero-card {
+    width: min(17rem, 100%);
+    margin: auto 0 0 auto;
+    padding: 1.4rem;
+    border: 1px solid hsla(0, 0%, 100%, .2);
+    border-radius: 6px;
+    background: hsla(213, 40%, 7%, .58);
+    backdrop-filter: blur(12px);
+  }
+
+  .experiment-hero-card > p {
+    margin: 0 0 1rem;
+    color: hsla(0, 0%, 100%, .58);
+    font: 600 .62rem/1.2 'IBM Plex Mono', monospace;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .experiment-hero-card ul {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    list-style: none;
+  }
+
+  .experiment-hero-card li {
+    padding-block: .72rem;
+    border-top: 1px solid hsla(0, 0%, 100%, .14);
+    font: 500 .86rem/1.3 'Proxima Nova', sans-serif;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero {
+    margin: 0;
+    padding: 1.8rem;
+    background: var(--page);
+    color: var(--ink);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-media {
+    inset: 5.6rem 1.8rem 1.8rem;
+    overflow: hidden;
+    border-radius: 32px;
+    background-position: center;
+    box-shadow: 0 32px 90px hsla(27, 30%, 18%, .18);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-shade {
+    background:
+      linear-gradient(90deg, hsla(36, 32%, 97%, .93) 0%, hsla(36, 32%, 97%, .84) 30%, hsla(36, 32%, 97%, .2) 58%, transparent 76%),
+      linear-gradient(180deg, hsla(170, 18%, 8%, .06), hsla(170, 18%, 8%, .18));
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-header {
+    color: var(--ink);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-header img {
+    filter: brightness(0) saturate(100%) invert(16%) sepia(11%) saturate(1065%) hue-rotate(118deg) brightness(92%) contrast(92%);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+    min-height: calc(100svh - 3.6rem);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-copy {
+    width: min(100%, 38rem);
+    padding: clamp(1.5rem, 3.4vw, 3rem);
+    border: 1px solid hsla(29, 22%, 38%, .13);
+    border-radius: 28px;
+    background: hsla(40, 38%, 97%, .91);
+    box-shadow:
+      0 26px 60px hsla(29, 30%, 20%, .12),
+      inset 0 1px 0 hsla(0, 0%, 100%, .9);
+    backdrop-filter: blur(14px);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero h1 {
+    max-width: 12ch;
+    font-size: clamp(2.9rem, 4.55vw, 4.3rem);
+    line-height: .98;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-description {
+    color: var(--muted);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-primary-cta {
+    border-color: transparent;
+    border-radius: 999px;
+    background: var(--accent-strong);
+    color: white;
+    box-shadow: 0 14px 32px hsla(27, 37%, 24%, .22);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-note {
+    color: hsl(167, 8%, 40%);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-card {
+    border-color: hsla(0, 0%, 100%, .7);
+    border-radius: 24px;
+    background: hsla(40, 38%, 97%, .88);
+    color: var(--ink);
+    box-shadow: 0 22px 52px hsla(27, 30%, 18%, .15);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-card > p {
+    color: var(--accent-strong);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-card li {
+    border-color: var(--line);
+  }
+
+  .experiment-section {
+    position: relative;
+    padding-block: clamp(5.5rem, 9vw, 8rem);
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(18rem, 1.15fr);
+    gap: 1.2rem 4rem;
+    align-items: end;
+  }
+
+  .section-heading .section-kicker {
+    grid-column: 1 / -1;
+  }
+
+  .section-heading h2,
+  .reading-intro h2 {
+    margin: 0;
+    font: 400 clamp(2.45rem, 4.5vw, 4.45rem)/1 'IBM Plex Serif', serif;
+    letter-spacing: -.048em;
+    text-wrap: balance;
+  }
+
+  .section-heading > p:last-child,
+  .reading-intro > p:last-child {
+    margin: 0;
+    color: var(--muted);
+    font: 400 1rem/1.7 'Proxima Nova', sans-serif;
+  }
+
+  .benefit-grid article {
+    min-width: 0;
+    padding: 2rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .benefit-grid article:first-child {
+    border-left: 0;
+  }
+
+  .benefit-grid span {
+    color: var(--accent-strong);
+    font: 500 .66rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .12em;
+  }
+
+  .benefit-grid h3 {
+    margin: 2.6rem 0 .75rem;
+    font: 400 clamp(1.5rem, 2.2vw, 2.1rem)/1.08 'IBM Plex Serif', serif;
+    letter-spacing: -.03em;
+  }
+
+  .benefit-grid p {
+    margin: 0;
+    color: var(--muted);
+    font: 400 .94rem/1.65 'Proxima Nova', sans-serif;
+  }
+
+  .problem-section {
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px),
+      var(--page);
+    background-size: 100% 6rem, 25% 100%, auto;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .problem-section {
+    background:
+      radial-gradient(circle at 14% 18%, hsla(31, 58%, 74%, .17), transparent 30%),
+      var(--page);
+  }
+
+  .problem-list {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .problem-list article {
+    min-width: 0;
+    padding: 2rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .problem-list article:first-child {
+    border-left: 0;
+  }
+
+  .problem-list span {
+    color: var(--accent-strong);
+    font: 500 .66rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .12em;
+  }
+
+  .problem-list h3 {
+    margin: 2.6rem 0 .75rem;
+    font: 400 clamp(1.5rem, 2.2vw, 2.1rem)/1.08 'IBM Plex Serif', serif;
+    letter-spacing: -.03em;
+  }
+
+  .problem-list p {
+    margin: 0;
+    color: var(--muted);
+    font: 400 .94rem/1.65 'Proxima Nova', sans-serif;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .problem-list {
+    gap: 1rem;
+    border: 0;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .problem-list article {
+    border: 1px solid hsla(29, 22%, 34%, .12);
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: 0 16px 42px hsla(29, 28%, 22%, .07);
+  }
+
+  @media (max-width: 700px) {
+    .problem-section {
+      background-size: 100% 5rem, 50% 100%, auto;
+    }
+
+    .problem-list {
+      margin-top: 3rem;
+      grid-template-columns: 1fr;
+      border-bottom: 0;
+    }
+
+    .problem-list article {
+      min-height: auto;
+      padding: 1.5rem 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .problem-list h3 {
+      margin-top: 1.4rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .problem-list article {
+      padding: 1.35rem;
+    }
+  }
+
+  .mechanism-section {
+    padding-block: 0;
+    background: var(--surface-soft);
+  }
+
+  .mechanism-layout {
+    width: min(100%, 1380px);
+    padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+    padding-block: 0;
+  }
+
+  .mechanism-intro {
+    min-height: 100vh;
+    min-height: 100svh;
+    min-width: 0;
+    padding-block: clamp(5.75rem, 11vh, 8.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: clamp(2.25rem, 5vh, 4rem) clamp(3rem, 8vw, 8rem);
+    align-items: start;
+  }
+
+  .mechanism-intro .section-kicker,
+  .mechanism-intro h2 {
+    grid-column: 1 / -1;
+  }
+
+  .mechanism-intro h2 {
+    max-width: 24ch;
+    margin: 0;
+    align-self: center;
+    font: 400 clamp(2.65rem, 4.2vw, 4.55rem)/1.02 'IBM Plex Serif', serif;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .mechanism-lead,
+  .mechanism-consequence {
+    margin: 0;
+    color: var(--muted);
+    font: 400 .94rem/1.68 'Proxima Nova', sans-serif;
+  }
+
+  .mechanism-lead {
+    max-width: 62ch;
+    align-self: end;
+  }
+
+  .mechanism-consequence {
+    max-width: 46ch;
+    align-self: end;
+  }
+
+  .mechanism-consequence > span {
+    margin-bottom: .8rem;
+    display: block;
+    color: var(--accent-strong);
+    font: 500 .62rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+
+  .mechanism-list {
+    width: 100%;
+    margin: 0;
+    padding: 0 0 clamp(6rem, 12vh, 9rem);
+    display: grid;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .mechanism-list li {
+    min-height: clamp(10rem, 18vh, 13rem);
+    padding-block: clamp(2.25rem, 5vh, 3.5rem);
+    display: grid;
+    grid-template-columns: 3rem minmax(14rem, .62fr) minmax(0, 1.38fr);
+    gap: clamp(1.5rem, 3.5vw, 4rem);
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mechanism-list li > span {
+    color: var(--accent-strong);
+    font: 500 .64rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .12em;
+  }
+
+  .mechanism-list h3 {
+    margin: 0;
+    font: 400 clamp(1.35rem, 1.8vw, 1.75rem)/1.12 'IBM Plex Serif', serif;
+    letter-spacing: -.025em;
+  }
+
+  .mechanism-list p {
+    width: min(100%, 64ch);
+    margin: 0;
+    justify-self: end;
+    color: var(--muted);
+    font: 400 .94rem/1.68 'Proxima Nova', sans-serif;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .mechanism-list {
+    gap: 0;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .mechanism-list li {
+    padding-inline: 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  @media (max-width: 980px) {
+    .mechanism-intro {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2rem, 6vw, 4rem);
+    }
+
+    .mechanism-intro h2 {
+      max-width: 21ch;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .mechanism-intro {
+      padding-block: clamp(4.5rem, 12vh, 6rem);
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto auto auto;
+      gap: clamp(1.5rem, 4.5vh, 2.5rem);
+      align-content: space-between;
+    }
+
+    .mechanism-intro .section-kicker,
+    .mechanism-intro h2,
+    .mechanism-lead,
+    .mechanism-consequence {
+      grid-column: 1;
+    }
+
+    .mechanism-intro h2 {
+      max-width: 17ch;
+      align-self: start;
+      font-size: clamp(2.05rem, 8.4vw, 2.35rem);
+      line-height: 1.07;
+    }
+
+    .mechanism-lead,
+    .mechanism-consequence {
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+
+    .mechanism-consequence {
+      max-width: 34ch;
+      justify-self: end;
+      padding-top: 1.35rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .mechanism-list {
+      padding-bottom: clamp(4.5rem, 11vh, 6rem);
+    }
+
+    .mechanism-list li {
+      min-height: 0;
+      padding-block: clamp(1.75rem, 5vh, 2.4rem);
+      grid-template-columns: 2rem minmax(0, 1fr);
+      gap: .8rem 1rem;
+      align-items: start;
+    }
+
+    .mechanism-list h3,
+    .mechanism-list p {
+      grid-column: 2;
+    }
+
+    .mechanism-list h3 {
+      font-size: 1.24rem;
+    }
+
+    .mechanism-list p {
+      width: 100%;
+      justify-self: start;
+      font-size: .84rem;
+      line-height: 1.58;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .mechanism-list li {
+      padding-inline: 0;
+    }
+  }
+
+  @supports (min-height: 100dvh) {
+    .mechanism-intro {
+      min-height: 100dvh;
+    }
+  }
+
+  .reading-section {
+    background: var(--surface);
+  }
+
+  .reading-layout {
+    display: grid;
+    grid-template-columns: minmax(18rem, .78fr) minmax(24rem, 1.15fr);
+    gap: 3rem 5rem;
+    align-items: start;
+  }
+
+  .reading-intro {
+    position: sticky;
+    top: 3rem;
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .reading-intro h2 {
+    max-width: 12ch;
+    font-size: clamp(2.5rem, 4.3vw, 4.2rem);
+  }
+
+  .reading-steps {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    list-style: none;
+  }
+
+  .reading-steps li {
+    min-height: 10rem;
+    padding-block: 1.6rem;
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .reading-steps li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .reading-steps > li > span {
+    padding-top: .4rem;
+    color: var(--accent-strong);
+    font: 500 .68rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .12em;
+  }
+
+  .reading-steps h3 {
+    margin: 0 0 .65rem;
+    font: 400 clamp(1.6rem, 2.4vw, 2.3rem)/1.05 'IBM Plex Serif', serif;
+    letter-spacing: -.035em;
+  }
+
+  .reading-steps p {
+    max-width: 48ch;
+    margin: 0;
+    color: var(--muted);
+    font: 400 .96rem/1.66 'Proxima Nova', sans-serif;
+  }
+
+  .decision-card {
+    grid-column: 1 / -1;
+    width: min(100%, 42rem);
+    margin: 1rem 0 0 auto;
+    padding: 2rem;
+    border-left: 3px solid var(--accent);
+    background: var(--surface-soft);
+  }
+
+  .decision-card > p {
+    margin: 0 0 1.3rem;
+    color: var(--accent-strong);
+    font: 600 .65rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .decision-card h3 {
+    margin: 0 0 .8rem;
+    font: 400 clamp(1.8rem, 3vw, 2.7rem)/1.04 'IBM Plex Serif', serif;
+    letter-spacing: -.035em;
+  }
+
+  .decision-card > span {
+    display: block;
+    color: var(--muted);
+    font: 400 .92rem/1.62 'Proxima Nova', sans-serif;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .reading-section {
+    background:
+      linear-gradient(180deg, var(--surface) 0%, hsl(38, 31%, 95%) 100%);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .reading-steps {
+    gap: 1rem;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .reading-steps li {
+    min-height: auto;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 1.6rem;
+    background: hsla(0, 0%, 100%, .52);
+    box-shadow: 0 14px 34px hsla(29, 28%, 22%, .06);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .decision-card {
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: 0 20px 46px hsla(29, 28%, 22%, .08);
+  }
+
+  .benefits-section {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    background: var(--page);
+  }
+
+  .benefits-heading h2 {
+    max-width: 15ch;
+  }
+
+  .benefit-grid {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-block: 1px solid var(--line);
+  }
+
+  .benefit-grid article {
+    padding-inline: 1.5rem;
+  }
+
+  .benefit-grid h3 {
+    margin-top: 3rem;
+    font-size: clamp(1.35rem, 1.8vw, 1.8rem);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .benefit-grid {
+    gap: 1rem;
+    border: 0;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .benefit-grid article {
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--surface);
+  }
+
+  .form-section {
+    background: var(--dark);
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .form-section {
+    background:
+      radial-gradient(circle at 86% 10%, hsla(28, 45%, 52%, .18), transparent 28%),
+      var(--dark);
+  }
+
+  .form-moment {
+    display: grid;
+    gap: clamp(.9rem, 1.4vw, 1.25rem);
+  }
+
+  .attendance-strip {
+    width: min(100%, 1120px);
+    margin: 0 auto;
+    padding: 1.2rem 1.4rem;
+    display: grid;
+    grid-template-columns: minmax(13rem, .64fr) minmax(0, 1.36fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: center;
+    border: 1px solid hsla(0, 0%, 100%, .14);
+    border-radius: 6px;
+    background: hsl(212, 48%, 10%);
+    color: white;
+  }
+
+  .attendance-strip-intro {
+    display: grid;
+    gap: .7rem;
+  }
+
+  .attendance-strip-intro > p:last-child {
+    margin: 0;
+    color: hsla(0, 0%, 100%, .64);
+    font: 400 .82rem/1.5 'Proxima Nova', sans-serif;
+  }
+
+  .attendance-strip ul {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    list-style: none;
+  }
+
+  .attendance-strip li {
+    min-width: 0;
+    min-height: 5.5rem;
+    padding: .75rem 1rem;
+    display: grid;
+    grid-template-columns: 1.7rem minmax(0, 1fr);
+    gap: .65rem;
+    align-items: start;
+    border-left: 1px solid hsla(0, 0%, 100%, .12);
+  }
+
+  .attendance-strip li > span {
+    padding-top: .16rem;
+    color: hsl(40, 42%, 68%);
+    font: 500 .58rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .1em;
+  }
+
+  .attendance-strip strong {
+    display: block;
+    font: 500 .8rem/1.3 'Proxima Nova', sans-serif;
+  }
+
+  .attendance-strip li p {
+    margin: .45rem 0 0;
+    color: hsla(0, 0%, 100%, .58);
+    font: 400 .74rem/1.42 'Proxima Nova', sans-serif;
+  }
+
+  :global(html[data-reajuste-variant="sensorial"]) .attendance-strip {
+    border-color: hsla(0, 0%, 100%, .12);
+    border-radius: 24px;
+    background: hsl(170, 18%, 14%);
+    box-shadow: 0 20px 52px hsla(29, 30%, 12%, .14);
+  }
+
+  @media (max-width: 700px) {
+    .attendance-strip {
+      padding: 1.3rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .attendance-strip ul {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .attendance-strip li {
+      min-height: 44px;
+      padding: 1rem 0;
+      border-left: 0;
+      border-top: 1px solid hsla(0, 0%, 100%, .12);
+    }
+
+    .attendance-strip li p {
+      max-width: 34ch;
+    }
+  }
+
+  @supports (min-height: 100dvh) {
+    .benefits-section {
+      min-height: 100dvh;
+    }
+  }
+
+  .experiment-footer {
+    background: hsl(213, 50%, 5%);
+    color: white;
+  }
+
+  .experiment-footer-inner {
+    min-height: 9.5rem;
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) auto minmax(14rem, 1fr);
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .experiment-footer p {
+    margin: 0;
+    color: hsla(0, 0%, 100%, .46);
+    font: 400 .7rem/1.5 'Proxima Nova', sans-serif;
+    text-align: center;
+  }
+
+  .experiment-footer nav {
+    justify-self: end;
+    display: flex;
+    gap: .5rem;
+  }
+
+  .experiment-footer a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding-inline: .55rem;
+    color: hsla(0, 0%, 100%, .66);
+    font: 400 .72rem/1 'Proxima Nova', sans-serif;
+    text-decoration: none;
+  }
+
+  @media (max-width: 980px) {
+    .section-heading,
+    .reading-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .experiment-hero-content {
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, .45fr);
+    }
+
+    .reading-intro {
+      position: static;
+    }
+
+    .decision-card {
+      grid-column: auto;
+    }
+
+    .benefit-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .benefit-grid article:nth-child(3) {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .benefit-grid article:nth-child(4) {
+      border-top: 1px solid var(--line);
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .benefit-grid article:nth-child(3),
+    :global(html[data-reajuste-variant="sensorial"]) .benefit-grid article:nth-child(4) {
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .experiment-shell {
+      padding-inline: 1.1rem;
+    }
+
+    .experiment-header-inner {
+      min-height: 4.5rem;
+      grid-template-columns: 1fr auto;
+      padding-inline: 1.1rem;
+    }
+
+    .experiment-header p {
+      display: none;
+    }
+
+    .experiment-hero {
+      min-height: 100svh;
+      align-items: end;
+    }
+
+    .experiment-hero-media {
+      background-position: 63% center;
+    }
+
+    .experiment-hero-shade {
+      background:
+        linear-gradient(180deg, hsla(213, 50%, 5%, .16) 0%, hsla(213, 50%, 5%, .34) 34%, hsla(213, 52%, 5%, .97) 72%, hsla(213, 52%, 5%, 1) 100%);
+    }
+
+    .experiment-hero-content {
+      min-height: 100svh;
+      padding-top: 6.2rem;
+      padding-bottom: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: stretch;
+      gap: 1rem;
+    }
+
+    .experiment-hero-copy {
+      max-width: 100%;
+      gap: .85rem;
+    }
+
+    .experiment-hero h1,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero h1 {
+      max-width: 12ch;
+      font-size: clamp(2.35rem, 10.6vw, 3.1rem);
+      line-height: .98;
+    }
+
+    .experiment-hero-description {
+      max-width: 35ch;
+      font-size: .94rem;
+      line-height: 1.5;
+    }
+
+    .experiment-primary-cta {
+      width: 100%;
+      min-height: 3.6rem;
+    }
+
+    .experiment-hero-note {
+      font-size: .72rem;
+    }
+
+    .experiment-hero-card {
+      display: none;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero {
+      margin: 0;
+      padding: 0;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-media {
+      inset: 0;
+      border-radius: 0 0 22px 22px;
+      background-position: 57% center;
+      box-shadow: 0 18px 44px hsla(27, 30%, 18%, .2);
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-shade {
+      background:
+        linear-gradient(180deg, hsla(170, 20%, 8%, .08) 0%, hsla(170, 20%, 8%, .16) 28%, hsla(33, 28%, 14%, .74) 62%, hsla(33, 28%, 12%, .9) 100%);
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-header {
+      color: white;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-header img {
+      filter: none;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+      min-height: 100svh;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-copy {
+      width: 100%;
+      padding: 1.25rem;
+      border-radius: 20px;
+      background: hsla(40, 38%, 97%, .94);
+      backdrop-filter: blur(10px);
+    }
+
+    .experiment-section {
+      padding-block: clamp(4.5rem, 16vw, 5.5rem);
+    }
+
+    .section-heading,
+    .reading-layout {
+      gap: 2.5rem;
+    }
+
+    .section-heading h2,
+    .reading-intro h2 {
+      font-size: clamp(2.15rem, 9.2vw, 3rem);
+      line-height: 1.02;
+    }
+
+    .benefit-grid article {
+      min-height: auto;
+      padding: 1.5rem 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .benefit-grid h3 {
+      margin-top: 1.4rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .benefit-grid article {
+      padding: 1.35rem;
+    }
+
+    .reading-steps li {
+      min-height: auto;
+      grid-template-columns: 2.2rem 1fr;
+      gap: .8rem;
+      padding-block: 1.35rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .reading-steps li {
+      padding: 1.25rem;
+    }
+
+    .decision-card {
+      padding: 1.5rem;
+    }
+
+    .benefit-grid {
+      grid-template-columns: 1fr;
+      border-bottom: 0;
+    }
+
+    .benefit-grid article:nth-child(n) {
+      border-left: 0;
+      border-top: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .form-section .experiment-shell {
+      padding-inline: .65rem;
+    }
+
+    .experiment-footer-inner {
+      min-height: auto;
+      padding-block: 2.5rem;
+      grid-template-columns: 1fr;
+      justify-items: start;
+      gap: 1.3rem;
+    }
+
+    .experiment-footer p {
+      max-width: 30ch;
+      text-align: left;
+    }
+
+    .experiment-footer nav {
+      justify-self: start;
+      flex-wrap: wrap;
+    }
+  }
+
+  @supports (min-height: 100dvh) {
+    .experiment-hero,
+    .experiment-hero-content {
+      min-height: 100dvh;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+      min-height: calc(100dvh - 3.6rem);
+    }
+
+    @media (max-width: 700px) {
+      :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+        min-height: 100dvh;
+      }
+    }
+  }
+
+  /* Technical variant — hero */
+  @keyframes technical-hero-media-reveal {
+    from {
+      opacity: 0;
+      clip-path: inset(24% 0 0);
+      transform: translate3d(0, .65rem, 0);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes technical-hero-copy-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, .8rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .experiment-hero {
+    isolation: isolate;
+    background: var(--technical-paper);
+    color: hsl(214, 44%, 12%);
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .experiment-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .09;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.045 .24' numOctaves='3' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.34'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .experiment-logo-wordmark,
+  :global(html[data-reajuste-variant="tecnica"]) .experiment-header p,
+  :global(html[data-reajuste-variant="tecnica"]) .experiment-header-privacy {
+    display: none;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .experiment-header .experiment-logo-shield {
+    width: 2.15rem;
+    height: auto;
+    display: block;
+  }
+
+  @media (min-width: 701px) {
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-header {
+      color: hsl(214, 44%, 12%);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-header-inner {
+      grid-template-columns: 1fr;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-header img {
+      filter: brightness(0) saturate(100%) invert(14%) sepia(18%) saturate(1127%) hue-rotate(173deg) brightness(91%) contrast(96%);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero::after {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      right: calc(max(0px, (100vw - 1240px) / 2) + clamp(1.25rem, 5vw, 4.5rem));
+      z-index: 1;
+      width: min(calc(44.5% - clamp(1.25rem, 5vw, 4.5rem)), 30.5rem);
+      background:
+        linear-gradient(
+          180deg,
+          var(--technical-blue-origin) 0%,
+          hsl(213, 51%, 8%) 52%,
+          var(--technical-blue-join) 100%
+        );
+      box-shadow: 0 0 72px hsla(215, 48%, 8%, .12);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media {
+      inset: clamp(6.8rem, 12vh, 8.2rem) 0 clamp(2.5rem, 6vh, 4rem) auto;
+      z-index: 2;
+      width: min(
+        calc(46vw + max(1.25rem, calc((100vw - 1240px) / 2))),
+        calc(42rem + max(1.25rem, calc((100vw - 1240px) / 2)))
+      );
+      overflow: hidden;
+      border: 1px solid hsla(0, 0%, 100%, .18);
+      background-image: none;
+      box-shadow: 0 18px 42px hsla(215, 48%, 8%, .075);
+      animation: technical-hero-media-reveal 1.55s cubic-bezier(.22, .68, .28, 1) .14s backwards;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media::before {
+      content: "";
+      position: absolute;
+      inset: -1.5rem;
+      z-index: 0;
+      background-image: var(--reajuste-hero-image);
+      background-size: cover;
+      background-position: 68% center;
+      background-repeat: no-repeat;
+      transform: translate3d(0, var(--technical-hero-parallax, 0px), 0) scale(1.035);
+      will-change: transform;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-shade {
+      z-index: 1;
+      background:
+        linear-gradient(180deg, hsla(215, 50%, 5%, .06), transparent 52%, hsla(215, 50%, 5%, .3)),
+        linear-gradient(90deg, hsla(215, 50%, 5%, .12), transparent 46%);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content {
+      z-index: 3;
+      padding-top: 7.25rem;
+      padding-bottom: 3.25rem;
+      grid-template-columns: minmax(0, .88fr) minmax(22rem, 1.12fr);
+      gap: clamp(3rem, 5vw, 5rem);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy {
+      position: relative;
+      z-index: 3;
+      max-width: 29.5rem;
+      gap: 1rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy > * {
+      animation: technical-hero-copy-in .72s cubic-bezier(.22, 1, .36, 1) backwards;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-eyebrow {
+      animation-delay: .12s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero h1 {
+      max-width: 13ch;
+      color: hsl(214, 44%, 12%);
+      font-size: clamp(2.35rem, 3.55vw, 3.5rem);
+      line-height: 1.02;
+      animation-delay: .18s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-description {
+      max-width: 31rem;
+      color: hsl(212, 16%, 34%);
+      animation-delay: .26s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-primary-cta {
+      border-color: hsl(214, 44%, 12%);
+      border-radius: 2px;
+      background: hsl(214, 44%, 12%);
+      color: hsl(40, 38%, 96%);
+      box-shadow: 0 14px 30px hsla(215, 48%, 8%, .14);
+      animation-delay: .34s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-primary-cta:hover {
+      border-color: hsl(210, 39%, 20%);
+      background: hsl(210, 39%, 20%);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-note {
+      color: hsla(214, 28%, 24%, .66);
+      animation-delay: .41s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-card {
+      position: absolute;
+      left: calc(
+        100vw
+        - max(1.25rem, calc((100vw - 1240px) / 2))
+        - min(46vw, 42rem)
+        - max(0px, calc((100vw - 1240px) / 2))
+        + clamp(1rem, 1.7vw, 1.5rem)
+      );
+      right: auto;
+      bottom: calc(clamp(2.5rem, 6vh, 4rem) + clamp(1rem, 1.7vw, 1.5rem));
+      z-index: 4;
+      width: min(15.75rem, 27vw);
+      margin: 0;
+      padding: 1.1rem 1.25rem;
+      border-color: hsla(0, 0%, 100%, .18);
+      border-radius: 2px;
+      background: hsla(215, 55%, 6%, .94);
+      color: hsl(40, 38%, 96%);
+      box-shadow: 0 20px 48px hsla(215, 55%, 5%, .24);
+      backdrop-filter: none;
+      animation: technical-hero-copy-in .72s cubic-bezier(.22, 1, .36, 1) .5s backwards;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-card > p {
+      margin-bottom: .75rem;
+      color: hsl(40, 42%, 68%);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-card li {
+      padding-block: .58rem;
+      border-color: hsla(0, 0%, 100%, .14);
+      font-size: .78rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero {
+      --technical-mobile-media-height: clamp(17.5rem, 38svh, 20.5rem);
+      min-height: 100svh;
+      display: block;
+      overflow: clip;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 4;
+      width: clamp(.58rem, 2.7vw, .78rem);
+      height: calc(var(--technical-mobile-media-height) + 2.25rem);
+      background: linear-gradient(180deg, hsl(215, 55%, 6%), hsl(206, 39%, 15%));
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media {
+      inset: 0 0 auto;
+      z-index: 2;
+      width: 100%;
+      height: var(--technical-mobile-media-height);
+      overflow: hidden;
+      border: 0;
+      background-image: none;
+      box-shadow: 0 10px 28px hsla(215, 48%, 8%, .08);
+      animation: technical-hero-media-reveal 1.35s cubic-bezier(.22, .68, .28, 1) .1s backwards;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media::before {
+      content: "";
+      position: absolute;
+      inset: -1rem;
+      z-index: 0;
+      background-image: var(--reajuste-hero-image);
+      background-size: cover;
+      background-position: 64% center;
+      background-repeat: no-repeat;
+      transform: scale(1.025);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-shade {
+      z-index: 1;
+      background:
+        linear-gradient(180deg, hsla(215, 50%, 5%, .38), transparent 35%, hsla(215, 50%, 5%, .28));
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content {
+      z-index: 3;
+      min-height: 100svh;
+      padding-top: calc(var(--technical-mobile-media-height) + 1.8rem);
+      padding-bottom: 1.4rem;
+      display: block;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy {
+      width: 100%;
+      max-width: none;
+      gap: .82rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy > * {
+      animation: technical-hero-copy-in .66s cubic-bezier(.22, 1, .36, 1) backwards;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-eyebrow {
+      animation-delay: .12s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero h1 {
+      max-width: 13.5ch;
+      color: hsl(214, 44%, 12%);
+      font-size: clamp(1.95rem, 7.8vw, 2.25rem);
+      line-height: 1.04;
+      animation-delay: .18s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-description {
+      max-width: 36ch;
+      color: hsl(212, 16%, 34%);
+      font-size: .92rem;
+      line-height: 1.48;
+      animation-delay: .25s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-primary-cta {
+      border-color: hsl(214, 44%, 12%);
+      border-radius: 2px;
+      background: hsl(214, 44%, 12%);
+      color: hsl(40, 38%, 96%);
+      box-shadow: 0 12px 26px hsla(215, 48%, 8%, .13);
+      animation-delay: .32s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-note {
+      color: hsla(214, 28%, 24%, .66);
+      animation-delay: .39s;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-card {
+      display: none;
+    }
+  }
+
+  @supports (min-height: 100dvh) {
+    @media (max-width: 700px) {
+      :global(html[data-reajuste-variant="tecnica"]) .experiment-hero,
+      :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content {
+        min-height: 100dvh;
+      }
+    }
+  }
+
+  /* Technical variant — section 2 */
+  :global(html[data-reajuste-variant="tecnica"]) .problem-section {
+    overflow: clip;
+    padding-block: 0;
+    isolation: isolate;
+    background: var(--technical-paper);
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .09;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.045 .24' numOctaves='3' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.34'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-section > .experiment-shell {
+    position: relative;
+    z-index: 1;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-heading {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-block: clamp(6rem, 12vh, 9rem);
+    grid-template-columns: minmax(0, 1.15fr) minmax(24rem, .85fr);
+    align-content: center;
+    align-items: center;
+    justify-items: stretch;
+    column-gap: clamp(5rem, 8vw, 9rem);
+    row-gap: 0;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-heading .section-kicker {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    margin-bottom: clamp(2rem, 5vh, 4rem);
+    text-align: left;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-heading h2 {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    max-width: 17ch;
+    font-size: clamp(2.55rem, 3.5vw, 3.55rem);
+    line-height: 1.06;
+    letter-spacing: -.04em;
+    text-align: left;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    width: min(100%, 32rem);
+    justify-self: end;
+    margin-top: 0;
+    padding: 1.55rem 1.75rem;
+    border: 1px solid hsla(0, 0%, 100%, .08);
+    border-radius: 4px;
+    background:
+      linear-gradient(135deg, hsl(215, 55%, 6%), hsl(210, 48%, 11%) 68%, hsl(206, 39%, 15%));
+    color: hsla(38, 34%, 96%, .82);
+    box-shadow:
+      0 26px 64px hsla(215, 48%, 8%, .16),
+      inset 0 1px 0 hsla(0, 0%, 100%, .06);
+  }
+
+  @media (min-width: 981px) {
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading {
+      position: relative;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child {
+      position: absolute;
+      grid-column: auto;
+      grid-row: auto;
+      inset-block: 0;
+      right: 0;
+      z-index: 2;
+      width: min(44.5%, 30.5rem);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      isolation: isolate;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border: 1px solid hsla(0, 0%, 100%, .08);
+      border-radius: 4px;
+      background:
+        linear-gradient(
+          180deg,
+          var(--technical-blue-join) 0%,
+          hsl(209, 43%, 13%) 48%,
+          var(--technical-blue-destination) 100%
+        );
+      box-shadow:
+        0 26px 64px hsla(215, 48%, 8%, .16),
+        inset 0 1px 0 hsla(0, 0%, 100%, .06);
+      transform: scale(.86, var(--problem-card-start-y, .2));
+      transform-origin: center;
+      transition:
+        transform 1.25s cubic-bezier(.22, 1, .36, 1),
+        border-radius 1.25s cubic-bezier(.22, 1, .36, 1);
+      will-change: transform;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child.is-expanded::before {
+      border-top: 0;
+      border-radius: 0;
+      box-shadow: 0 26px 64px hsla(215, 48%, 8%, .16);
+      transform: scale(1);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child > span {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 3rem), 24.5rem);
+      height: min(66%, 36rem);
+      display: flex;
+      align-items: center;
+      padding: clamp(2rem, 4vh, 3rem) clamp(1.75rem, 2.6vw, 2.5rem);
+      color: inherit;
+      transform: translate3d(0, 2rem, 0);
+      transition:
+        transform .88s cubic-bezier(.22, 1, .36, 1) 1.28s,
+        color .34s ease 1.44s;
+      isolation: isolate;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child > span::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border: 1px solid hsla(34, 22%, 76%, .34);
+      border-radius: 2px;
+      background:
+        linear-gradient(145deg, hsl(42, 38%, 97%), hsl(35, 28%, 92%));
+      box-shadow:
+        0 28px 64px hsla(215, 48%, 5%, .22),
+        inset 0 1px 0 hsla(0, 0%, 100%, .72);
+      opacity: 0;
+      transform: translate3d(0, 1.5rem, 0) scaleY(.84);
+      transform-origin: center;
+      transition:
+        opacity .48s ease 1.28s,
+        transform .88s cubic-bezier(.22, 1, .36, 1) 1.28s;
+      will-change: transform, opacity;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child.is-expanded > span {
+      color: hsl(214, 44%, 12%);
+      transform: translate3d(clamp(1rem, 2vw, 1.75rem), 0, 0);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child.is-expanded > span::before {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scaleY(1);
+    }
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-list {
+    min-height: 100vh;
+    min-height: 100svh;
+    margin-top: 0;
+    padding-block: clamp(6rem, 12vh, 9rem);
+    align-content: center;
+    border-color: hsla(213, 30%, 16%, .13);
+    border-top: 0;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-list article {
+    min-height: clamp(17rem, 38vh, 22rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2.5rem, 4vw, 4rem);
+    border-color: hsla(213, 30%, 16%, .13);
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-list h3 {
+    margin-top: 2.1rem;
+    font-size: clamp(1.3rem, 1.7vw, 1.6rem);
+    line-height: 1.12;
+  }
+
+  :global(html[data-reajuste-variant="tecnica"]) .problem-list p {
+    max-width: 29ch;
+    font-size: .9rem;
+    line-height: 1.68;
+  }
+
+  @media (max-width: 980px) {
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: initial;
+      column-gap: 0;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading .section-kicker,
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading h2,
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child {
+      width: min(32rem, 65%);
+      margin-top: clamp(3rem, 7vh, 5rem);
+    }
+  }
+  @media (max-width: 700px) {
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading {
+      min-height: 100vh;
+      min-height: 100svh;
+      padding-block: clamp(5.5rem, 13vh, 7rem);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading .section-kicker {
+      margin-bottom: clamp(1.75rem, 5vh, 3rem);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading h2 {
+      justify-self: start;
+      max-width: 16ch;
+      font-size: clamp(2rem, 8.2vw, 2.4rem);
+      line-height: 1.08;
+      text-align: left;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child {
+      width: min(95%, 21rem);
+      justify-self: end;
+      margin-top: clamp(2.5rem, 7vh, 4rem);
+      padding: 1.25rem 1.35rem;
+      font-size: .92rem;
+      line-height: 1.6;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-list {
+      min-height: 100vh;
+      min-height: 100svh;
+      margin-top: 0;
+      padding-block: clamp(3.75rem, 9vh, 5rem);
+      align-content: center;
+      border-top: 0;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-list article {
+      min-height: 0;
+      padding: clamp(1.35rem, 3.6vh, 1.85rem) .25rem;
+      border-bottom-color: hsla(213, 30%, 16%, .13);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-list h3 {
+      margin-top: 1.15rem;
+      font-size: 1.3rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-list p {
+      max-width: 32ch;
+      font-size: .88rem;
+      line-height: 1.58;
+    }
+  }
+
+  @supports (min-height: 100dvh) {
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading,
+    :global(html[data-reajuste-variant="tecnica"]) .problem-list {
+      min-height: 100dvh;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) {
+      scroll-behavior: auto;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media,
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy > *,
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-card {
+      animation: none;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media::before {
+      will-change: auto;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child::before {
+      transition: none;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child > span,
+    :global(html[data-reajuste-variant="tecnica"]) .problem-heading > p:last-child > span::before {
+      transition: none;
+    }
+
+    .experiment-primary-cta {
+      transition: none;
+    }
+
+    .experiment-primary-cta:hover {
+      transform: none;
+    }
+  }
+</style>
+

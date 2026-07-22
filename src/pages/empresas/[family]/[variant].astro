@@ -1,5 +1,6 @@
 ---
 import CampaignLanding from '../../../components/campaign/CampaignLanding.astro';
+import ReajusteExperiment from '../../../components/campaign/ReajusteExperiment.astro';
 import { campaignLandings, type CampaignLanding as CampaignLandingData } from '../../../lib/campaign-landings';
 
 export function getStaticPaths() {
@@ -11,6 +12,7 @@ export function getStaticPaths() {
 
 interface Props { landing: CampaignLandingData }
 const { landing } = Astro.props;
+const isReajusteExperiment = landing.family === 'custos' && landing.variant === 'reajuste';
 ---
 
-<CampaignLanding landing={landing} />
+{isReajusteExperiment ? <ReajusteExperiment landing={landing} /> : <CampaignLanding landing={landing} />}
