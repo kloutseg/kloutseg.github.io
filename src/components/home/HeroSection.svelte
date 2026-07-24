@@ -40,7 +40,7 @@
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </a>
-        <a href="/sobre" class="cta-button cta-secondary">
+        <a href="/a-klout" class="cta-button cta-secondary">
             Conhecer a Klout
         </a>
       </div>

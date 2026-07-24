@@ -17,6 +17,7 @@ const thesis = 'renovacao-como-decisao-empresarial';
   description="Antes de aceitar o reajuste do plano de saúde empresarial, revise contrato, uso, cobertura e oportunidades com a leitura técnica da Klout."
   noindex={true}
   smoothScrollDelay={0}
+  smoothScrollTouch={true}
 >
   <Fragment slot="head">
     <script is:inline>
@@ -279,9 +280,7 @@ const thesis = 'renovacao-como-decisao-empresarial';
                 <span>01</span>
                 <h3>Empresa</h3>
                 <p>Financeiro e RH devem ser ouvidos a fim de que a leitura compreenda orçamento, composição da equipe, prioridades e uso real do benefício.</p>
-                <button class="reading-front-trigger" type="button" data-reading-front-open aria-haspopup="dialog" aria-controls="reading-detail-dialog" aria-describedby="reading-mobile-hint" aria-label="Ver detalhes sobre Empresa">
-                  <span class="reading-front-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
-                </button>
+                <button class="reading-front-trigger" type="button" data-reading-front-open aria-haspopup="dialog" aria-controls="reading-detail-dialog" aria-describedby="reading-mobile-hint" aria-label="Ver detalhes sobre Empresa"></button>
               </article>
               <article class="reading-front">
                 <span>02</span>
@@ -318,22 +317,22 @@ const thesis = 'renovacao-como-decisao-empresarial';
                   </button>
                 </header>
 
-                <div class="reading-dialog-copy" aria-live="polite" aria-atomic="true">
-                  <h3 id="reading-dialog-title" data-reading-dialog-title>Empresa</h3>
-                  <p id="reading-dialog-description" data-reading-dialog-description>Financeiro e RH devem ser ouvidos a fim de que a leitura compreenda orçamento, composição da equipe, prioridades e uso real do benefício.</p>
-                </div>
-
-                <footer class="reading-dialog-footer">
-                  <span data-reading-dialog-progress>1 de 4</span>
-                  <button class="reading-dialog-next" type="button" data-reading-dialog-next aria-label="Ver próxima frente: Apólice">
-                    <span>Próxima</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                <div class="reading-dialog-content">
+                  <button class="reading-dialog-nav reading-dialog-previous" type="button" data-reading-dialog-previous aria-label="Ver frente anterior: Oportunidades">
+                    <span class="reading-dialog-chevron" aria-hidden="true">&#8249;</span>
                   </button>
-                </footer>
+                  <div class="reading-dialog-copy" aria-live="polite" aria-atomic="true">
+                    <h3 id="reading-dialog-title" data-reading-dialog-title>Empresa</h3>
+                    <p id="reading-dialog-description" data-reading-dialog-description>Financeiro e RH devem ser ouvidos a fim de que a leitura compreenda orçamento, composição da equipe, prioridades e uso real do benefício.</p>
+                  </div>
+                  <button class="reading-dialog-nav reading-dialog-next" type="button" data-reading-dialog-next aria-label="Ver próxima frente: Apólice">
+                    <span class="reading-dialog-chevron" aria-hidden="true">&#8250;</span>
+                  </button>
+                </div>
               </div>
             </dialog>
 
-            <ol class="reading-mobile-notes" aria-label="Descrição das quatro frentes">
+            <ol class="reading-mobile-notes" data-lenis-prevent aria-label="Descrição das quatro frentes">
               <li><strong>Empresa</strong><p>Financeiro e RH devem ser ouvidos a fim de que a leitura compreenda orçamento, composição da equipe, prioridades e uso real do benefício.</p></li>
               <li><strong>Apólice</strong><p>Regras, custos, rede, utilização, coparticipação e pontos que condicionem a renovação ou eventuais mudanças precisam de análise cuidadosa.</p></li>
               <li><strong>Parceiros</strong><p>A qualidade da rede de parceiros influencia a disponibilidade de condições e oportunidades mais vantajosas para a empresa.</p></li>
@@ -635,9 +634,9 @@ const thesis = 'renovacao-como-decisao-empresarial';
         const panel = dialog?.querySelector('[data-reading-dialog-panel]');
         const copy = dialog?.querySelector('.reading-dialog-copy');
         const closeButton = dialog?.querySelector('[data-reading-dialog-close]');
+        const previousButton = dialog?.querySelector('[data-reading-dialog-previous]');
         const nextButton = dialog?.querySelector('[data-reading-dialog-next]');
         const indexNode = dialog?.querySelector('[data-reading-dialog-index]');
-        const progressNode = dialog?.querySelector('[data-reading-dialog-progress]');
         const titleNode = dialog?.querySelector('[data-reading-dialog-title]');
         const descriptionNode = dialog?.querySelector('[data-reading-dialog-description]');
         const triggers = visual
@@ -652,9 +651,9 @@ const thesis = 'renovacao-como-decisao-empresarial';
           || !(panel instanceof HTMLElement)
           || !(copy instanceof HTMLElement)
           || !(closeButton instanceof HTMLElement)
+          || !(previousButton instanceof HTMLElement)
           || !(nextButton instanceof HTMLElement)
           || !(indexNode instanceof HTMLElement)
-          || !(progressNode instanceof HTMLElement)
           || !(titleNode instanceof HTMLElement)
           || !(descriptionNode instanceof HTMLElement)
           || triggers.length === 0
@@ -669,7 +668,9 @@ const thesis = 'renovacao-como-decisao-empresarial';
 
         if (fronts.some((front) => !front.title || !front.description)) return;
 
-        const mobileQuery = window.matchMedia('(max-width: 700px)');
+        const mobileQuery = window.matchMedia(
+          '(max-width: 700px), (min-width: 701px) and (max-width: 1100px) and (max-height: 620px)',
+        );
         const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
         let activeIndex = 0;
         let lastTrigger = null;
@@ -678,12 +679,13 @@ const thesis = 'renovacao-como-decisao-empresarial';
         function updateFront(index, animate) {
           activeIndex = (index + fronts.length) % fronts.length;
           const activeFront = fronts[activeIndex];
+          const previousFront = fronts[(activeIndex - 1 + fronts.length) % fronts.length];
           const nextFront = fronts[(activeIndex + 1) % fronts.length];
 
           indexNode.textContent = String(activeIndex + 1).padStart(2, '0');
-          progressNode.textContent = String(activeIndex + 1) + ' de ' + String(fronts.length);
           titleNode.textContent = activeFront.title;
           descriptionNode.textContent = activeFront.description;
+          previousButton.setAttribute('aria-label', 'Ver frente anterior: ' + previousFront.title);
           nextButton.setAttribute('aria-label', 'Ver próxima frente: ' + nextFront.title);
 
           if (animate && !reducedMotionQuery.matches && typeof copy.animate === 'function') {
@@ -741,6 +743,14 @@ const thesis = 'renovacao-como-decisao-empresarial';
         });
 
         closeButton.addEventListener('click', () => requestClose('close-button'));
+
+        previousButton.addEventListener('click', () => {
+          updateFront(activeIndex - 1, true);
+          track('reading_front_previous', {
+            front_position: activeIndex + 1,
+            front_title: fronts[activeIndex].title,
+          });
+        });
 
         nextButton.addEventListener('click', () => {
           updateFront(activeIndex + 1, true);
@@ -1725,8 +1735,7 @@ const thesis = 'renovacao-como-decisao-empresarial';
     touch-action: manipulation;
   }
 
-  .reading-dialog-close svg,
-  .reading-dialog-next svg {
+  .reading-dialog-close svg {
     width: 1.1rem;
     height: 1.1rem;
     fill: none;
@@ -1736,60 +1745,70 @@ const thesis = 'renovacao-como-decisao-empresarial';
     stroke-linejoin: round;
   }
 
+  .reading-dialog-content {
+    display: grid;
+    grid-template-columns: 2.65rem minmax(0, 1fr) 2.65rem;
+    align-items: center;
+    margin-inline: -.35rem;
+  }
+
   .reading-dialog-copy {
-    padding: clamp(1.25rem, 4vh, 2rem) .2rem clamp(1.6rem, 5vh, 2.5rem);
+    min-width: 0;
+    padding: clamp(1.25rem, 4vh, 2rem) .1rem clamp(1.6rem, 5vh, 2.5rem);
+    text-align: center;
   }
 
   .reading-dialog-copy h3 {
     max-width: 13ch;
-    margin: 0;
+    margin: 0 auto;
     font: 400 clamp(2rem, 9vw, 2.75rem)/1.02 'IBM Plex Serif', serif;
     letter-spacing: -.04em;
     text-wrap: balance;
   }
 
   .reading-dialog-copy p {
-    max-width: 38ch;
-    margin: 1.15rem 0 0;
+    max-width: 32ch;
+    margin: 1.15rem auto 0;
     color: var(--muted);
     font: 400 .98rem/1.62 'Proxima Nova', sans-serif;
   }
 
-  .reading-dialog-footer {
-    min-height: 4.25rem;
-    padding: .9rem .2rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    border-top: 1px solid var(--line);
-  }
-
-  .reading-dialog-footer > span {
-    color: var(--muted);
-    font: 500 .62rem/1 'IBM Plex Mono', monospace;
-    letter-spacing: .1em;
-  }
-
-  .reading-dialog-next {
-    min-width: 8.75rem;
-    min-height: 3rem;
-    padding: .75rem 1rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: .8rem;
+  .reading-dialog-nav {
+    width: 3rem;
+    height: 4rem;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
     border: 0;
-    border-radius: 999px;
-    background: var(--dark);
-    color: white;
-    font: 600 .8rem/1 'Proxima Nova', sans-serif;
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    color: var(--accent);
     cursor: pointer;
+    opacity: .82;
     touch-action: manipulation;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .reading-dialog-chevron {
+    display: block;
+    font: 300 3.35rem/.65 'IBM Plex Serif', serif;
+    transform: translateY(-.025em) scaleX(.58);
+    transform-origin: center;
+  }
+
+  .reading-dialog-nav:hover,
+  .reading-dialog-nav:focus-visible {
+    opacity: 1;
+  }
+
+  .reading-dialog-nav:active {
+    transform: scale(.92);
   }
 
   .reading-dialog-close:focus-visible,
-  .reading-dialog-next:focus-visible {
+  .reading-dialog-nav:focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 3px;
   }
@@ -3090,10 +3109,15 @@ const thesis = 'renovacao-como-decisao-empresarial';
     }
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 700px), (min-width: 701px) and (max-width: 1100px) and (max-height: 620px) {
     .success-story-challenge-layer--reading,
     .success-story-challenge-layer--benefits {
       padding-block: max(1.35rem, env(safe-area-inset-top)) max(1.35rem, env(safe-area-inset-bottom));
+    }
+
+    .success-story-challenge-layer--benefits {
+      overflow-y: visible;
+      overscroll-behavior-y: auto;
     }
 
     .success-story-challenge-layer--reading .reading-layout {
@@ -3224,6 +3248,22 @@ const thesis = 'renovacao-como-decisao-empresarial';
       color: white;
     }
 
+    :global(html[data-reajuste-variant]) .success-story-challenge-layer--reading .reading-visual .reading-front:nth-child(2),
+    :global(html[data-reajuste-variant]) .success-story-challenge-layer--reading .reading-visual .reading-front:nth-child(3),
+    :global(html[data-reajuste-variant]) .success-story-challenge-layer--reading .reading-visual .reading-front:nth-child(4) {
+      background: hsl(210, 9%, 91%);
+      color: var(--ink);
+    }
+
+    :global(html[data-reajuste-variant]) .success-story-challenge-layer--reading .reading-visual .reading-front:nth-child(4) > span,
+    :global(html[data-reajuste-variant]) .success-story-challenge-layer--reading .reading-visual .reading-front:nth-child(4) .reading-front-trigger {
+      color: var(--accent-strong);
+    }
+
+    :global(html[data-reajuste-variant]) .success-story-challenge-layer--reading .reading-visual .reading-front:nth-child(4) p {
+      color: var(--muted);
+    }
+
     .success-story-challenge-layer--reading .reading-front-trigger:active {
       background: hsla(0, 0%, 100%, .12);
     }
@@ -3332,79 +3372,82 @@ const thesis = 'renovacao-como-decisao-empresarial';
       bottom: .55rem;
     }
 
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) {
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-wheel {
+      overflow: visible;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front {
       overflow: hidden;
     }
 
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1)::before {
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) {
+      z-index: 5;
+      isolation: isolate;
+      border-radius: 100% 0 0;
+      background:
+        linear-gradient(
+          145deg,
+          hsla(50, 100%, 98%, .28) 0%,
+          hsla(48, 88%, 86%, .08) 38%,
+          hsla(35, 52%, 32%, .16) 100%
+        ) 0 0 / 100% 100% no-repeat,
+        linear-gradient(
+          108deg,
+          transparent 12%,
+          hsla(48, 96%, 90%, .04) 30%,
+          hsla(51, 100%, 98%, .24) 48%,
+          hsla(44, 84%, 75%, .06) 66%,
+          transparent 84%
+        ) 100% 50% / 260% 100% no-repeat,
+        linear-gradient(
+          145deg,
+          hsl(48, 82%, 91%) 0%,
+          hsl(44, 68%, 76%) 40%,
+          hsl(39, 55%, 58%) 72%,
+          hsl(35, 48%, 46%) 100%
+        ) 0 0 / 100% 100% no-repeat;
+      box-shadow:
+        0 .7rem 1.45rem hsla(38, 58%, 30%, .22),
+        0 0 1.15rem hsla(45, 82%, 67%, .34);
+      transform: translate3d(-.28rem, -.28rem, 0);
+      animation: reading-company-gold-flow 10.8s cubic-bezier(.45, 0, .55, 1) infinite alternate;
+      will-change: transform, background-position;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(2) {
+      border-radius: 0 100% 0 0;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(3) {
+      border-radius: 0 0 0 100%;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(4) {
+      border-radius: 0 0 100%;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-wheel::after {
+      z-index: 8;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1)::after {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 4;
-      width: 200%;
-      height: 200%;
-      padding: 1px;
+      inset: 0;
+      z-index: 0;
       pointer-events: none;
-      border-radius: 50%;
-      background:
-        conic-gradient(
-          from 0deg,
-          hsla(42, 54%, 52%, .28),
-          hsla(42, 70%, 67%, .92),
-          hsla(36, 54%, 45%, .42),
-          hsla(46, 76%, 72%, .96),
-          hsla(42, 54%, 52%, .28)
-        );
-      filter: drop-shadow(0 0 3px hsla(42, 72%, 58%, .3));
-      transform-origin: 50% 50%;
-      animation: reading-company-arc-shift 6s linear infinite;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
+      border-radius: inherit;
+      box-shadow:
+        inset 0 0 0 1px hsla(47, 86%, 87%, .84),
+        inset -.6rem -.6rem 1.3rem hsla(35, 52%, 34%, .14),
+        inset .45rem .45rem 1rem hsla(50, 100%, 97%, .3);
     }
 
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) .reading-front-trigger::before,
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) .reading-front-trigger::after {
-      content: "";
-      position: absolute;
-      z-index: 4;
-      pointer-events: none;
-      filter: drop-shadow(0 0 2px hsla(42, 72%, 58%, .26));
-    }
-
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) .reading-front-trigger::before {
-      top: 0;
-      right: 0;
-      width: 1px;
-      height: 100%;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          hsla(42, 58%, 50%, .26) 0%,
-          hsla(44, 78%, 72%, .96) 25%,
-          hsla(42, 58%, 50%, .26) 50%
-        );
-      background-size: 100% 200%;
-      animation: reading-company-line-y 4.6s linear infinite;
-    }
-
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) .reading-front-trigger::after {
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      height: 1px;
-      background:
-        repeating-linear-gradient(
-          to right,
-          hsla(42, 58%, 50%, .26) 0%,
-          hsla(44, 78%, 72%, .96) 25%,
-          hsla(42, 58%, 50%, .26) 50%
-        );
-      background-size: 200% 100%;
-      animation: reading-company-line-x 4.6s linear infinite;
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) > span,
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) > h3 {
+      position: relative;
+      z-index: 1;
+      color: hsl(38, 48%, 24%);
     }
 
     .success-story-challenge-layer--benefits .section-heading {
@@ -3468,21 +3511,618 @@ const thesis = 'renovacao-como-decisao-empresarial';
     }
   }
 
-  @keyframes reading-company-arc-shift {
-    to {
-      transform: rotate(1turn);
+  @media (max-width: 700px) and (max-height: 680px) {
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero {
+      --technical-mobile-media-height: clamp(13.5rem, 38svh, 16rem);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content {
+      padding-top: calc(var(--technical-mobile-media-height) + 1.25rem);
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-copy {
+      padding: 1rem;
+      gap: .72rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero h1 {
+      max-width: 14ch;
+      font-size: clamp(1.9rem, 9vw, 2.2rem);
+      line-height: 1;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-description {
+      font-size: .86rem;
+      line-height: 1.42;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-primary-cta {
+      min-height: 3.3rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-note {
+      font-size: .66rem;
+    }
+
+    .success-story-challenge-layer--reading,
+    .success-story-challenge-layer--benefits {
+      padding-block: max(.9rem, env(safe-area-inset-top)) max(.9rem, env(safe-area-inset-bottom));
+    }
+
+    .success-story-challenge-layer--reading .reading-layout {
+      padding-bottom: 1.5rem;
+    }
+
+    .success-story-challenge-layer--reading .reading-front:nth-child(4) h3 {
+      font-size: clamp(.76rem, 3.45vw, .92rem);
+      letter-spacing: -.025em;
+    }
+
+    .success-story-challenge-layer--benefits {
+      align-items: flex-start;
+    }
+
+    .success-story-challenge-layer--benefits .section-heading {
+      gap: .5rem;
+    }
+
+    .success-story-challenge-layer--benefits .section-kicker {
+      font-size: .52rem;
+    }
+
+    .success-story-challenge-layer--benefits .section-heading h2 {
+      font-size: clamp(1.38rem, 6.8vw, 1.55rem);
+      line-height: 1.02;
+    }
+
+    .success-story-challenge-layer--benefits .section-heading > p:last-child {
+      font-size: .7rem;
+      line-height: 1.34;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid {
+      margin-top: .7rem;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid article:nth-child(n),
+    :global(html[data-reajuste-variant="sensorial"]) .success-story-challenge-layer--benefits .benefit-grid article:nth-child(n) {
+      padding: .62rem .55rem;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid span {
+      font-size: .48rem;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid h3 {
+      margin: .55rem 0 .28rem;
+      font-size: .88rem;
+      line-height: 1.04;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid p {
+      font-size: .63rem;
+      line-height: 1.28;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .success-story-challenge-layer--benefits .benefit-grid {
+      gap: .35rem;
     }
   }
 
-  @keyframes reading-company-line-y {
-    to {
-      background-position: 0 200%;
+  @media (min-width: 701px) and (max-width: 850px) {
+    .success-story-challenge-layer--reading .reading-layout {
+      grid-template-columns: minmax(12.5rem, .52fr) minmax(22rem, 1.48fr);
+      gap: clamp(1.75rem, 4vw, 2.25rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-wheel {
+      width: min(100%, 34rem, calc(100vh - 5rem));
+    }
+
+    .success-story-challenge-layer--reading .reading-front {
+      padding: clamp(1.35rem, 3vw, 1.7rem) clamp(1.1rem, 2.5vw, 1.45rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-front h3 {
+      font-size: clamp(1.08rem, 2.7vw, 1.38rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-front p {
+      font-size: .67rem;
+      line-height: 1.4;
     }
   }
 
-  @keyframes reading-company-line-x {
+  @media (min-width: 720px) and (max-width: 900px) {
+    .mechanism-section {
+      padding-block: clamp(5rem, 10vw, 6.5rem);
+    }
+
+    .mechanism-layout {
+      min-height: 0;
+      grid-template-columns: minmax(0, .86fr) minmax(18rem, 1.14fr);
+      grid-template-rows: auto auto;
+      gap: 2.25rem clamp(2rem, 4vw, 3rem);
+      align-items: stretch;
+    }
+
+    .mechanism-intro {
+      grid-column: 1;
+      grid-row: 1;
+      width: auto;
+      align-self: start;
+      padding-top: 0;
+    }
+
+    .mechanism-intro h2 {
+      font-size: clamp(2.05rem, 4.6vw, 2.55rem);
+      line-height: 1.05;
+    }
+
+    .mechanism-intro p {
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .mechanism-portrait {
+      position: relative;
+      inset: auto;
+      grid-column: 2;
+      grid-row: 1 / 3;
+      width: 100%;
+      height: 100%;
+      min-height: 42rem;
+      aspect-ratio: auto;
+      justify-self: stretch;
+      align-self: stretch;
+    }
+
+    .mechanism-effects {
+      grid-column: 1;
+      grid-row: 2;
+      width: auto;
+    }
+
+    .effect-accordion summary > span:nth-child(2) {
+      font-size: .86rem;
+    }
+
+    .effect-panel p {
+      padding-right: .5rem;
+      font-size: .8rem;
+      line-height: 1.54;
+    }
+  }
+
+  @media (max-width: 1100px) and (max-height: 620px) and (orientation: landscape) {
+    .success-story-challenge-layer--reading,
+    .success-story-challenge-layer--benefits {
+      padding-block: max(.75rem, env(safe-area-inset-top)) max(.75rem, env(safe-area-inset-bottom));
+    }
+
+    .success-story-challenge-layer--reading .reading-layout {
+      height: 100%;
+      padding-bottom: 0;
+      grid-template-columns: minmax(0, .9fr) minmax(14rem, 1.1fr);
+      gap: clamp(1.25rem, 4vw, 2.5rem);
+      align-content: center;
+      align-items: center;
+    }
+
+    .success-story-challenge-layer--reading .reading-intro {
+      width: 100%;
+      gap: .58rem;
+      justify-items: start;
+      text-align: left;
+    }
+
+    .success-story-challenge-layer--reading .reading-intro h2 {
+      max-width: 14ch;
+      font-size: clamp(1.45rem, 6.2vh, 2rem);
+      line-height: 1.02;
+    }
+
+    .success-story-challenge-layer--reading .reading-intro > p:last-child {
+      max-width: 34ch;
+      font-size: .72rem;
+      line-height: 1.34;
+    }
+
+    .success-story-challenge-layer--reading .reading-visual {
+      width: 100%;
+    }
+
+    .success-story-challenge-layer--reading .reading-wheel {
+      width: min(42vw, calc(100vh - 3rem), 21rem);
+      min-width: 0;
+    }
+
+    .success-story-challenge-layer--reading .reading-front {
+      padding: .72rem .65rem;
+    }
+
+    .success-story-challenge-layer--reading .reading-front p {
+      display: none;
+    }
+
+    .success-story-challenge-layer--reading .reading-front h3,
+    .success-story-challenge-layer--reading .reading-front:nth-child(4) h3 {
+      margin-top: .38rem;
+      font-size: clamp(.78rem, 2vw, 1rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-mobile-hint {
+      margin-top: .4rem;
+      gap: .4rem;
+      font-size: .67rem;
+    }
+
+    .reading-mobile-hint-icon {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+
+    .success-story-challenge-layer--benefits {
+      align-items: flex-start;
+      overflow-y: visible;
+      overscroll-behavior-y: auto;
+    }
+
+    .success-story-challenge-layer--benefits .section-heading {
+      grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+      gap: .35rem clamp(1.25rem, 4vw, 2.5rem);
+      align-items: end;
+    }
+
+    .success-story-challenge-layer--benefits .section-kicker {
+      grid-column: 1 / -1;
+      font-size: .5rem;
+    }
+
+    .success-story-challenge-layer--benefits .section-heading h2 {
+      max-width: 15ch;
+      font-size: clamp(1.25rem, 5.5vh, 1.65rem);
+      line-height: 1.01;
+    }
+
+    .success-story-challenge-layer--benefits .section-heading > p:last-child {
+      font-size: .66rem;
+      line-height: 1.3;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid {
+      margin-top: .6rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid article:nth-child(n) {
+      min-height: 0;
+      padding: .55rem .48rem;
+      border-top: 0;
+      border-bottom: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid article:first-child {
+      border-left: 0;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid span {
+      font-size: .46rem;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid h3 {
+      margin: .46rem 0 .25rem;
+      font-size: .82rem;
+      line-height: 1.02;
+    }
+
+    .success-story-challenge-layer--benefits .benefit-grid p {
+      font-size: .59rem;
+      line-height: 1.24;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .success-story-challenge-layer--benefits .benefit-grid {
+      gap: .3rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .success-story-challenge-layer--benefits .benefit-grid article:nth-child(n) {
+      padding: .5rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+  }
+  @media (max-width: 1100px) and (max-height: 620px) and (orientation: landscape) {
+    .experiment-header-inner {
+      min-height: 3.75rem;
+      padding-inline: 1rem;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero {
+      margin: 0;
+      padding: 0;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero {
+      min-height: 100svh;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-media {
+      inset: 0 auto 0 0;
+      width: 42%;
+      height: auto;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media::before {
+      background-position: 58% center;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-shade,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-shade {
+      inset: 0 auto 0 0;
+      width: 42%;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero::after {
+      top: 0;
+      right: auto;
+      left: calc(42% - .35rem);
+      width: .7rem;
+      height: 100%;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+      width: 58%;
+      min-height: 100svh;
+      margin: 0 0 0 42%;
+      padding: 3.6rem 1rem .65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-copy {
+      gap: .48rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero h1,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero h1 {
+      max-width: 17ch;
+      font-size: clamp(1.5rem, 4.25vw, 1.75rem);
+      line-height: 1.01;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-description,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-description {
+      max-width: 38ch;
+      font-size: .76rem;
+      line-height: 1.38;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-primary-cta,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-primary-cta {
+      min-height: 3rem;
+      padding: .72rem .9rem;
+      font-size: .72rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-note,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-note {
+      font-size: .61rem;
+      line-height: 1.35;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-media {
+      border-radius: 0 20px 20px 0;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-copy {
+      width: 100%;
+      max-width: none;
+      padding: .7rem;
+      border-radius: 16px;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-card,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-card {
+      display: none;
+    }
+
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-header-privacy {
+      display: none;
+    }
+  }
+
+  @media (max-width: 700px) and (max-height: 350px) and (orientation: landscape) {
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+      padding-top: 3.35rem;
+      padding-bottom: .4rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-copy,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-copy {
+      gap: .38rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-description,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-description {
+      font-size: .7rem;
+      line-height: 1.32;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-primary-cta,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-primary-cta {
+      min-height: 2.75rem;
+      padding-block: .6rem;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-note,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-note {
+      display: none;
+    }
+  }
+
+  @media (max-width: 520px) and (max-height: 350px) and (orientation: landscape) {
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-media,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-media,
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-shade,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-shade {
+      width: 34%;
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero::after {
+      left: calc(34% - .35rem);
+    }
+
+    :global(html[data-reajuste-variant="tecnica"]) .experiment-hero-content,
+    :global(html[data-reajuste-variant="sensorial"]) .experiment-hero-content {
+      width: 66%;
+      margin-left: 34%;
+    }
+  }
+
+  @media (min-width: 600px) and (max-width: 1100px) and (max-height: 620px) and (orientation: landscape) {
+    .mechanism-section {
+      padding-block: 4rem;
+    }
+
+    .mechanism-layout {
+      min-height: 0;
+      grid-template-columns: minmax(0, .9fr) minmax(15rem, 1.1fr);
+      grid-template-rows: auto auto;
+      gap: 1.5rem clamp(1.5rem, 4vw, 2.5rem);
+      align-items: stretch;
+    }
+
+    .mechanism-intro {
+      grid-column: 1;
+      grid-row: 1;
+      width: auto;
+      align-self: start;
+      padding-top: 0;
+    }
+
+    .mechanism-intro h2 {
+      font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+      line-height: 1.04;
+    }
+
+    .mechanism-intro p {
+      font-size: .78rem;
+      line-height: 1.48;
+    }
+
+    .mechanism-portrait {
+      position: relative;
+      inset: auto;
+      grid-column: 2;
+      grid-row: 1 / 3;
+      width: 100%;
+      height: 100%;
+      min-height: 34rem;
+      aspect-ratio: auto;
+      justify-self: stretch;
+      align-self: stretch;
+    }
+
+    .mechanism-effects {
+      grid-column: 1;
+      grid-row: 2;
+      width: auto;
+    }
+
+    .mechanism-effects > h3 {
+      margin-bottom: .85rem;
+      font-size: 1.2rem;
+    }
+
+    .effect-accordion summary {
+      min-height: 3rem;
+      padding-block: .7rem;
+      grid-template-columns: 1.65rem minmax(0, 1fr) 1.1rem;
+      gap: .5rem;
+    }
+
+    .effect-accordion summary > span:nth-child(2) {
+      font-size: .76rem;
+      line-height: 1.25;
+    }
+
+    .effect-panel p {
+      padding: 0 .5rem 1rem 2.15rem;
+      font-size: .72rem;
+      line-height: 1.45;
+    }
+  }
+  .success-story-challenge-layer--reading .reading-front:nth-child(1) p,
+  .success-story-challenge-layer--reading .reading-front:nth-child(2) p {
+    min-block-size: 5lh;
+  }
+
+  @media (min-width: 701px) and (max-width: 710px) {
+    .success-story-challenge-layer--reading .reading-front:nth-child(1) p,
+    .success-story-challenge-layer--reading .reading-front:nth-child(2) p {
+      min-block-size: 6lh;
+    }
+  }
+
+  @media (max-width: 700px), (min-width: 701px) and (max-width: 1100px) and (max-height: 620px) {
+    .success-story-challenge-layer--reading .reading-front p {
+      display: none;
+    }
+  }
+
+  @media (min-width: 701px) and (max-width: 1000px) and (min-height: 621px) {
+    .success-story-challenge-layer--reading .reading-front:nth-child(3) > span,
+    .success-story-challenge-layer--reading .reading-front:nth-child(3) > h3,
+    .success-story-challenge-layer--reading .reading-front:nth-child(4) > span,
+    .success-story-challenge-layer--reading .reading-front:nth-child(4) > h3 {
+      transform: translateY(-.3rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-front:nth-child(3) p {
+      transform: translate(.3rem, -.3rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-front:nth-child(4) p {
+      transform: translate(-.45rem, -.3rem);
+    }
+
+    .success-story-challenge-layer--reading .reading-front:nth-child(3) p::before {
+      content: "";
+      float: left;
+      width: 2.75rem;
+      height: 9em;
+      shape-outside: polygon(0 0, 100% 100%, 0 100%);
+    }
+
+    .success-story-challenge-layer--reading .reading-front:nth-child(4) p::before {
+      content: "";
+      float: right;
+      width: 3.75rem;
+      height: 9em;
+      shape-outside: polygon(100% 0, 100% 100%, 0 100%);
+    }
+  }
+
+  :global(html[data-reajuste-variant] .cookie-consent__button) {
+    min-height: 44px;
+  }
+
+  @keyframes reading-company-gold-flow {
+    from {
+      background-position: 0 0, 100% 50%, 0 0;
+    }
+
     to {
-      background-position: 200% 0;
+      background-position: 0 0, 0% 50%, 0 0;
     }
   }
 
@@ -3492,9 +4132,7 @@ const thesis = 'renovacao-como-decisao-empresarial';
     }
 
     .reading-dialog-panel,
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1)::before,
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) .reading-front-trigger::before,
-    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) .reading-front-trigger::after {
+    .success-story-challenge-layer--reading .reading-visual.is-dialog-ready .reading-front:nth-child(1) {
       animation: none;
     }
 

@@ -1,6 +1,20 @@
+const mobileScrollEnabled = () =>
+  document.documentElement.dataset.smoothScrollTouch === 'true';
+
+const usesTouchProfile = () =>
+  mobileScrollEnabled() &&
+  (
+    window.matchMedia('(max-width: 768px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches ||
+    navigator.maxTouchPoints > 0
+  );
+
 const canUseSmoothScroll = () =>
-  window.matchMedia('(min-width: 769px)').matches &&
-  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+  (
+    window.matchMedia('(min-width: 769px)').matches ||
+    mobileScrollEnabled()
+  );
 
 let smoothScrollStarted = false;
 
@@ -18,18 +32,21 @@ async function startSmoothScroll() {
 
     const gsap = gsapModule.gsap;
     const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+    const touchProfile = usesTouchProfile();
 
     const lenis = new Lenis({
-      duration: 1.65,
+      duration: touchProfile ? 1.1 : 1.65,
       easing: (t) => 1 - Math.pow(1 - t, 4),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.86,
-      smoothTouch: false,
-      touchMultiplier: 2,
+      wheelMultiplier: touchProfile ? 1 : 0.86,
+      syncTouch: touchProfile,
+      syncTouchLerp: touchProfile ? 0.12 : 0.075,
+      touchInertiaExponent: touchProfile ? 1.55 : 1.7,
+      touchMultiplier: touchProfile ? 1.05 : 1,
       infinite: false,
-      normalizeWheel: true,
+      anchors: touchProfile,
     });
 
     window.lenisInstance = lenis;
