@@ -379,34 +379,48 @@ const thesis = 'renovacao-como-decisao-empresarial';
         </div>
       </div>
 
+      <section class="experiment-section closing-section" aria-labelledby="closing-title">
+        <div class="experiment-shell closing-layout">
+          <div>
+            <p class="section-kicker">Próximo passo</p>
+            <h2 id="closing-title">Queremos te ajudar a quebrar as barreiras na relação da sua empresa com o plano de saúde.</h2>
+          </div>
+          <div class="closing-copy">
+            <p class="closing-description">Já ajudamos mais de 600 clientes a conseguir um contrato aderente às suas necessidades atuais, com previsibilidade, clareza e potencial de redução de custos.</p>
+            <p>Agende uma consulta com a Klout, sem compromisso. Nossa equipe de consultores analisará a apólice, documentos e informações essenciais para identificar oportunidades junto à rede de parceiros composta por operadoras como Omint, Alice, Bradesco Seguros e Amil. Em seguida, um consultor da Klout irá até a sua empresa para apresentar as melhores condições.</p>
+            <a href="#diagnostico" class="closing-cta" data-reajuste-cta data-cta-location="closing">Agendar uma consulta <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14 0m-6-6 6 6-6 6" /></svg></a>
+          </div>
+        </div>
+      </section>
+
       <section class="experiment-section form-section" aria-label="Formulário e formas de atendimento">
         <div class="experiment-shell form-moment">
           <aside class="attendance-strip" aria-label="Formas de atendimento para o diagnóstico inicial">
             <div class="attendance-strip-intro">
               <p class="section-kicker">Formas de atendimento</p>
-              <p>A empresa escolhe como iniciar a leitura. O formato acompanha a agenda de Financeiro e RH.</p>
+              <p>Iniciaremos contato conforme a sua preferência. Nas próximas etapas, agendaremos encontros presenciais na sede da empresa ou, se preferir, aguardaremos a sua visita ao escritório da Klout.</p>
             </div>
 
             <ul>
               <li>
                 <span>01</span>
                 <div>
-                  <strong>Enviar documentos</strong>
-                  <p>Apólice e informações essenciais.</p>
+                  <strong>Preencha o formulário</strong>
+                  <p>Entraremos em contato em até 24 horas úteis.</p>
                 </div>
               </li>
               <li>
                 <span>02</span>
                 <div>
-                  <strong>Receber um consultor</strong>
-                  <p>Na sede da empresa, com horário combinado.</p>
+                  <strong>Enviar documentos</strong>
+                  <p>Apólice e informações essenciais para a análise.</p>
                 </div>
               </li>
               <li>
                 <span>03</span>
                 <div>
-                  <strong>Visitar a Klout</strong>
-                  <p>R. da Quitanda, 96 · Centro Histórico de São Paulo · São Paulo - SP · 01012-010.</p>
+                  <strong>Reunião com consultor</strong>
+                  <p>Agendaremos um encontro na empresa ou em um dos nossos escritórios.</p>
                 </div>
               </li>
             </ul>
@@ -2029,14 +2043,95 @@ const thesis = 'renovacao-como-decisao-empresarial';
     background: var(--surface);
   }
 
+  .closing-section,
   .form-section {
-    background: var(--dark);
+    background: var(--technical-blue-destination);
+    color: white;
+  }
+
+  .closing-section {
+    padding-top: clamp(5.5rem, 9vw, 8rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.75rem);
+    background:
+      linear-gradient(180deg, hsl(207, 29%, 21%) 0, var(--technical-blue-destination) clamp(4.5rem, 8vw, 7rem));
+  }
+
+  .closing-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, .84fr);
+    gap: clamp(2.5rem, 8vw, 10rem);
+    align-items: start;
+  }
+
+  .closing-layout .section-kicker {
+    color: hsl(40, 42%, 68%);
+  }
+
+  .closing-layout h2 {
+    max-width: 13ch;
+    margin: 1.2rem 0 0;
+    font: 400 clamp(2.35rem, 4.4vw, 4.5rem)/.98 'IBM Plex Serif', serif;
+    letter-spacing: -.045em;
+  }
+
+  .closing-copy {
+    display: grid;
+    gap: 1.5rem;
+    padding-top: .35rem;
+  }
+
+  .closing-copy p {
+    margin: 0;
+    color: hsla(0, 0%, 100%, .7);
+    font: 400 clamp(.98rem, 1.2vw, 1.1rem)/1.62 'Proxima Nova', sans-serif;
+  }
+
+  .closing-copy .closing-description {
+    color: white;
+    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+    line-height: 1.35;
+  }
+
+  .closing-cta {
+    width: fit-content;
+    min-height: 3rem;
+    margin-top: .25rem;
+    padding: .65rem 1rem .65rem 1.15rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid hsla(0, 0%, 100%, .42);
+    color: white;
+    font: 600 .72rem/1 'IBM Plex Mono', monospace;
+    letter-spacing: .08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+
+  .closing-cta:hover,
+  .closing-cta:focus-visible {
+    border-color: white;
+    background: white;
+    color: var(--technical-blue-origin);
+  }
+
+  .closing-cta svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.6;
+  }
+
+  .form-section {
+    padding-top: clamp(1.5rem, 3vw, 2.75rem);
+    padding-bottom: clamp(4rem, 9vw, 8rem);
   }
 
   :global(html[data-reajuste-variant="sensorial"]) .form-section {
-    background:
-      radial-gradient(circle at 86% 10%, hsla(28, 45%, 52%, .18), transparent 28%),
-      var(--dark);
+    background: var(--technical-blue-destination);
   }
 
   .form-moment {
@@ -2102,8 +2197,8 @@ const thesis = 'renovacao-como-decisao-empresarial';
 
   .attendance-strip li p {
     margin: .45rem 0 0;
-    color: hsla(0, 0%, 100%, .58);
-    font: 400 .74rem/1.42 'Proxima Nova', sans-serif;
+    color: hsla(0, 0%, 100%, .64);
+    font: 400 .82rem/1.45 'Proxima Nova', sans-serif;
   }
 
   :global(html[data-reajuste-variant="sensorial"]) .attendance-strip {
@@ -2114,6 +2209,30 @@ const thesis = 'renovacao-como-decisao-empresarial';
   }
 
   @media (max-width: 700px) {
+    .closing-section {
+      padding-top: 4.5rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .closing-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .closing-layout h2 {
+      max-width: 14ch;
+    }
+
+    .closing-cta {
+      width: 100%;
+      justify-content: space-between;
+      min-height: 3.25rem;
+    }
+
+    .form-section {
+      padding-top: 1.5rem;
+    }
+
     .attendance-strip {
       padding: 1.3rem;
       grid-template-columns: minmax(0, 1fr);

@@ -236,7 +236,7 @@
         <label>
           <span>Cargo / função</span>
           <select bind:value={cargo} name="cargo" required>
-            <option value="" disabled>Selecione seu contexto</option>
+            <option value="" disabled>Selecionar</option>
             {#each cargoOptions as option}<option value={option}>{option}</option>{/each}
           </select>
         </label>
