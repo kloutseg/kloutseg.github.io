@@ -291,7 +291,7 @@
   fieldset legend { display: block; margin: 0; color: hsl(214, 22%, 28%); font: 600 .68rem/1.2 'Proxima Nova', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   fieldset legend small { color: hsl(214, 12%, 48%); font-size: .7rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
   .preference-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; min-height: 3.25rem; }
-  .preference-option { display: inline-flex; grid-template-columns: auto 1fr; align-items: center; gap: .45rem; min-height: 3.25rem; padding: .55rem .75rem; box-sizing: border-box; border: 1px solid hsl(214, 16%, 76%); border-radius: 3px; cursor: pointer; }
+  .preference-option { display: inline-flex; grid-template-columns: auto 1fr; align-items: center; gap: .45rem; min-height: 3.25rem; padding: .55rem .75rem; box-sizing: border-box; border: 0; cursor: pointer; }
   .preference-option input { width: 1rem; min-height: 1rem; accent-color: hsl(214, 61%, 28%); }
   .preference-option span { color: hsl(214, 22%, 28%); font-size: .78rem; letter-spacing: 0; text-transform: none; white-space: nowrap; }
   .honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
