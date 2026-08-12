@@ -15,7 +15,7 @@
     || import.meta.env.PUBLIC_JOTFORM_B2B_FORM_ID
     || '261337328053050';
   const configuredPreferenceField = import.meta.env.PUBLIC_JOTFORM_B2B_CONTACT_PREFERENCE_FIELD_NAME?.trim();
-  const CONTACT_PREFERENCE_FIELD_NAME = configuredPreferenceField || 'contact_preference';
+  const CONTACT_PREFERENCE_FIELD_NAME = configuredPreferenceField || 'q9_q9_radio7';
 
   let nome = $state('');
   let empresa = $state('');
@@ -131,16 +131,16 @@
       addField(form, 'simple_spc', FORM_ID + '-' + FORM_ID);
       addField(form, 'website', website);
       addField(form, 'submitSource', 'site-klout-reajuste-experiment');
-      addField(form, 'q3_nome[first]', name.first);
-      addField(form, 'q3_nome[last]', name.last);
-      addField(form, 'q4_telefone[full]', telefone);
-      addField(form, 'q5_email', email);
-      addField(form, 'q6_cargo', cargo);
-      addField(form, 'q8_razaoSocial', empresa);
+      addField(form, 'q2_q2_fullname0[first]', name.first);
+      addField(form, 'q2_q2_fullname0[last]', name.last);
+      addField(form, 'q8_q8_phone6[full]', telefone);
+      addField(form, 'q7_q7_email5', email);
+      addField(form, 'q4_q4_radio2', cargo);
+      addField(form, 'q3_q3_textbox1', empresa);
       addField(form, 'q15_tipo', 'b2b-campaign');
       addField(
         form,
-        'q16_origem',
+        'q11_q11_textbox9',
         getCampaignSubmissionOrigin(window.location.pathname, landingId, variantId),
       );
       addField(form, 'landing_id', landingId);
@@ -153,15 +153,15 @@
       }
 
       if (attribution) {
-        addField(form, 'q17_visitor_id', attribution.visitorId);
-        addField(form, 'q18_first_landing', attribution.firstLanding);
-        addField(form, 'q19_first_referrer', attribution.firstReferrer);
-        addField(form, 'q20_utm_source', attribution.utm_source);
-        addField(form, 'q21_utm_medium', attribution.utm_medium);
-        addField(form, 'q22_utm_campaign', attribution.utm_campaign);
-        addField(form, 'q23_utm_content', attribution.utm_content);
-        addField(form, 'q24_utm_term', attribution.utm_term);
-        addField(form, 'q25_gclid', attribution.gclid);
+        addField(form, 'q12_q12_textbox10', attribution.visitorId);
+        addField(form, 'q13_q13_textbox11', attribution.firstLanding);
+        addField(form, 'q14_q14_textbox12', attribution.firstReferrer);
+        addField(form, 'q15_q15_textbox13', attribution.utm_source);
+        addField(form, 'q16_q16_textbox14', attribution.utm_medium);
+        addField(form, 'q17_q17_textbox15', attribution.utm_campaign);
+        addField(form, 'q18_q18_textbox16', attribution.utm_content);
+        addField(form, 'q19_q19_textbox17', attribution.utm_term);
+        addField(form, 'q20_q20_textbox18', attribution.gclid);
       }
 
       const completed = new Promise<void>((resolve) => {

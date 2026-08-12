@@ -24,7 +24,7 @@
     || import.meta.env.PUBLIC_JOTFORM_B2B_FORM_ID
     || '261337328053050';
   const configuredPreferenceField = import.meta.env.PUBLIC_JOTFORM_B2B_CONTACT_PREFERENCE_FIELD_NAME?.trim();
-  const CONTACT_PREFERENCE_FIELD_NAME = configuredPreferenceField || 'contact_preference';
+  const CONTACT_PREFERENCE_FIELD_NAME = configuredPreferenceField || 'q9_q9_radio7';
 
   let nome = $state('');
   let empresa = $state('');
@@ -111,17 +111,17 @@
       addField(form, 'simple_spc', `${FORM_ID}-${FORM_ID}`);
       addField(form, 'website', website);
       addField(form, 'submitSource', 'site-klout-campaign');
-      addField(form, 'q3_nome[first]', name.first);
-      addField(form, 'q3_nome[last]', name.last);
-      addField(form, 'q4_telefone[full]', telefone);
-      addField(form, 'q5_email', email);
-      addField(form, 'q6_cargo', cargo);
-      addField(form, 'q8_razaoSocial', empresa);
-      addField(form, 'q14_numeroDe', faixaVidas);
+      addField(form, 'q2_q2_fullname0[first]', name.first);
+      addField(form, 'q2_q2_fullname0[last]', name.last);
+      addField(form, 'q8_q8_phone6[full]', telefone);
+      addField(form, 'q7_q7_email5', email);
+      addField(form, 'q4_q4_radio2', cargo);
+      addField(form, 'q3_q3_textbox1', empresa);
+      addField(form, 'q5_q5_radio3', faixaVidas);
       addField(form, 'q15_tipo', 'b2b-campaign');
       addField(
         form,
-        'q16_origem',
+        'q11_q11_textbox9',
         getCampaignSubmissionOrigin(window.location.pathname, landingId, variantId),
       );
       addField(form, 'landing_id', landingId);
@@ -132,15 +132,15 @@
       }
 
       if (attribution) {
-        addField(form, 'q17_visitor_id', attribution.visitorId);
-        addField(form, 'q18_first_landing', attribution.firstLanding);
-        addField(form, 'q19_first_referrer', attribution.firstReferrer);
-        addField(form, 'q20_utm_source', attribution.utm_source);
-        addField(form, 'q21_utm_medium', attribution.utm_medium);
-        addField(form, 'q22_utm_campaign', attribution.utm_campaign);
-        addField(form, 'q23_utm_content', attribution.utm_content);
-        addField(form, 'q24_utm_term', attribution.utm_term);
-        addField(form, 'q25_gclid', attribution.gclid);
+        addField(form, 'q12_q12_textbox10', attribution.visitorId);
+        addField(form, 'q13_q13_textbox11', attribution.firstLanding);
+        addField(form, 'q14_q14_textbox12', attribution.firstReferrer);
+        addField(form, 'q15_q15_textbox13', attribution.utm_source);
+        addField(form, 'q16_q16_textbox14', attribution.utm_medium);
+        addField(form, 'q17_q17_textbox15', attribution.utm_campaign);
+        addField(form, 'q18_q18_textbox16', attribution.utm_content);
+        addField(form, 'q19_q19_textbox17', attribution.utm_term);
+        addField(form, 'q20_q20_textbox18', attribution.gclid);
       }
 
       const completed = new Promise<void>((resolve) => {
@@ -274,10 +274,10 @@
   fieldset { display: grid; gap: .75rem; min-width: 0; margin: 0; padding: 0; border: 0; }
   fieldset legend { color: hsl(214, 22%, 28%); font: 600 .68rem/1.2 'Proxima Nova', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   fieldset legend small { color: hsl(214, 12%, 48%); font-size: .7rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
-  .preference-options { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .preference-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
   .preference-option { display: inline-flex; grid-template-columns: auto 1fr; align-items: center; gap: .45rem; min-height: 2.75rem; padding: .55rem .75rem; border: 1px solid hsl(214, 16%, 76%); border-radius: 3px; cursor: pointer; }
   .preference-option input { width: 1rem; min-height: 1rem; accent-color: hsl(214, 61%, 28%); }
-  .preference-option span { color: hsl(214, 22%, 28%); font-size: .78rem; letter-spacing: 0; text-transform: none; }
+  .preference-option span { color: hsl(214, 22%, 28%); font-size: .78rem; letter-spacing: 0; text-transform: none; white-space: nowrap; }
   .honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .form-submit-row { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-top: .5rem; }
   .form-submit-row p { max-width: 36rem; margin: 0; color: hsl(214, 12%, 48%); font: 400 .76rem/1.55 'Proxima Nova', sans-serif; }
