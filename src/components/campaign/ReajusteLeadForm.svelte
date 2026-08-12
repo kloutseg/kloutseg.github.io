@@ -202,16 +202,7 @@
         <span class="copy-tecnica">A revisão começa pela leitura do contexto.</span>
         <span class="copy-sensorial">A conversa já pode começar com mais tranquilidade.</span>
       </h2>
-      <p>Um consultor da Klout entrará em contato em até um dia útil para entender o cenário da empresa.</p>
-      <a
-        href="https://wa.me/5511925506721?text=Ol%C3%A1%2C%20acabei%20de%20solicitar%20um%20diagn%C3%B3stico%20sobre%20o%20reajuste%20do%20plano%20da%20empresa."
-        target="_blank"
-        rel="noopener noreferrer"
-        data-reajuste-cta
-        data-cta-location="form-success"
-      >
-        Falar pelo WhatsApp
-      </a>
+      <p>Retornaremos em até 24 horas úteis para entender o cenário da empresa.</p>
     </div>
   {:else}
     <header class="reajuste-form-header">

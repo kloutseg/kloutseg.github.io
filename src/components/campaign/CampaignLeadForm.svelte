@@ -23,6 +23,8 @@
   const FORM_ID = import.meta.env.PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID
     || import.meta.env.PUBLIC_JOTFORM_B2B_FORM_ID
     || '261337328053050';
+  const configuredPreferenceField = import.meta.env.PUBLIC_JOTFORM_B2B_CONTACT_PREFERENCE_FIELD_NAME?.trim();
+  const CONTACT_PREFERENCE_FIELD_NAME = configuredPreferenceField || 'contact_preference';
 
   let nome = $state('');
   let empresa = $state('');
@@ -30,6 +32,7 @@
   let email = $state('');
   let telefone = $state('');
   let faixaVidas = $state('');
+  let preferenciaContato = $state('');
   let website = $state('');
   let status = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
@@ -124,6 +127,9 @@
       addField(form, 'landing_id', landingId);
       addField(form, 'variant_id', variantId);
       addField(form, 'thesis', thesis);
+      if (preferenciaContato) {
+        addField(form, CONTACT_PREFERENCE_FIELD_NAME, preferenciaContato);
+      }
 
       if (attribution) {
         addField(form, 'q17_visitor_id', attribution.visitorId);
@@ -166,10 +172,7 @@
     <div class="campaign-form-success" role="status" aria-live="polite">
       <p class="form-kicker">Solicitação recebida</p>
       <h2>Agora a leitura começa com a Klout.</h2>
-      <p>Nosso time entrará em contato em até um dia útil para entender o contexto da empresa.</p>
-      <a href="https://wa.me/5511925506721?text=Olá%2C%20acabei%20de%20solicitar%20um%20diagnóstico%20pelo%20site%20da%20Klout." target="_blank" rel="noopener noreferrer">
-        Falar pelo WhatsApp
-      </a>
+      <p>Retornaremos em até 24 horas úteis para entender o contexto da empresa.</p>
     </div>
   {:else}
     <header class="campaign-form-header">
@@ -221,6 +224,17 @@
             placeholder="(11) 00000-0000"
           />
         </label>
+        <fieldset>
+          <legend>Preferência de contato <small>(opcional)</small></legend>
+          <div class="preference-options">
+            {#each ['WhatsApp', 'E-mail', 'Ligação'] as option}
+              <label class="preference-option">
+                <input type="radio" bind:group={preferenciaContato} name="preferenciaContato" value={option} />
+                <span>{option}</span>
+              </label>
+            {/each}
+          </div>
+        </fieldset>
       </div>
 
       <label class="honeypot" aria-hidden="true">
@@ -257,6 +271,13 @@
   input:focus, select:focus { border-bottom-color: hsl(214, 62%, 28%); }
   input::placeholder { color: hsl(214, 12%, 53%); }
   select { cursor: pointer; }
+  fieldset { display: grid; gap: .75rem; min-width: 0; margin: 0; padding: 0; border: 0; }
+  fieldset legend { color: hsl(214, 22%, 28%); font: 600 .68rem/1.2 'Proxima Nova', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  fieldset legend small { color: hsl(214, 12%, 48%); font-size: .7rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
+  .preference-options { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .preference-option { display: inline-flex; grid-template-columns: auto 1fr; align-items: center; gap: .45rem; min-height: 2.75rem; padding: .55rem .75rem; border: 1px solid hsl(214, 16%, 76%); border-radius: 3px; cursor: pointer; }
+  .preference-option input { width: 1rem; min-height: 1rem; accent-color: hsl(214, 61%, 28%); }
+  .preference-option span { color: hsl(214, 22%, 28%); font-size: .78rem; letter-spacing: 0; text-transform: none; }
   .honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .form-submit-row { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-top: .5rem; }
   .form-submit-row p { max-width: 36rem; margin: 0; color: hsl(214, 12%, 48%); font: 400 .76rem/1.55 'Proxima Nova', sans-serif; }
