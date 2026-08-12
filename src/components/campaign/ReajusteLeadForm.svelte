@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { getStoredAttribution } from '../../lib/attribution';
+  import { getCampaignSubmissionOrigin } from '../../lib/campaign-form';
 
   let {
     landingId = 'b2b-custos-reajuste',
@@ -137,7 +138,11 @@
       addField(form, 'q6_cargo', cargo);
       addField(form, 'q8_razaoSocial', empresa);
       addField(form, 'q15_tipo', 'b2b-campaign');
-      addField(form, 'q16_origem', window.location.pathname);
+      addField(
+        form,
+        'q16_origem',
+        getCampaignSubmissionOrigin(window.location.pathname, landingId, variantId),
+      );
       addField(form, 'landing_id', landingId);
       addField(form, 'variant_id', variantId);
       addField(form, 'thesis', thesis);

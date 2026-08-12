@@ -6,6 +6,10 @@ npm create astro@latest -- --template minimal
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
+## Documentação
+
+- [Modelo de landing técnica](docs/technical-landing-model.md)
+
 ## 🚀 Project Structure
 
 Inside of your Astro project, you'll see the following folders and files:
