@@ -278,7 +278,7 @@
             minlength="10"
             maxlength="11"
             required
-            placeholder="11900000000"
+            placeholder="(11) 0000-0000"
           />
         </label>
 
