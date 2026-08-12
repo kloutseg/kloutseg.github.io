@@ -5,8 +5,9 @@ export function getCampaignSubmissionOrigin(
   landingId: string,
   variantId: string,
 ): string {
-  if (landingId !== REAJUSTE_LANDING_ID) return pathname;
+  const normalizedPathname = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+  if (landingId !== REAJUSTE_LANDING_ID) return normalizedPathname;
 
   const variant = variantId === 'reajuste-sensorial' ? 'sensorial' : 'tecnica';
-  return `${pathname}?variant=${variant}`;
+  return `${normalizedPathname}?variant=${variant}`;
 }

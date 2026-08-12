@@ -20,11 +20,15 @@
     rolePlaceholder?: string;
   } = $props();
 
-  const FORM_ID = import.meta.env.PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID
-    || import.meta.env.PUBLIC_JOTFORM_B2B_FORM_ID
-    || '261337328053050';
-  const configuredPreferenceField = import.meta.env.PUBLIC_JOTFORM_B2B_CONTACT_PREFERENCE_FIELD_NAME?.trim();
-  const CONTACT_PREFERENCE_FIELD_NAME = configuredPreferenceField || 'q9_q9_radio7';
+  const CAMPAIGN_FORM_ID = '262233413435045';
+  const ANALISE_B2B_FORM_ID = '261337328053050';
+  const configuredCampaignFormId = import.meta.env.PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID?.trim();
+  const FORM_ID = configuredCampaignFormId
+    && /^\d+$/.test(configuredCampaignFormId)
+    && configuredCampaignFormId !== ANALISE_B2B_FORM_ID
+      ? configuredCampaignFormId
+      : CAMPAIGN_FORM_ID;
+  const CONTACT_PREFERENCE_FIELD_NAME = 'q9_q9_radio7';
 
   let nome = $state('');
   let empresa = $state('');
@@ -48,11 +52,11 @@
   const vidasOptions = ['1–9', '10–29', '30–99', '100–299', '300+'];
 
   function formatPhone(value: string) {
-    const digits = value.replace(/\D/g, '').slice(0, 11);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-    if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
-    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+    return value.replace(/\D/g, '').slice(0, 11);
+  }
+
+  function formatName(value: string) {
+    return value.replace(/[^\p{L}\s]/gu, '').replace(/\s{2,}/g, ' ');
   }
 
   function splitName(value: string) {
@@ -117,7 +121,7 @@
       addField(form, 'q7_q7_email5', email);
       addField(form, 'q4_q4_radio2', cargo);
       addField(form, 'q3_q3_textbox1', empresa);
-      addField(form, 'q5_q5_radio3', faixaVidas);
+      addField(form, 'q5_q5_radio3', `${faixaVidas} vidas`);
       addField(form, 'q15_tipo', 'b2b-campaign');
       addField(
         form,
@@ -185,7 +189,16 @@
       <div class="form-grid">
         <label>
           <span>Nome completo</span>
-          <input bind:value={nome} name="nome" autocomplete="name" required placeholder="Como podemos chamar você?" />
+          <input
+            value={nome}
+            oninput={(event) => nome = formatName((event.currentTarget as HTMLInputElement).value)}
+            name="nome"
+            autocomplete="name"
+            minlength="5"
+            pattern={'[A-Za-zÀ-ÖØ-öø-ÿ ]{5,}'}
+            required
+            placeholder="Como podemos chamar você?"
+          />
         </label>
         <label>
           <span>Empresa</span>
@@ -207,7 +220,7 @@
         </label>
         <label>
           <span>E-mail corporativo</span>
-          <input bind:value={email} name="email" type="email" autocomplete="email" required placeholder="voce@empresa.com.br" />
+          <input bind:value={email} name="email" type="email" inputmode="email" autocomplete="email" required placeholder="voce@empresa.com.br" />
         </label>
         <label>
           <span>WhatsApp</span>
@@ -216,21 +229,26 @@
             oninput={(event) => telefone = formatPhone((event.currentTarget as HTMLInputElement).value)}
             name="telefone"
             type="tel"
-            inputmode="tel"
+            inputmode="numeric"
             autocomplete="tel"
-            minlength="14"
-            maxlength="15"
+            pattern="[0-9]{10,11}"
+            minlength="10"
+            maxlength="11"
             required
-            placeholder="(11) 00000-0000"
+            placeholder="11900000000"
           />
         </label>
         <fieldset>
           <legend>Preferência de contato <small>(opcional)</small></legend>
           <div class="preference-options">
-            {#each ['WhatsApp', 'E-mail', 'Ligação'] as option}
+            {#each [
+              { label: 'WhatsApp', value: 'WhatsApp' },
+              { label: 'E-mail', value: 'E-mail' },
+              { label: 'Ligação', value: 'Ligação telefônica' },
+            ] as option}
               <label class="preference-option">
-                <input type="radio" bind:group={preferenciaContato} name="preferenciaContato" value={option} />
-                <span>{option}</span>
+                <input type="radio" bind:group={preferenciaContato} name="preferenciaContato" value={option.value} />
+                <span>{option.label}</span>
               </label>
             {/each}
           </div>
@@ -268,14 +286,15 @@
   label { display: grid; gap: .55rem; min-width: 0; }
   label > span { color: hsl(214, 22%, 28%); font: 600 .68rem/1.2 'Proxima Nova', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   input, select { width: 100%; min-height: 3.25rem; box-sizing: border-box; border: 0; border-bottom: 1px solid hsl(214, 16%, 76%); border-radius: 0; background: transparent; color: hsl(214, 34%, 13%); font: 400 1rem/1.2 'Proxima Nova', sans-serif; outline: none; transition: border-color .2s ease; }
+  input[type='tel'] { padding-inline: .75rem; }
   input:focus, select:focus { border-bottom-color: hsl(214, 62%, 28%); }
   input::placeholder { color: hsl(214, 12%, 53%); }
   select { cursor: pointer; }
-  fieldset { display: grid; gap: .75rem; min-width: 0; margin: 0; padding: 0; border: 0; }
-  fieldset legend { color: hsl(214, 22%, 28%); font: 600 .68rem/1.2 'Proxima Nova', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  fieldset { display: grid; grid-template-rows: 1rem 3.25rem; gap: .55rem; min-width: 0; margin: 0; padding: 0; border: 0; }
+  fieldset legend { display: block; margin: 0; color: hsl(214, 22%, 28%); font: 600 .68rem/1.2 'Proxima Nova', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   fieldset legend small { color: hsl(214, 12%, 48%); font-size: .7rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
-  .preference-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
-  .preference-option { display: inline-flex; grid-template-columns: auto 1fr; align-items: center; gap: .45rem; min-height: 2.75rem; padding: .55rem .75rem; border: 1px solid hsl(214, 16%, 76%); border-radius: 3px; cursor: pointer; }
+  .preference-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; min-height: 3.25rem; }
+  .preference-option { display: inline-flex; grid-template-columns: auto 1fr; align-items: center; gap: .45rem; min-height: 3.25rem; padding: .55rem .75rem; box-sizing: border-box; border: 1px solid hsl(214, 16%, 76%); border-radius: 3px; cursor: pointer; }
   .preference-option input { width: 1rem; min-height: 1rem; accent-color: hsl(214, 61%, 28%); }
   .preference-option span { color: hsl(214, 22%, 28%); font-size: .78rem; letter-spacing: 0; text-transform: none; white-space: nowrap; }
   .honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }

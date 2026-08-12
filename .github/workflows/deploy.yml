@@ -19,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID: ${{ vars.PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID }}
-      PUBLIC_JOTFORM_B2B_CONTACT_PREFERENCE_FIELD_NAME: ${{ vars.PUBLIC_JOTFORM_B2B_CONTACT_PREFERENCE_FIELD_NAME }}
 
     steps:
       - name: Checkout repository
