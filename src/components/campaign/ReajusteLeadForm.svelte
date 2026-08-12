@@ -274,11 +274,12 @@
           <input
             value={telefone}
             oninput={(event) => telefone = formatPhone((event.currentTarget as HTMLInputElement).value)}
+            onkeydown={(event) => { if (event.key.length === 1 && !/[0-9]/.test(event.key)) event.preventDefault(); }}
             name="telefone"
             type="tel"
             inputmode="tel"
             autocomplete="tel"
-            pattern="\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}"
+            pattern={'\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}'}
             minlength="14"
             maxlength="15"
             required
