@@ -279,9 +279,6 @@
             type="tel"
             inputmode="tel"
             autocomplete="tel"
-            pattern={'\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}'}
-            minlength="14"
-            maxlength="15"
             required
             placeholder="(11) 0000-0000"
           />

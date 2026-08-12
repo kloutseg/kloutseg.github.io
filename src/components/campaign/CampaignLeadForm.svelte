@@ -236,9 +236,6 @@
             type="tel"
             inputmode="tel"
             autocomplete="tel"
-            pattern={'\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}'}
-            minlength="14"
-            maxlength="15"
             required
             placeholder="(11) 0000-0000"
           />
@@ -306,7 +303,7 @@
   .form-submit-row { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-top: .5rem; }
   .form-submit-row p { max-width: 36rem; margin: 0; color: hsl(214, 12%, 48%); font: 400 .76rem/1.55 'Proxima Nova', sans-serif; }
   .form-submit-row a { color: inherit; }
-  button, .campaign-form-success a { min-height: 3.2rem; display: inline-flex; align-items: center; justify-content: center; gap: .8rem; border: 0; border-radius: 4px; padding: .85rem 1.2rem; background: hsl(214, 61%, 18%); color: white; font: 600 .76rem/1 'Proxima Nova', sans-serif; letter-spacing: .05em; text-decoration: none; cursor: pointer; }
+  button { min-height: 3.2rem; display: inline-flex; align-items: center; justify-content: center; gap: .8rem; border: 0; border-radius: 4px; padding: .85rem 1.2rem; background: hsl(214, 61%, 18%); color: white; font: 600 .76rem/1 'Proxima Nova', sans-serif; letter-spacing: .05em; text-decoration: none; cursor: pointer; }
   button svg { width: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   button:disabled { opacity: .55; cursor: wait; }
   .form-error { margin: 0; color: hsl(0, 56%, 42%); font: 500 .84rem/1.5 'Proxima Nova', sans-serif; }
