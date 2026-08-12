@@ -52,7 +52,11 @@
   const vidasOptions = ['1–9', '10–29', '30–99', '100–299', '300+'];
 
   function formatPhone(value: string) {
-    return value.replace(/\D/g, '').slice(0, 11);
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 6) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2);
+    if (digits.length <= 10) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 6) + '-' + digits.slice(6);
+    return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 7) + '-' + digits.slice(7);
   }
 
   function formatName(value: string) {
@@ -229,11 +233,11 @@
             oninput={(event) => telefone = formatPhone((event.currentTarget as HTMLInputElement).value)}
             name="telefone"
             type="tel"
-            inputmode="numeric"
+            inputmode="tel"
             autocomplete="tel"
-            pattern="[0-9]{10,11}"
-            minlength="10"
-            maxlength="11"
+            pattern="\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}"
+            minlength="14"
+            maxlength="15"
             required
             placeholder="(11) 0000-0000"
           />
