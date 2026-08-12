@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getStoredAttribution } from '../../lib/attribution';
   import { getCampaignSubmissionOrigin } from '../../lib/campaign-form';
+  import { formatTelefone } from '../../lib/form-validation';
 
   let {
     landingId,
@@ -20,14 +21,7 @@
     rolePlaceholder?: string;
   } = $props();
 
-  const CAMPAIGN_FORM_ID = '262233413435045';
-  const ANALISE_B2B_FORM_ID = '261337328053050';
-  const configuredCampaignFormId = import.meta.env.PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID?.trim();
-  const FORM_ID = configuredCampaignFormId
-    && /^\d+$/.test(configuredCampaignFormId)
-    && configuredCampaignFormId !== ANALISE_B2B_FORM_ID
-      ? configuredCampaignFormId
-      : CAMPAIGN_FORM_ID;
+  const FORM_ID = '262233413435045';
   const CONTACT_PREFERENCE_FIELD_NAME = 'q9_q9_radio7';
 
   let nome = $state('');
@@ -51,12 +45,11 @@
 
   const vidasOptions = ['1–9', '10–29', '30–99', '100–299', '300+'];
 
-  function formatPhone(value: string) {
-    const digits = value.replace(/\D/g, '').slice(0, 11);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 6) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2);
-    if (digits.length <= 10) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 6) + '-' + digits.slice(6);
-    return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 7) + '-' + digits.slice(7);
+  function handlePhoneInput(event: Event) {
+    const input = event.currentTarget as HTMLInputElement;
+    const formatted = formatTelefone(input.value);
+    input.value = formatted;
+    telefone = formatted;
   }
 
   function formatName(value: string) {
@@ -230,14 +223,16 @@
           <span>WhatsApp</span>
           <input
             value={telefone}
-            oninput={(event) => telefone = formatPhone((event.currentTarget as HTMLInputElement).value)}
+            oninput={handlePhoneInput}
             onkeydown={(event) => { if (event.key.length === 1 && !/[0-9]/.test(event.key)) event.preventDefault(); }}
             name="telefone"
             type="tel"
             inputmode="tel"
             autocomplete="tel"
+            minlength="14"
+            maxlength="15"
             required
-            placeholder="(11) 0000-0000"
+            placeholder="(11) 00000-0000"
           />
         </label>
         <fieldset>

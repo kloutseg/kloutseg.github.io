@@ -81,12 +81,11 @@ Limites desta tarefa:
 
 1. Confirme que os campos técnicos estão ocultos e que `q16_origem` aparece nas respostas.
 2. Se a IA criar identificadores diferentes, ajuste os nomes internos no editor do Jotform ou recrie os campos com os identificadores indicados no briefing.
-3. Copie o ID numérico do formulário.
-4. Configure esse ID no ambiente de produção como `PUBLIC_JOTFORM_B2B_CAMPAIGN_FORM_ID`.
-5. Publique o site e teste as três URLs:
+3. Confirme que o ID numérico do formulário é `262233413435045`. Esse ID fica definido diretamente nos componentes das campanhas e não depende de variável de ambiente.
+4. Publique o site e teste as três URLs:
 
    - `https://kloutseguros.com.br/empresas/beneficios/bradesco-saude`
    - `https://kloutseguros.com.br/empresas/custos/reajuste/?variant=tecnica`
    - `https://kloutseguros.com.br/empresas/custos/reajuste/?variant=sensorial`
 
-6. No Jotform, confirme que `q16_origem` recebeu um valor diferente em cada teste.
+5. No Jotform, confirme que o campo “Origem do lead” recebeu um valor diferente em cada teste.

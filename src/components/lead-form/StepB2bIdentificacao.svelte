@@ -56,7 +56,10 @@
     const target = e.currentTarget as HTMLInputElement;
     const field = target.dataset.field as string;
     let value = target.value;
-    if (field === 'telefone') value = formatTelefone(value);
+    if (field === 'telefone') {
+      value = formatTelefone(value);
+      target.value = value;
+    }
     onInput(field, value);
 
     if (validation[field as keyof typeof validation]?.touched) {

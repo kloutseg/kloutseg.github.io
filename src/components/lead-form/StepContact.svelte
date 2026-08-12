@@ -35,6 +35,7 @@
 
     if (field === 'telefone') {
       value = formatTelefone(value);
+      target.value = value;
     }
 
     onInput(field, value);
