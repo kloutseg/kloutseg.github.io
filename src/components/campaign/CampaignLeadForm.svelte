@@ -149,7 +149,6 @@
       addField(form, 'q4_q4_radio2', cargo);
       addField(form, 'q3_q3_textbox1', empresa);
       addField(form, 'q5_q5_radio3', `${faixaVidas} vidas`);
-      addField(form, 'q15_tipo', 'b2b-campaign');
       addField(
         form,
         'q11_q11_textbox9',
