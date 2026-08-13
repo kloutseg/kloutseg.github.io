@@ -27,6 +27,20 @@ const FORM_CONFIG = {
       gclid: ['q25_gclid', 'gclid'],
     },
   },
+  '262233413435045': {
+      leadType: 'b2b',
+      fields: {
+        visitorId: ['q12_q12_textbox10', 'visitor_id'],
+        firstLanding: ['q13_q13_textbox11', 'first_landing'],
+        firstReferrer: ['q14_q14_textbox12', 'first_referrer'],
+        utmSource: ['q15_q15_textbox13', 'utm_source'],
+        utmMedium: ['q16_q16_textbox14', 'utm_medium'],
+        utmCampaign: ['q17_q17_textbox15', 'utm_campaign'],
+        utmContent: ['q18_q18_textbox16', 'utm_content'],
+        utmTerm: ['q19_q19_textbox17', 'utm_term'],
+        gclid: ['q20_q20_textbox18', 'gclid'],
+      },
+    },
 };
 
 const MAX_FIELD_LENGTH = 500;
