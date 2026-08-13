@@ -30,7 +30,8 @@ Campos visíveis, nesta ordem:
 4. Faixa de vidas — seleção única — obrigatório. Descrição auxiliar: Titulares + dependentes. Opções:
    - 1–9 vidas
    - 10–29 vidas
-   - 30–99 vidas
+   - 30–49 vidas
+   - 50–99 vidas
    - 100–299 vidas
    - 300+ vidas
 5. E-mail corporativo — e-mail — obrigatório.

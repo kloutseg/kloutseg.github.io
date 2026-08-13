@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { getStoredAttribution } from '../../lib/attribution';
-  import { getCampaignSubmissionOrigin } from '../../lib/campaign-form';
+  import {
+    CAMPAIGN_LIFE_RANGE_OPTIONS,
+    getCampaignLeadSizeSegment,
+    getCampaignSubmissionOrigin,
+  } from '../../lib/campaign-form';
   import { formatTelefone } from '../../lib/form-validation';
 
   let {
@@ -37,9 +41,8 @@
     'Gestão geral / Administrativo',
   ];
 
-  const vidasOptions = ['1–9', '10–29', '30–99', '100–299', '300+'];
-
   type TrackingPayload = Record<string, string | boolean>;
+  type SubmitAcknowledgement = 'iframe_load' | 'timeout';
   type ExperimentWindow = Window & {
     dataLayer?: Array<TrackingPayload>;
     __kloutReajusteTrack?: (eventName: string, details?: TrackingPayload) => void;
@@ -98,7 +101,22 @@
   function markFormStart() {
     if (formStarted) return;
     formStarted = true;
-    track('form_start', { form_id: FORM_ID });
+    track('form_start', {
+      form_id: FORM_ID,
+      measurement_version: 'campaign_forms_v2',
+    });
+  }
+
+  function getLeadTrackingDetails(): TrackingPayload {
+    const leadSizeSegment = getCampaignLeadSizeSegment(faixaVidas);
+
+    return {
+      form_id: FORM_ID,
+      life_range: faixaVidas,
+      lead_size_segment: leadSizeSegment,
+      is_b2b_50_plus: leadSizeSegment === 'b2b50',
+      measurement_version: 'campaign_forms_v2',
+    };
   }
 
   async function submit(event: SubmitEvent) {
@@ -107,6 +125,9 @@
 
     const sourceForm = event.currentTarget as HTMLFormElement;
     if (!sourceForm.reportValidity()) return;
+
+    const leadTrackingDetails = getLeadTrackingDetails();
+    track('form_submit_attempt', leadTrackingDetails);
 
     status = 'submitting';
 
@@ -117,7 +138,6 @@
       const attribution = getStoredAttribution();
       const name = splitName(nome);
       let submissionStarted = false;
-      let conversionSent = false;
 
       iframe.name = targetName;
       iframe.hidden = true;
@@ -167,29 +187,36 @@
         addField(form, 'q20_q20_textbox18', attribution.gclid);
       }
 
-      const completed = new Promise<void>((resolve) => {
-        const timeout = window.setTimeout(resolve, 3500);
-        iframe.addEventListener('load', () => {
+      const completed = new Promise<SubmitAcknowledgement>((resolve) => {
+        let settled = false;
+        let timeoutId = 0;
+        const complete = (signal: SubmitAcknowledgement) => {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeoutId);
+          resolve(signal);
+        };
+
+        timeoutId = window.setTimeout(() => complete('timeout'), 3500);
+        const handleLoad = () => {
           if (!submissionStarted) return;
-          window.clearTimeout(timeout);
-          window.setTimeout(resolve, 250);
-        });
+          iframe.removeEventListener('load', handleLoad);
+          window.setTimeout(() => complete('iframe_load'), 250);
+        };
+        iframe.addEventListener('load', handleLoad);
       });
 
       document.body.append(iframe, form);
       submissionStarted = true;
       form.submit();
-      await completed;
+      const completionSignal = await completed;
       form.remove();
       window.setTimeout(() => iframe.remove(), 500);
 
-      if (!conversionSent) {
-        conversionSent = true;
-        track('generate_lead', {
-          form_id: FORM_ID,
-          contact_preference: preferenciaContato || 'Não informada',
-        });
-      }
+      track('form_submit_acknowledged', {
+        ...leadTrackingDetails,
+        completion_signal: completionSignal,
+      });
       status = 'success';
     } catch {
       status = 'error';
@@ -220,7 +247,7 @@
       </p>
     </header>
 
-    <form onsubmit={submit} onfocusin={markFormStart} novalidate>
+    <form onsubmit={submit} oninput={markFormStart} novalidate>
       <div class="form-grid">
         <label>
           <span>Nome completo</span>
@@ -253,7 +280,7 @@
           <span>Faixa de vidas</span>
           <select bind:value={faixaVidas} name="faixaVidas" required>
             <option value="" disabled>Titulares + dependentes</option>
-            {#each vidasOptions as option}<option value={option}>{option} vidas</option>{/each}
+            {#each CAMPAIGN_LIFE_RANGE_OPTIONS as option}<option value={option}>{option} vidas</option>{/each}
           </select>
         </label>
 
