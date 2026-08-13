@@ -31,16 +31,18 @@ Não é necessário usar `variant=tecnica` ou `variant=sensorial` nos anúncios.
 O Jotform continuará recebendo a versão efetivamente exibida no campo **Origem do lead**:
 
 ```text
-/empresas/custos/reajuste?variant=tecnica
+/empresas/custos/reajuste?variant=tecnica&experiment_forced=false
 ```
 
 ou:
 
 ```text
-/empresas/custos/reajuste?variant=sensorial
+/empresas/custos/reajuste?variant=sensorial&experiment_forced=false
 ```
 
-Use `variant=tecnica` ou `variant=sensorial` somente quando precisar abrir deliberadamente uma versão para revisão ou teste interno.
+O flag `experiment_forced=false` indica que a variante veio da distribuição normal do site. No Jotform Tables, combine dois critérios para cada leitura experimental: a origem contém a variante desejada e contém `experiment_forced=false`.
+
+Use `variant=tecnica` ou `variant=sensorial` na URL somente quando precisar abrir deliberadamente uma versão para revisão ou teste interno. Esses cadastros recebem `experiment_forced=true` e devem ficar fora do comparativo Técnica versus Sensorial.
 
 ## Convenção de nomenclatura
 

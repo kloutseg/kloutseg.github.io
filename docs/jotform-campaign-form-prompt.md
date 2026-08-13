@@ -43,28 +43,29 @@ Campos visíveis, nesta ordem:
 
 Campos técnicos ocultos:
 Crie campos ocultos para receber dados enviados pelo site. Eles não devem aparecer para o visitante nem ser obrigatórios na interface:
-- Origem do lead, identificador interno q16_origem
-- Visitor ID, identificador interno q17_visitor_id
-- Primeira landing, identificador interno q18_first_landing
-- Primeiro referenciador, identificador interno q19_first_referrer
-- UTM source, identificador interno q20_utm_source
-- UTM medium, identificador interno q21_utm_medium
-- UTM campaign, identificador interno q22_utm_campaign
-- UTM content, identificador interno q23_utm_content
-- UTM term, identificador interno q24_utm_term
-- GCLID, identificador interno q25_gclid
+- Origem do lead, nome técnico q11_q11_textbox9
+- Visitor ID, nome técnico q12_q12_textbox10
+- Primeira landing, nome técnico q13_q13_textbox11
+- Primeiro referenciador, nome técnico q14_q14_textbox12
+- UTM source, nome técnico q15_q15_textbox13
+- UTM medium, nome técnico q16_q16_textbox14
+- UTM campaign, nome técnico q17_q17_textbox15
+- UTM content, nome técnico q18_q18_textbox16
+- UTM term, nome técnico q19_q19_textbox17
+- GCLID, nome técnico q20_q20_textbox18
 
 Compatibilidade com a integração:
 - O site envia os dados para um único formulário Jotform por POST.
-- Preserve os identificadores internos acima exatamente como escritos, especialmente q16_origem até q25_gclid.
+- Preserve os nomes técnicos acima exatamente como escritos, especialmente q11 até q20.
 - Não renomeie nem remova esses campos técnicos.
 - Os campos de nome, telefone, e-mail, cargo, empresa e faixa de vidas devem permanecer compatíveis com os campos B2B já existentes no site.
-- O campo de origem q16_origem é o principal campo de atribuição e deve ser exibido nas tabelas, relatórios e integrações.
+- O campo de origem q11_q11_textbox9 é o principal campo de atribuição e deve ser exibido nas tabelas, relatórios e integrações.
 
-Valores esperados no campo q16_origem:
+Valores esperados no campo q11_q11_textbox9:
 - /empresas/beneficios/bradesco-saude
-- /empresas/custos/reajuste?variant=tecnica
-- /empresas/custos/reajuste?variant=sensorial
+- /empresas/custos/reajuste?variant=tecnica&experiment_forced=false
+- /empresas/custos/reajuste?variant=sensorial&experiment_forced=false
+- Em acessos manuais de QA, o último valor será true.
 
 Botão de envio:
 Solicitar diagnóstico
@@ -80,8 +81,8 @@ Limites desta tarefa:
 
 ## Depois que a IA criar o formulário
 
-1. Confirme que os campos técnicos estão ocultos e que `q16_origem` aparece nas respostas.
-2. Se a IA criar identificadores diferentes, ajuste os nomes internos no editor do Jotform ou recrie os campos com os identificadores indicados no briefing.
+1. Confirme que os campos técnicos estão ocultos e que `q11_q11_textbox9` aparece nas respostas.
+2. Não apague nem recrie perguntas do formulário existente. Isso muda os qids. Se algum nome técnico divergir, atualize primeiro o código e o Worker como uma mudança coordenada.
 3. Confirme que o ID numérico do formulário é `262233413435045`. Esse ID fica definido diretamente nos componentes das campanhas e não depende de variável de ambiente.
 4. Publique o site e teste as três URLs:
 

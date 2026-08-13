@@ -162,13 +162,13 @@ O lançamento pago deve ocorrer somente quando um envio de produção for confir
 
 ### 5.3 Autorizar o novo formulário no Worker
 
-O Worker de atribuição aceita atualmente os formulários B2C e B2B de `/analise`. O formulário de campanhas `262233413435045` ainda não consta em `FORM_CONFIG`.
+Em 13 de agosto de 2026, o formulário de campanhas `262233413435045` foi incluído no `FORM_CONFIG`. O webhook foi corrigido e o mesmo `submissionID` foi confirmado no Jotform e no D1. A autorização básica de `q12` a `q20`, portanto, está concluída.
 
-Siga o runbook separado:
+O passo seguinte é migrar o D1 e publicar a classificação autoritativa de `q5` e `q11`. O código preserva a faixa bruta, classifica `sb2b`/`b2b50` no Worker e deriva landing e variante por lista fechada. Use o novo runbook:
 
-- [`runbook-autorizar-jotform-campanhas-worker-atribuicao.md`](./runbook-autorizar-jotform-campanhas-worker-atribuicao.md)
+- [`runbook-segmentacao-b2b50-worker-d1.md`](./runbook-segmentacao-b2b50-worker-d1.md)
 
-Esse procedimento autoriza o formulário e mapeia `q12` a `q20` sem alterar o Worker neste documento.
+Não publique o Worker novo antes da migração remota. A ordem inversa quebra o INSERT dos três formulários.
 
 ### 5.4 Colocar o GTM em produção
 
@@ -1515,7 +1515,7 @@ A futura `klout-ads` deverá:
 
 ### Oferta e página
 
-- [ ] Faixas `30–49` e `50–99` publicadas e validadas em produção; código e Jotform já atualizados.
+- [x] Faixas `30–49` e `50–99` publicadas e validadas em produção; código e Jotform atualizados em 13/08/2026.
 - [ ] Bradesco deixa claro que a atuação é da Klout.
 - [ ] Retorno em até 24 horas úteis em todas as mensagens.
 - [ ] Nenhuma promessa de economia garantida.
@@ -1524,8 +1524,8 @@ A futura `klout-ads` deverá:
 ### Jotform e Worker
 
 - [ ] Formulário `262233413435045` recebe as três origens.
-- [ ] Worker autoriza o novo ID.
-- [ ] Webhook grava no D1.
+- [x] Worker autoriza o novo ID.
+- [x] Webhook grava no D1; fluxo básico validado em 13/08/2026.
 - [ ] Testes não alteraram os formulários anteriores.
 - [ ] GCLID e UTMs chegam quando o consentimento permite.
 

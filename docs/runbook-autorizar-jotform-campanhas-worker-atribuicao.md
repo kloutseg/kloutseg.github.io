@@ -2,6 +2,12 @@
 
 Última revisão: 12 de agosto de 2026.
 
+> **Status em 13 de agosto de 2026:** concluído. O formulário `262233413435045`
+> foi autorizado, o webhook foi corrigido e um envio ponta a ponta foi confirmado
+> no D1. Este documento permanece como histórico da autorização básica de `q12`
+> a `q20`. A evolução para faixa de vidas, segmento e variante está em
+> [`runbook-segmentacao-b2b50-worker-d1.md`](./runbook-segmentacao-b2b50-worker-d1.md).
+
 ## Objetivo
 
 Autorizar o formulário Jotform `262233413435045`, usado pelas landing pages de Bradesco Saúde e reajuste, no Worker Cloudflare `klout-lead-attribution`.

@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
+    "test:worker": "node --test cloudflare/lead-attribution-worker/*.test.mjs",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",

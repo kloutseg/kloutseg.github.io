@@ -9,3 +9,4 @@ crons = ["17 4 * * *"]
 binding = "DB"
 database_name = "klout_lead_attribution"
 database_id = "9520e8b6-2233-4b4d-aff7-f9fd2b9a0e9d"
+migrations_dir = "migrations"

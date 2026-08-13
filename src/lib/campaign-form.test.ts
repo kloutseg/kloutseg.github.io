@@ -29,6 +29,14 @@ describe('campaign form', () => {
       '/empresas/custos/reajuste/',
       'b2b-custos-reajuste',
       'reajuste-sensorial',
-    )).toBe('/empresas/custos/reajuste?variant=sensorial');
+      false,
+    )).toBe('/empresas/custos/reajuste?variant=sensorial&experiment_forced=false');
+
+    expect(getCampaignSubmissionOrigin(
+      '/empresas/custos/reajuste',
+      'b2b-custos-reajuste',
+      'reajuste-tecnica',
+      true,
+    )).toBe('/empresas/custos/reajuste?variant=tecnica&experiment_forced=true');
   });
 });
