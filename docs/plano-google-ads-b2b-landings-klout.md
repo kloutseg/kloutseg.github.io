@@ -182,17 +182,19 @@ INSERT dos formulários e a criação atômica da fila.
 ### 5.4 Colocar o GTM em produção
 
 O site lê `PUBLIC_GTM_ID` em `src/components/CookieConsent.astro` e o workflow de
-GitHub Pages a injeta por `vars.PUBLIC_GTM_ID`. O container e a existência dessa
-variável no escopo do repositório ou da organização ainda precisam ser confirmados.
+GitHub Pages a injeta por `vars.PUBLIC_GTM_ID`, com o container Web
+`GTM-PP5Q2QTH` registrado como fallback público e versionado no workflow. O
+container foi criado em 14 de agosto de 2026; a publicação e a validação em
+produção ainda precisam ser concluídas.
 
 Antes do lançamento:
 
-1. criar o container no Google Tag Manager;
-2. guardar o ID como variável de Actions, por exemplo `PUBLIC_GTM_ID`;
-3. confirmar que o job de build recebe a variável;
-4. publicar ou reexecutar o workflow;
-5. aceitar cookies em produção e confirmar o carregamento pelo Tag Assistant;
-6. rejeitar cookies e confirmar o comportamento previsto pelo Consent Mode.
+1. opcionalmente guardar o ID como variável de Actions `PUBLIC_GTM_ID` para
+   substituir o fallback versionado;
+2. confirmar que o job de build recebe o valor `GTM-PP5Q2QTH`;
+3. publicar ou reexecutar o workflow;
+4. aceitar cookies em produção e confirmar o carregamento pelo Tag Assistant;
+5. rejeitar cookies e confirmar o comportamento previsto pelo Consent Mode.
 
 Não confundir `PUBLIC_GTM_ID` com segredo. O ID do container é público; ainda assim, deve existir uma fonte canônica e um processo de deploy testável.
 
