@@ -48,11 +48,17 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
             {landing.eyebrow && <p class="campaign-eyebrow">{landing.eyebrow}</p>}
             <h1 id="campaign-title">{landing.title}</h1>
             <p class="campaign-description">{landing.description}</p>
-            <a href="#diagnostico" class="campaign-primary-cta">
+            <a
+              href="#diagnostico"
+              class="campaign-primary-cta"
+              data-campaign-cta
+              data-cta-location="hero"
+              data-cta-key="hero_primary"
+            >
               {landing.ctaLabel}
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14 0m-6-6 6 6-6 6" /></svg>
             </a>
-            <p class="campaign-response-time">Retorno em até um dia útil</p>
+            <p class="campaign-response-time">Retorno em até 24 horas úteis</p>
           </div>
         </div>
       </section>
@@ -129,7 +135,12 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
           <h2>{landing.finalTitle}</h2>
           <div>
             <p>Sem compromisso de troca ou contratação. Primeiro, a Klout entende o cenário.</p>
-            <a href="#diagnostico">Solicitar diagnóstico</a>
+            <a
+              href="#diagnostico"
+              data-campaign-cta
+              data-cta-location="final"
+              data-cta-key="final_diagnostico"
+            >Solicitar diagnóstico</a>
           </div>
         </div>
       </section>
@@ -147,6 +158,54 @@ const criteriaKicker = landing.criteriaKicker ?? 'O que entra na leitura';
       </div>
     </footer>
   </div>
+
+  <script
+    is:inline
+    define:vars={{
+      landingId: landing.landingId,
+      variantId: landing.variant,
+      thesis: landing.thesis,
+    }}
+  >
+    (() => {
+      window.dataLayer = window.dataLayer || [];
+      let variantViewTracked = false;
+
+      function track(eventName, details) {
+        if (window.KloutConsent?.read?.()?.analytics !== true) return false;
+        window.dataLayer.push({
+          event: eventName,
+          landing_id: landingId,
+          variant_id: variantId,
+          thesis,
+          measurement_version: 'campaign_forms_v2',
+          ...(details || {}),
+        });
+        return true;
+      }
+
+      function trackVariantView() {
+        if (variantViewTracked) return;
+        variantViewTracked = track('landing_variant_view');
+      }
+
+      trackVariantView();
+      window.addEventListener('klout:consent-updated', (event) => {
+        if (event.detail?.preferences?.analytics === true) trackVariantView();
+      });
+
+      document.addEventListener('click', (event) => {
+        const target = event.target instanceof Element
+          ? event.target.closest('[data-campaign-cta]')
+          : null;
+        if (!(target instanceof HTMLElement)) return;
+        track('cta_click', {
+          cta_location: target.dataset.ctaLocation || 'unknown',
+          cta_key: target.dataset.ctaKey || 'unknown',
+        });
+      }, { capture: true });
+    })();
+  </script>
 </BaseLayout>
 
 <style>

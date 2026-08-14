@@ -1,99 +1,6 @@
 ---
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
-const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
 ---
-
-<script is:inline>
-  (() => {
-    const STORAGE_KEY = 'klout:cookie-consent';
-    const CONSENT_VERSION = '2026-06-22';
-    const DEFAULT_STATE = {
-      necessary: true,
-      analytics: false,
-      marketing: false,
-    };
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function gtag(){ window.dataLayer.push(arguments); };
-    window.gtag('consent', 'default', {
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      analytics_storage: 'denied',
-      functionality_storage: 'granted',
-      security_storage: 'granted',
-    });
-
-    function readConsent() {
-      try {
-        const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (!parsed || parsed.version !== CONSENT_VERSION || !parsed.preferences) return null;
-        return {
-          ...DEFAULT_STATE,
-          ...parsed.preferences,
-          necessary: true,
-        };
-      } catch {
-        return null;
-      }
-    }
-
-    function writeConsent(preferences) {
-      const normalized = {
-        ...DEFAULT_STATE,
-        ...preferences,
-        necessary: true,
-      };
-
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        version: CONSENT_VERSION,
-        savedAt: new Date().toISOString(),
-        preferences: normalized,
-      }));
-
-      return normalized;
-    }
-
-    function updateGoogleConsent(preferences) {
-      window.gtag('consent', 'update', {
-        analytics_storage: preferences.analytics ? 'granted' : 'denied',
-        ad_storage: preferences.marketing ? 'granted' : 'denied',
-        ad_user_data: preferences.marketing ? 'granted' : 'denied',
-        ad_personalization: preferences.marketing ? 'granted' : 'denied',
-        functionality_storage: 'granted',
-        security_storage: 'granted',
-      });
-    }
-
-    function applyConsent(preferences) {
-      updateGoogleConsent(preferences);
-      window.dispatchEvent(new CustomEvent('klout:consent-updated', {
-        detail: { preferences },
-      }));
-    }
-
-    window.KloutConsent = {
-      read: readConsent,
-      save(preferences) {
-        const saved = writeConsent(preferences);
-        applyConsent(saved);
-        return saved;
-      },
-      openPreferences() {
-        window.dispatchEvent(new CustomEvent('klout:open-cookie-preferences'));
-      },
-      hasConsent(category) {
-        const current = readConsent();
-        return !!current?.[category];
-      },
-    };
-
-    const storedConsent = readConsent();
-    if (storedConsent) applyConsent(storedConsent);
-  })();
-</script>
 
 {gtmId && (
   <script is:inline define:vars={{ gtmId }}>
@@ -121,8 +28,9 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
   </script>
 )}
 
-<script is:inline define:vars={{ cloudflareWebAnalyticsToken }}>
+<script is:inline>
   (() => {
+    const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
     let loaded = false;
 
     function loadCloudflareWebAnalytics() {
@@ -267,7 +175,12 @@ const cloudflareWebAnalyticsToken = 'bb8fbce41322499481af3f732f4c5c1f';
     }
 
     function save(preferences) {
+      const previous = currentPreferences();
       window.KloutConsent?.save?.(preferences);
+      if (previous.analytics && !preferences.analytics) {
+        window.location.reload();
+        return;
+      }
       closeBanner();
       closeModal();
     }

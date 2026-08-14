@@ -2,8 +2,12 @@ name = "klout-lead-attribution"
 main = "worker.mjs"
 compatibility_date = "2026-06-22"
 
+[vars]
+GOOGLE_DATA_MANAGER_ENABLED = "false"
+GOOGLE_DATA_MANAGER_DESTINATIONS_JSON = "{}"
+
 [triggers]
-crons = ["17 4 * * *"]
+crons = ["17 4 * * *", "*/10 * * * *"]
 
 [[d1_databases]]
 binding = "DB"

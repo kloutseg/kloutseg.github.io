@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getStoredAttribution } from '../../lib/attribution';
+  import { getAdUserDataConsent, getStoredAttribution } from '../../lib/attribution';
   import {
     CAMPAIGN_LIFE_RANGE_OPTIONS,
     getCampaignLeadSizeSegment,
@@ -40,7 +40,7 @@
   let status = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   type TrackingPayload = Record<string, string | boolean>;
-  type SubmitAcknowledgement = 'iframe_load' | 'timeout';
+  type SubmitAcknowledgement = 'iframe_load';
 
   const cargoOptions = [
     'Sócio(a) / Founder',
@@ -75,8 +75,12 @@
     form.appendChild(input);
   }
 
-  function track(eventName: string, details: TrackingPayload = {}) {
-    const target = window as Window & { dataLayer?: Array<TrackingPayload> };
+  function track(eventName: string, details: TrackingPayload = {}): boolean {
+    const target = window as Window & {
+      dataLayer?: Array<TrackingPayload>;
+      KloutConsent?: { read?: () => { analytics?: boolean } | null };
+    };
+    if (target.KloutConsent?.read?.()?.analytics !== true) return false;
     const dataLayer = target.dataLayer || (target.dataLayer = []);
     dataLayer.push({
       event: eventName,
@@ -85,6 +89,7 @@
       thesis,
       ...details,
     });
+    return true;
   }
 
   function getLeadTrackingDetails(): TrackingPayload {
@@ -101,8 +106,7 @@
 
   function markFormStart() {
     if (formStarted) return;
-    formStarted = true;
-    track('form_start', {
+    formStarted = track('form_start', {
       form_id: FORM_ID,
       measurement_version: 'campaign_forms_v2',
     });
@@ -115,6 +119,7 @@
     const sourceForm = event.currentTarget as HTMLFormElement;
     if (!sourceForm.reportValidity()) return;
 
+    markFormStart();
     const leadTrackingDetails = getLeadTrackingDetails();
     track('form_submit_attempt', leadTrackingDetails);
 
@@ -157,6 +162,7 @@
       addField(form, 'landing_id', landingId);
       addField(form, 'variant_id', variantId);
       addField(form, 'thesis', thesis);
+      addField(form, 'q22_ad_user_data_consent', getAdUserDataConsent());
       if (preferenciaContato) {
         addField(form, CONTACT_PREFERENCE_FIELD_NAME, preferenciaContato);
       }
@@ -170,24 +176,38 @@
         addField(form, 'q17_q17_textbox15', attribution.utm_campaign);
         addField(form, 'q18_q18_textbox16', attribution.utm_content);
         addField(form, 'q19_q19_textbox17', attribution.utm_term);
-        addField(form, 'q20_q20_textbox18', attribution.gclid);
+        if (attribution.gclid && attribution.gclidCapturedAt) {
+          addField(form, 'q20_q20_textbox18', attribution.gclid);
+          addField(form, 'q23_gclid_captured_at', attribution.gclidCapturedAt);
+        }
       }
 
-      const completed = new Promise<SubmitAcknowledgement>((resolve) => {
+      const completed = new Promise<SubmitAcknowledgement>((resolve, reject) => {
         let settled = false;
-        let timeoutId = 0;
-        const complete = (signal: SubmitAcknowledgement) => {
+        const timeoutId = window.setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          reject(new Error('Jotform acknowledgement timeout'));
+        }, 20000);
+
+        const complete = () => {
           if (settled) return;
           settled = true;
           window.clearTimeout(timeoutId);
-          resolve(signal);
+          resolve('iframe_load');
         };
 
-        timeoutId = window.setTimeout(() => complete('timeout'), 3500);
         const handleLoad = () => {
           if (!submissionStarted) return;
+          try {
+            const frameUrl = iframe.contentWindow?.location.href;
+            if (!frameUrl || frameUrl === 'about:blank') return;
+          } catch {
+            // A resposta do Jotform é cross-origin; o acesso à URL deve falhar.
+          }
+
           iframe.removeEventListener('load', handleLoad);
-          window.setTimeout(() => complete('iframe_load'), 250);
+          window.setTimeout(complete, 250);
         };
         iframe.addEventListener('load', handleLoad);
       });
@@ -195,15 +215,17 @@
       document.body.append(iframe, form);
       submissionStarted = true;
       form.submit();
-      const completionSignal = await completed;
-      form.remove();
-      window.setTimeout(() => iframe.remove(), 500);
-
-      track('form_submit_acknowledged', {
-        ...leadTrackingDetails,
-        completion_signal: completionSignal,
-      });
-      status = 'success';
+      try {
+        const completionSignal = await completed;
+        track('form_submit_acknowledged', {
+          ...leadTrackingDetails,
+          completion_signal: completionSignal,
+        });
+        status = 'success';
+      } finally {
+        form.remove();
+        window.setTimeout(() => iframe.remove(), 500);
+      }
     } catch {
       status = 'error';
     }
@@ -300,7 +322,7 @@
       </label>
 
       {#if status === 'error'}
-        <p class="form-error" role="alert">Não foi possível concluir o envio. Tente novamente ou fale com a Klout pelo WhatsApp.</p>
+        <p class="form-error" role="alert">Não foi possível confirmar o envio. Antes de tentar novamente, fale com a Klout pelo WhatsApp.</p>
       {/if}
 
       <div class="form-submit-row">

@@ -1,5 +1,6 @@
 ---
 import CookieConsent from '../components/CookieConsent.astro';
+import ConsentBootstrap from '../components/ConsentBootstrap.astro';
 import AttributionCapture from '../components/AttributionCapture.astro';
 import { buildKloutPageSchema } from '../lib/schema';
 
@@ -58,6 +59,7 @@ const structuredData =
   <meta name="description" content={description}>
   {noindex && <meta name="robots" content="noindex, nofollow">}
   <link rel="canonical" href={canonicalUrl}>
+  <ConsentBootstrap />
   <slot name="head" />
   <script is:inline>
     try {
@@ -681,9 +683,9 @@ const structuredData =
 <body>
   <div class="page-transition-overlay" id="page-transition-overlay" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
-  <slot />
   <CookieConsent />
   <AttributionCapture />
+  <slot />
   <script is:inline>
     (() => {
       const mobileQuery = window.matchMedia('(max-width: 768px)');

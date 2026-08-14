@@ -1,9 +1,10 @@
 /// <reference types="vitest/config" />
-import { getViteConfig } from 'astro/config';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { svelteTesting } from '@testing-library/svelte/vite';
+import { defineConfig } from 'vitest/config';
 
-export default getViteConfig({
-  plugins: [svelteTesting()],
+export default defineConfig({
+  plugins: [svelte(), svelteTesting()],
   
   test: {
     // Configuração básica do Vitest

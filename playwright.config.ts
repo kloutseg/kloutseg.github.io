@@ -1,5 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const chromiumLaunchOptions = process.env.CHROME_PATH
+  ? {
+      launchOptions: {
+        executablePath: process.env.CHROME_PATH,
+        args: ['--no-sandbox', '--disable-dev-shm-usage'],
+      },
+    }
+  : {};
+
 export default defineConfig({
   testDir: './e2e',
 
@@ -26,7 +35,7 @@ export default defineConfig({
 
   // Configurações compartilhados
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: 'http://127.0.0.1:4321',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -35,7 +44,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], ...chromiumLaunchOptions },
     },
     {
       name: 'firefox',
@@ -49,7 +58,7 @@ export default defineConfig({
     // Mobile
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      use: { ...devices['Pixel 5'], ...chromiumLaunchOptions },
     },
     {
       name: 'Mobile Safari',
@@ -60,8 +69,9 @@ export default defineConfig({
   // Servidor de desenvolvimento
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:4321',
-    reuseExistingServer: !process.env.CI,
+    url: 'http://127.0.0.1:4321',
+    reuseExistingServer: false,
+    env: { PUBLIC_GTM_ID: process.env.PUBLIC_GTM_ID || 'GTM-PLAYWRIGHT' },
     timeout: 120 * 1000,
   },
 });

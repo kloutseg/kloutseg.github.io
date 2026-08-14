@@ -25,6 +25,7 @@ export type AttributionData = {
   utm_content: string;
   utm_term: string;
   gclid: string;
+  gclidCapturedAt?: string;
 };
 
 type ConsentPreferences = {
@@ -35,6 +36,15 @@ type ConsentPreferences = {
 type KloutConsentApi = {
   read?: () => ConsentPreferences | null;
 };
+
+export type AdUserDataConsent = 'granted' | 'denied' | 'unknown';
+
+export function getAdUserDataConsent(): AdUserDataConsent {
+  if (typeof window === 'undefined') return 'unknown';
+  const consent = (window as Window & { KloutConsent?: KloutConsentApi }).KloutConsent?.read?.();
+  if (!consent) return 'unknown';
+  return consent.marketing ? 'granted' : 'denied';
+}
 
 function truncate(value: string): string {
   return value.trim().slice(0, MAX_VALUE_LENGTH);
@@ -73,8 +83,16 @@ export function getStoredAttribution(): AttributionData | null {
       localStorage.removeItem(ATTRIBUTION_STORAGE_KEY);
       return null;
     }
-    if (parsed.gclid && Date.now() - capturedAt > GCLID_RETENTION_MS) {
-      const withoutExpiredGclid = { ...parsed, gclid: '' } as AttributionData;
+    const gclidCapturedAt = Date.parse(parsed.gclidCapturedAt || parsed.capturedAt || '');
+    if (parsed.gclid && (
+      !Number.isFinite(gclidCapturedAt)
+      || Date.now() - gclidCapturedAt > GCLID_RETENTION_MS
+    )) {
+      const withoutExpiredGclid = {
+        ...parsed,
+        gclid: '',
+        gclidCapturedAt: '',
+      } as AttributionData;
       localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(withoutExpiredGclid));
       return withoutExpiredGclid;
     }
@@ -86,6 +104,8 @@ export function getStoredAttribution(): AttributionData | null {
 
 function captureAttribution(includeGclid: boolean): AttributionData {
   const params = new URLSearchParams(window.location.search);
+  const capturedAt = new Date().toISOString();
+  const gclid = includeGclid ? truncate(params.get('gclid') || '') : '';
   const campaign = Object.fromEntries(
     ATTRIBUTION_PARAMETERS.map((parameter) => [parameter, truncate(params.get(parameter) || '')]),
   ) as Record<AttributionParameter, string>;
@@ -95,9 +115,26 @@ function captureAttribution(includeGclid: boolean): AttributionData {
     visitorId: createVisitorId(),
     firstLanding: truncate(window.location.pathname),
     firstReferrer: sanitizeReferrer(document.referrer),
-    capturedAt: new Date().toISOString(),
+    capturedAt,
     ...campaign,
-    gclid: includeGclid ? truncate(params.get('gclid') || '') : '',
+    gclid,
+    gclidCapturedAt: gclid ? capturedAt : '',
+  };
+}
+
+function captureCurrentPaidClick(): Partial<AttributionData> | null {
+  const params = new URLSearchParams(window.location.search);
+  const gclid = truncate(params.get('gclid') || '');
+  if (!gclid) return null;
+
+  const campaign = Object.fromEntries(
+    ATTRIBUTION_PARAMETERS.map((parameter) => [parameter, truncate(params.get(parameter) || '')]),
+  ) as Record<AttributionParameter, string>;
+
+  return {
+    ...campaign,
+    gclid,
+    gclidCapturedAt: new Date().toISOString(),
   };
 }
 
@@ -119,6 +156,21 @@ export function syncAttributionWithConsent(): void {
   }
 
   if (!consent.marketing && stored.gclid) {
-    localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify({ ...stored, gclid: '' }));
+    localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify({
+      ...stored,
+      gclid: '',
+      gclidCapturedAt: '',
+    }));
+    return;
+  }
+
+  if (consent.marketing) {
+    const currentPaidClick = captureCurrentPaidClick();
+    if (currentPaidClick) {
+      localStorage.setItem(
+        ATTRIBUTION_STORAGE_KEY,
+        JSON.stringify({ ...stored, ...currentPaidClick }),
+      );
+    }
   }
 }

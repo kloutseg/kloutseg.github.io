@@ -452,8 +452,14 @@ const thesis = 'renovacao-como-decisao-empresarial';
       const forced = root.dataset.reajusteForced === 'true';
 
       window.dataLayer = window.dataLayer || [];
+      let variantViewTracked = false;
+
+      function hasAnalyticsConsent() {
+        return window.KloutConsent?.read?.()?.analytics === true;
+      }
 
       function track(eventName, details) {
+        if (!hasAnalyticsConsent()) return false;
         window.dataLayer.push({
           event: eventName,
           landing_id: landingId,
@@ -463,12 +469,21 @@ const thesis = 'renovacao-como-decisao-empresarial';
           experiment_override: forced ? variantSlug : '',
           ...(details || {}),
         });
+        return true;
       }
 
       window.__kloutReajusteTrack = track;
 
-      track('landing_variant_view', {
-        hero_asset: root.dataset.reajusteHero || '',
+      function trackVariantView() {
+        if (variantViewTracked) return;
+        variantViewTracked = track('landing_variant_view', {
+          hero_asset: root.dataset.reajusteHero || '',
+        });
+      }
+
+      trackVariantView();
+      window.addEventListener('klout:consent-updated', (event) => {
+        if (event.detail?.preferences?.analytics === true) trackVariantView();
       });
 
       document.addEventListener('click', (event) => {
@@ -4283,4 +4298,3 @@ const thesis = 'renovacao-como-decisao-empresarial';
     }
   }
 </style>
-

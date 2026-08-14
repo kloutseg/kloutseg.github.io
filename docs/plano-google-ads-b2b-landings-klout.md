@@ -148,14 +148,14 @@ Critério de aceite:
 
 ### 5.2 Confirmar o envio no Jotform
 
-O navegador agora emite `form_submit_attempt` após a validação local e `form_submit_acknowledged` depois do carregamento do iframe oculto ou de um timeout. O segundo evento registra `completion_signal=iframe_load|timeout`. Como o POST é feito para outro domínio, nenhum deles comprova de forma inequívoca que o Jotform criou a submissão.
+O navegador agora emite `form_submit_attempt` após a validação local e `form_submit_acknowledged` somente depois do carregamento da resposta no iframe oculto, com `completion_signal=iframe_load`. Se a resposta não carregar em 20 segundos, a interface mostra erro e não declara a solicitação recebida. Como o POST é feito para outro domínio, o evento do navegador ainda não comprova de forma inequívoca que o Jotform criou a submissão.
 
 Consequência: esses eventos servem para diagnóstico da interface e do funil. Eles não devem receber nomes de conversão nem orientar os lances.
 
 Soluções, em ordem de robustez:
 
 1. endpoint próprio recebe o formulário, envia ao Jotform, confirma a resposta e então devolve sucesso ao navegador;
-2. webhook confirmado do Jotform grava o lead e envia a conversão ao Google Ads pelo processo de conversões aprimoradas para leads;
+2. webhook confirmado do Jotform grava o lead e o evento factual; uma camada de entregas separada envia depois a conversão elegível ao Google Ads;
 3. MVP provisório reconcilia diariamente os eventos do navegador com as submissões efetivas do Jotform.
 
 O lançamento pago deve ocorrer somente quando um envio de produção for confirmado de ponta a ponta.
@@ -164,22 +164,33 @@ O lançamento pago deve ocorrer somente quando um envio de produção for confir
 
 Em 13 de agosto de 2026, o formulário de campanhas `262233413435045` foi incluído no `FORM_CONFIG`. O webhook foi corrigido e o mesmo `submissionID` foi confirmado no Jotform e no D1. A autorização básica de `q12` a `q20`, portanto, está concluída.
 
-O passo seguinte é migrar o D1 e publicar a classificação autoritativa de `q5` e `q11`. O código preserva a faixa bruta, classifica `sb2b`/`b2b50` no Worker e deriva landing e variante por lista fechada. Use o novo runbook:
+A classificação autoritativa, o ledger factual e a fila de Data Manager estão
+publicados. Em 14 de agosto de 2026, as migrações 0004 e 0005 foram aplicadas e o
+Worker foi publicado na versão `fb92053f-e8c3-42e5-bbb4-4e25a56cbe37`.
+`/ready` respondeu com `missing_events=0`, a fila não apresentou gaps e os sete
+eventos existentes eram QA bloqueado. O transporte Google permanece desligado por
+`GOOGLE_DATA_MANAGER_ENABLED=false`, sem credenciais ou destinos Google.
+
+Use os dois runbooks:
 
 - [`runbook-segmentacao-b2b50-worker-d1.md`](./runbook-segmentacao-b2b50-worker-d1.md)
+- [`runbook-google-data-manager-worker.md`](./runbook-google-data-manager-worker.md)
 
-Não publique o Worker novo antes da migração remota. A ordem inversa quebra o INSERT dos três formulários.
+Não publique o Worker novo antes das migrações remotas. A ordem inversa quebra o
+INSERT dos formulários e a criação atômica da fila.
 
 ### 5.4 Colocar o GTM em produção
 
-O site já lê `PUBLIC_GTM_ID` em `src/components/CookieConsent.astro`. O workflow atual de GitHub Pages, porém, não declara essa variável no passo de build.
+O site lê `PUBLIC_GTM_ID` em `src/components/CookieConsent.astro` e o workflow de
+GitHub Pages a injeta por `vars.PUBLIC_GTM_ID`. O container e a existência dessa
+variável no escopo do repositório ou da organização ainda precisam ser confirmados.
 
 Antes do lançamento:
 
 1. criar o container no Google Tag Manager;
 2. guardar o ID como variável de Actions, por exemplo `PUBLIC_GTM_ID`;
-3. expor essa variável ao build em `.github/workflows/deploy.yml`;
-4. publicar;
+3. confirmar que o job de build recebe a variável;
+4. publicar ou reexecutar o workflow;
 5. aceitar cookies em produção e confirmar o carregamento pelo Tag Assistant;
 6. rejeitar cookies e confirmar o comportamento previsto pelo Consent Mode.
 
