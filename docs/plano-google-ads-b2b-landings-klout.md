@@ -184,17 +184,20 @@ INSERT dos formulários e a criação atômica da fila.
 O site lê `PUBLIC_GTM_ID` em `src/components/CookieConsent.astro` e o workflow de
 GitHub Pages a injeta por `vars.PUBLIC_GTM_ID`, com o container Web
 `GTM-PP5Q2QTH` registrado como fallback público e versionado no workflow. O
-container foi criado em 14 de agosto de 2026; a publicação e a validação em
-produção ainda precisam ser concluídas.
+container foi criado e publicado em produção em 14 de agosto de 2026 pelo
+[workflow 31821967424](https://github.com/kloutseg/kloutseg.github.io/actions/runs/31821967424).
 
-Antes do lançamento:
+Validação realizada em produção:
 
-1. opcionalmente guardar o ID como variável de Actions `PUBLIC_GTM_ID` para
-   substituir o fallback versionado;
-2. confirmar que o job de build recebe o valor `GTM-PP5Q2QTH`;
-3. publicar ou reexecutar o workflow;
-4. aceitar cookies em produção e confirmar o carregamento pelo Tag Assistant;
-5. rejeitar cookies e confirmar o comportamento previsto pelo Consent Mode.
+1. build e deploy concluídos com sucesso;
+2. nenhuma requisição ao GTM antes da escolha do visitante;
+3. nenhuma requisição ao GTM após rejeitar cookies opcionais;
+4. após o aceite, uma única carga de `gtm.js?id=GTM-PP5Q2QTH`, com HTTP 200;
+5. ordem observada: consent default, consent update, GTM e
+   `landing_variant_view`, sem erro de JavaScript.
+
+A criação e a publicação das tags dentro do container, seguidas da conferência
+autenticada no Tag Assistant, continuam sendo gate para ativar a campanha.
 
 Não confundir `PUBLIC_GTM_ID` com segredo. O ID do container é público; ainda assim, deve existir uma fonte canônica e um processo de deploy testável.
 
