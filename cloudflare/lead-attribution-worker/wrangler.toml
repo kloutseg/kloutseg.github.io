@@ -4,7 +4,7 @@ compatibility_date = "2026-06-22"
 
 [vars]
 GOOGLE_DATA_MANAGER_ENABLED = "false"
-GOOGLE_DATA_MANAGER_DESTINATIONS_JSON = "{}"
+# O mapeamento de destinos de produção é armazenado como Worker secret.
 
 [triggers]
 crons = ["17 4 * * *", "*/10 * * * *"]
